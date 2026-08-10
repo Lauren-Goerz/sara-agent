@@ -1,0 +1,9 @@
+# Ignore local junk when building the Sara agent image.
+.venv/
+.rasa/
+__pycache__/
+*.pyc
+.git/
+.cursor/
+.claude/
+.env

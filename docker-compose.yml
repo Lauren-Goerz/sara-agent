@@ -1,0 +1,50 @@
+# Sara HR/Ops agent — always-on Slack deployment
+#
+# Prerequisites:
+#   1. A trained model in ./models/ (run `rasa train` locally first)
+#   2. Secrets in .env (RASA_LICENSE, OPENAI_API_KEY, SLACK_*, …)
+#   3. A stable public HTTPS URL pointing at port 5005
+#      (Cloudflare Tunnel, ngrok reserved domain, or a VPS reverse proxy)
+#   4. Slack Event Subscriptions Request URL set to:
+#      https://YOUR-HOST/webhooks/slack/webhook
+#
+# Start:
+#   docker compose up -d --build
+#
+# Logs:
+#   docker compose logs -f sara
+
+services:
+  sara:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Override if Rasa gives you a private Maestro/beta image tag:
+      # args:
+      #   RASA_IMAGE: europe-west3-docker.pkg.dev/rasa-releases/rasa-pro/rasa-pro:3.19.0.dev1
+    container_name: sara-agent
+    restart: unless-stopped
+    ports:
+      - "5005:5005"
+    env_file:
+      - .env
+    environment:
+      # Ensure the custom Slack channel + lib/ imports resolve
+      PYTHONPATH: /app
+      # Rasa Pro license (also loaded from .env as RASA_LICENSE)
+      RASA_PRO_LICENSE: ${RASA_LICENSE}
+    volumes:
+      # Live project files (skills, integrations, models, lib)
+      - ./:/app
+    working_dir: /app
+    command: >
+      rasa run
+      --enable-api
+      --cors "*"
+      -p 5005
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5005/')"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s

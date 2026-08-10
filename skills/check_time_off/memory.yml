@@ -1,0 +1,15 @@
+schema:
+  public:
+    selected_employee_id:
+      type: text
+      description: BambooHR employee id for balances / requests.
+      llm_settable: true
+    selected_employee_name:
+      type: text
+    request_confirmed:
+      type: bool
+      description: User confirmed the time-off request details before submit.
+      llm_settable: true
+  private:
+    last_request_id:
+      type: text

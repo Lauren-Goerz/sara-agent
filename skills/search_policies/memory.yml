@@ -1,0 +1,8 @@
+schema:
+  public:
+    selected_page_id:
+      type: text
+      description: Notion page id selected for full policy content.
+      llm_settable: true
+    selected_page_title:
+      type: text

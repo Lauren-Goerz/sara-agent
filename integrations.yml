@@ -1,0 +1,22 @@
+# External integrations for your Maestro agent.
+
+llm:
+  provider: openai
+  model: gpt-5.1
+  api_key_env: OPENAI_API_KEY
+
+channels:
+  rest:
+    enabled: true
+  inspector:
+    enabled: true
+  # Slack is the primary home for this agent (DMs + @mentions).
+  # Custom connector reads SLACK_BOT_TOKEN + SLACK_SIGNING_SECRET from .env
+  # (avoids ${VAR} in this file — beta train validation cannot parse it).
+  # Webhook URL: https://<public-host>/webhooks/slack/webhook
+  lib.slack_channel.EnvSlackInput:
+    enabled: true
+    # Reply in-thread and keep one conversation per Slack thread.
+    # After @Sara-Agent opens a thread, follow-ups need no further @mention.
+    use_threads: true
+    conversation_granularity: thread
