@@ -1,0 +1,22 @@
+schema:
+  public:
+    fun_mode:
+      type: categorical
+      enum_values:
+        - off
+        - pirate
+        - valley_girl
+        - shakespeare
+        - robot
+        - cowboy
+        - noir_detective
+        - sports_announcer
+        - movie_trailer
+        - yoda
+        - surfer
+        - haiku
+        - overcaffeinated_founder
+      description: >
+        Active light-hearted reply voice. off means normal Sara. Only these
+        funny modes are allowed.
+      llm_settable: true

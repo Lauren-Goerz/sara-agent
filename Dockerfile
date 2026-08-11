@@ -5,8 +5,8 @@ FROM ${RASA_IMAGE}
 
 USER root
 
-# Slack connector dependency (required for our EnvSlackInput channel)
-RUN pip install --no-cache-dir "slack-sdk>=3.27.0"
+# Slack connector + SVG-to-PNG rendering for Phosphor icon delivery.
+RUN pip install --no-cache-dir "slack-sdk>=3.27.0" "resvg_py>=0.3.4"
 
 # Project code is bind-mounted at runtime; keep /app as the workdir.
 WORKDIR /app
