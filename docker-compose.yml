@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
       # Override if Rasa gives you a private Maestro/beta image tag:
       # args:
-      #   RASA_IMAGE: europe-west3-docker.pkg.dev/rasa-releases/rasa-pro/rasa-pro:3.19.0.dev1
+      #   RASA_IMAGE: europe-west3-docker.pkg.dev/rasa-releases/rasa-pro/rasa-pro:3.19.0.dev3
     container_name: sara-agent
     restart: unless-stopped
     ports:

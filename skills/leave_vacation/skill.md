@@ -9,7 +9,12 @@ description: >
   ("how many days do I have") - that is leave_check. Do NOT activate for
   "I'm sick what should I do" / sick certificates - that is leave_sick. Do NOT
   activate for parental, maternity, paternity, or adoption leave - that is
-  leave_parental.
+  leave_parental. Do NOT activate for gym membership, wellness, or other
+  employer benefits/perks - that is lookup_benefits. Do NOT activate for
+  working from other countries / working abroad - that is lookup_work_abroad.
+  Do NOT activate for public/bank holiday calendar questions - that is
+  lookup_holidays. Do NOT activate for payday / days until salary - that is
+  lookup_payday.
 ---
 
 Answer vacation / offline-day process questions from the official Rasa policy

@@ -7,9 +7,12 @@ description: >
   "competitive analysis", "battle card", "why Rasa over …", or requests for
   competitor positioning or differentiation write-ups.
   Do NOT activate for win/loss analysis, win/loss notes, or the win/loss
-  archive - that is lookup_win_loss_analysis. Do NOT activate for a one-line
-  cheeky joke about a competitor name with no real comparison ask - those
-  stay as light small-talk.
+  archive - that is lookup_win_loss_analysis. Do NOT activate for product
+  proof points, customer metrics, deployment speed from the proof-points pack,
+  or "why customers use Rasa" without a named competitor - that is
+  lookup_product_proof_points. Do NOT activate for a one-line cheeky joke
+  about a competitor name with no real comparison ask - those stay as light
+  small-talk.
 ---
 
 ## Competitive comparison requests

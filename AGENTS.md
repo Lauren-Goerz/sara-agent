@@ -13,8 +13,13 @@ be re-added later with admin buy-in.
 
 - `agent.yml` — persona, global rules, identity
 - `integrations.yml` — LLM + channels (REST, Inspector, Slack)
-- `lib/` — shared clients (`notion_client`, `slack_client`, `hr_mocks`) and the
-  custom Slack channel (`slack_channel.EnvSlackInput`)
+- `lib/` — shared clients (`notion_client`, `notion_sources`, `slack_client`,
+  `hr_mocks`) and the custom Slack channel (`slack_channel.EnvSlackInput`)
+- `lib/notion_sources.py` — registry of allowlisted Notion pages/databases plus
+  shared fetch, clean, cache, and query-aware trimming. Skills that just read a
+  fixed Notion page should register a source here and keep `tools.py` to a thin
+  wrapper around `notion_sources.load(...)` rather than re-implementing fetch
+  and error handling.
 - `skills/<name>/skill.md` — one skill per user goal
 - `skills/<name>/tools.py` — optional `@tool` functions for that skill
 - `skills/<name>/memory.yml` — skill-scoped memory schema
@@ -27,8 +32,25 @@ be re-added later with admin buy-in.
 | `lookup_employee` | Who's Who directory lookup (live Notion database) |
 | `lookup_company_info` | Addresses, VAT, banking, and phone details from Notion |
 | `lookup_company_values` | Official Rasa company values from Notion |
+| `lookup_benefits` | Employer benefits & perks 2026 (gym, wellness, etc.) from Notion |
+| `lookup_remote_budget` | Remote / home-office budget 2026 (Berlin, coworking, WFH) |
+| `lookup_work_abroad` | Working from other countries / temporary work abroad policy |
+| `lookup_holidays` | Public/bank holiday lookup by country or region (e.g. Bayern today) |
+| `lookup_payday` | Days until next Rasa payday from location / Deel setup |
+| `lookup_security_incidents` | Security incidents / "was Rasa affected?" from Notion tracker |
+| `rfp_security` | RFP/RFI security questionnaire answers from the Notion question bank |
+| `policy_social_media` | Social media policy (LinkedIn, X/Twitter, personal accounts) |
+| `lookup_board` | Who is on the Rasa board (from Notion) |
+| `policy_legal_support` | Legal support: point people to Mat Searle (@Mat) |
+| `policy_travel_insurance` | Travel insurance / business-trip cover from Notion (2026) |
+| `policy_business_travel` | Business travel booking & spend rules (flights, hotels, per diem) |
 | `lookup_all_hands_presentations` | Links to the All Hands slides/recordings archive |
 | `lookup_win_loss_analysis` | Links to the Win/Loss Analysis Notion page; asks people to add notes via @PMM |
+| `lookup_product_proof_points` | Answers from / uploads the Product Proof Points PDF (customer metrics, analysts, deploy speed) |
+| `it_support_laptop_repairs` | MacBook / laptop repair process (Apple Support first, then Rajesh paths) |
+| `it_support_stolen_laptop` | Stolen work laptop: police report + notify Ops/Security |
+| `onboarding_yubikey` | YubiKey / security-key install steps from Notion |
+| `onboarding_yubisneeze` | Undo an accidental YubiKey sneeze / OTP paste |
 | `leave_check` | Points users to the BambooHR Slack app for leave balances |
 | `leave_sick` | What to do when sick; personalizes by Slack timezone/location |
 | `leave_vacation` | How to book vacation, offline days, carry-over, OOO FAQ |
@@ -40,6 +62,8 @@ be re-added later with admin buy-in.
 | `redirect_competitive_analysis` | Routes competitor comparisons to @Alan / Product Marketing |
 | `redirect_product_docs` | Routes technical product questions to Docs + the docs bot |
 | `activate_fun_mode` | Light-hearted reply voices (pirate, valley girl, etc.) |
+| `who_built_sara` | "Who built you?" → @lauren + live day count since Aug 11, 2026 |
+| `fun_fact_rasa` | Canned rotating fun facts about Rasa (company/product) |
 
 ## Build loop
 

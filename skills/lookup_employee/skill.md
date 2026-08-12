@@ -4,7 +4,10 @@ description: >
   Look up a coworker in Rasa's Who's Who directory (Notion) - who someone is,
   their role, team, location, a fun fact, or other general profile info. Activate when the user
   asks who someone is, "who is <name>", "tell me about <name>", how to reach them, who manages whom,
-  or org/directory questions.
+  or org/directory questions. Do NOT activate for "who is on the Rasa board" /
+  board of directors - that is lookup_board. Do NOT activate for "who built
+  you" / "who made Sara" - that is who_built_sara. Do NOT activate for a fun
+  fact about Rasa the company/product - that is fun_fact_rasa.
 tool_constraints:
   - get_employee_details:
       requires: session.lookup_employee.selected_employee_id

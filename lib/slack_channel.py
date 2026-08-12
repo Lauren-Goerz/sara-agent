@@ -13,6 +13,8 @@ Behaviour:
   - GIFs/images are accepted even with empty text; a short vision description
     is injected so Maestro (text-only) can react. This includes app-posted
     GIFs (``/giphy``), which Slack delivers as bot messages with no user id.
+  - Slack voice messages / audio files are transcribed with Deepgram
+    (``DEEPGRAM_API_KEY``) and injected as the user text.
 """
 
 from __future__ import annotations
@@ -29,6 +31,7 @@ from rasa.shared.exceptions import InvalidConfigException
 from sanic.request import Request
 
 from lib.media_vision import describe_slack_media, media_from_slack_event
+from lib.slack_audio import audio_from_slack_event, transcribe_slack_audio
 
 structlogger = structlog.get_logger()
 
@@ -245,7 +248,7 @@ class EnvSlackInput(SlackInput):
         return metadata
 
     def _is_user_message(self, slack_event: Dict[Text, Any]) -> bool:
-        """Accept text, user-uploaded images/GIFs, and app-posted GIFs."""
+        """Accept text, images/GIFs, voice notes, and app-posted GIFs."""
         event = slack_event.get("event") or {}
         if not event:
             return False
@@ -255,6 +258,7 @@ class EnvSlackInput(SlackInput):
             return False
 
         media = media_from_slack_event(event)
+        audio = audio_from_slack_event(event)
         bot_id = str(event.get("bot_id") or "")
 
         if bot_id:
@@ -274,7 +278,7 @@ class EnvSlackInput(SlackInput):
             return False
 
         subtype = event.get("subtype")
-        # file_share is how Slack delivers many GIF/image uploads.
+        # file_share is how Slack delivers many GIF/image/voice uploads.
         if subtype and subtype not in {"file_share", "file_mention"}:
             return False
 
@@ -290,7 +294,7 @@ class EnvSlackInput(SlackInput):
 
         if event.get("text"):
             return True
-        return bool(media)
+        return bool(media or audio)
 
     def _event_user_id(self, event: Dict[Text, Any]) -> Text:
         """Fall back to the last human sender for app-posted messages."""
@@ -319,13 +323,44 @@ class EnvSlackInput(SlackInput):
         sender_id: Optional[Text],
         metadata: Optional[Dict],
     ) -> Any:
-        """Describe attached GIFs/images so Maestro (text-only) can react."""
+        """Transcribe voice + describe GIFs/images for Maestro (text-only)."""
         event: Dict[str, Any] = {}
         if request.headers.get("content-type") == "application/json":
             event = (request.json or {}).get("event") or {}
 
         media = media_from_slack_event(event)
+        audio = audio_from_slack_event(event)
         enriched = (text or "").strip()
+
+        if audio:
+            structlogger.info(
+                "slack_channel.audio_received",
+                audio_count=len(audio),
+                kinds=[item.get("kind") for item in audio],
+            )
+            transcripts: list[str] = []
+            for item in audio[:1]:
+                transcript = await transcribe_slack_audio(item)
+                if transcript:
+                    transcripts.append(transcript)
+            structlogger.info(
+                "slack_channel.audio_transcribed",
+                transcribed=len(transcripts),
+            )
+            if transcripts:
+                spoken = " ".join(transcripts).strip()
+                enriched = f"{enriched}\n{spoken}".strip() if enriched else spoken
+                metadata = dict(metadata or {})
+                metadata["has_audio"] = True
+                metadata["audio_transcript"] = spoken
+            elif not enriched:
+                enriched = (
+                    "[User sent a voice message, but I could not transcribe "
+                    "it. Ask them to type the request or try again.]"
+                )
+                metadata = dict(metadata or {})
+                metadata["has_audio"] = True
+
         if media:
             structlogger.info(
                 "slack_channel.media_received",

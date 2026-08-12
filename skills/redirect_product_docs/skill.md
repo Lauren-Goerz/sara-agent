@@ -6,8 +6,11 @@ description: >
   custom actions, slots, dialogues, or "how do I build/configure X in Rasa".
   Activate for developer/product how-to questions that belong in product
   documentation. Do NOT activate for internal HR/Ops policies, leave, brand
-  colors, Phosphor icons, Who's Who, company info, competitive analysis, or
-  Slack announcements.
+  colors, Phosphor icons, Who's Who, company info, competitive analysis,
+  product proof points / customer metrics / "why customers use Rasa", laptop
+  / MacBook IT repairs, YubiKey onboarding install, security incident /
+  vulnerability impact status, RFP/RFI security questionnaires, or Slack
+  announcements.
 ---
 
 When someone asks a technical question about the Rasa product, do not invent

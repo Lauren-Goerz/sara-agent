@@ -22,9 +22,38 @@ description: >
   maternity, paternity, or adoption leave - that is leave_parental. Do NOT
   activate for competitive analysis or Rasa vs competitor comparisons - that
   is redirect_competitive_analysis. Do NOT activate for win/loss analysis or
-  the win/loss archive - that is lookup_win_loss_analysis. Do NOT activate
-  for technical product how-tos, APIs, SDKs, CALM/Maestro config, or
-  deployment questions - that is redirect_product_docs.
+  the win/loss archive - that is lookup_win_loss_analysis. Do NOT activate for
+  product proof points, customer case-study metrics, "why customers use Rasa",
+  deployment-speed anecdotes from the proof-points pack, or the proof points
+  PDF - that is lookup_product_proof_points. Do NOT activate for laptop /
+  MacBook repairs, Apple Support for work Macs, substitute Macs, or Rajesh
+  laptop repair process - that is it_support_laptop_repairs. Do NOT activate
+  for stolen / missing-presumed-stolen work laptops - that is
+  it_support_stolen_laptop. Do NOT activate for YubiKey / security-key
+  install or onboarding setup - that is onboarding_yubikey. Do NOT activate
+  for Yubisneeze / accidental YubiKey OTP undo - that is
+  onboarding_yubisneeze. Do NOT activate for employer benefits, gym
+  membership, wellness/perks allowances - that is lookup_benefits. Do NOT
+  activate for working from other countries / working abroad temporarily -
+  that is lookup_work_abroad. Do NOT activate for public/bank holiday
+  lookups by country or region ("is it a holiday in Bayern today") - that
+  is lookup_holidays. Do NOT activate for payday / days-until-salary
+  questions - that is lookup_payday. Do NOT activate for security incidents
+  or "was Rasa affected by …" vulnerability questions - that is
+  lookup_security_incidents. Do NOT activate for RFP/RFI security
+  questionnaire answers - that is rfp_security. Do NOT activate for social
+  media policy (LinkedIn / X / personal accounts) - that is
+  policy_social_media. Do NOT activate for who is on the Rasa board -
+  that is lookup_board. Do NOT activate for legal support / legal counsel /
+  who to contact for legal - that is policy_legal_support. Do NOT activate for
+  travel insurance / business-trip cover / travel insurance claims - that is
+  policy_travel_insurance. Do NOT activate for business travel booking or
+  spend rules (flight class, hotel budgets, per diem vs receipts, public
+  transport preference) - that is policy_business_travel. Do NOT activate for
+  remote budget / home office budget / coworking flex desk allowances - that
+  is lookup_remote_budget. Do NOT activate for technical product how-tos,
+  APIs, SDKs, CALM/Maestro config, or deployment questions - that is
+  redirect_product_docs.
 tool_constraints:
   - get_policy_page:
       requires: session.search_policies.selected_page_id

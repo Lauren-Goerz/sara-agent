@@ -7,7 +7,8 @@ description: >
   templates, or carry-over rules - that is leave_vacation. Do NOT activate
   for "I'm sick what should I do" / certificates - that is leave_sick. Do NOT
   activate for parental, maternity, paternity, or adoption leave - that is
-  leave_parental.
+  leave_parental. Do NOT activate for gym membership, wellness, or other
+  employer benefits/perks - that is lookup_benefits.
 ---
 
 Sara does not have live BambooHR API access yet, so do not invent balances,

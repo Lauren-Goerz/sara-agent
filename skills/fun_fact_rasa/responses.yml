@@ -1,0 +1,16 @@
+responses:
+  utter_rasa_fun_fact:
+    - text: >-
+        Rasa NLU was at first actually called PARSA, which eventually turned
+        into Rasa, as in tabula rasa ('the mind in its hypothetical primary
+        blank or empty state before receiving outside impressions'), which is
+        also fitting for machine learning, which requires training data in
+        order to work.
+    - text: >-
+        "Sara" is the name of the early Rasa Open Source bird mascot. It makes
+        sense because it is Rasa backwards.
+    - text: >-
+        I once asked Alan what the weirdest bot ever built with Rasa was, and
+        he mentioned it was called "Serpent Bot". It was an open source bot that
+        someone from the community built to help folks with ball python
+        husbandry. Apparently it was a hit with the python husbandry community!
