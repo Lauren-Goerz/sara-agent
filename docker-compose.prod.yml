@@ -1,0 +1,73 @@
+# Sara — production compose (always-on Linux VM + Cloudflare Tunnel)
+#
+# Prerequisites on the VM:
+#   - cloned repo, .env (secrets + CLOUDFLARE_TUNNEL_TOKEN), models/*.tar.gz
+#
+# Cloudflare Tunnel (Zero Trust → Networks → Tunnels → Create):
+#   Public hostname → Service URL: http://127.0.0.1:5005
+#   Copy the install token into .env as CLOUDFLARE_TUNNEL_TOKEN=...
+#
+# Start:
+#   docker compose -f docker-compose.prod.yml --profile tunnel up -d --build
+#
+# Without tunnel (VM-local check only):
+#   docker compose -f docker-compose.prod.yml up -d --build sara
+# Slack Event Subscriptions:
+#   https://YOUR_PUBLIC_HOSTNAME/webhooks/slack/webhook
+
+services:
+  sara:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sara-agent:prod
+    container_name: sara-agent
+    restart: unless-stopped
+    # Oracle Ampere A1 is arm64; image publishes arm64 + amd64.
+    platform: linux/arm64
+    env_file:
+      - .env
+    environment:
+      PYTHONPATH: /app
+      RASA_PRO_LICENSE: ${RASA_LICENSE}
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - "127.0.0.1:5005:5005"
+    command:
+      [
+        "run",
+        "--enable-api",
+        "--cors",
+        "*",
+        "-p",
+        "5005",
+      ]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5005/')",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # Host networking so the dashboard service URL http://127.0.0.1:5005 works
+  # (Linux VMs only — this is the Oracle / Ubuntu target).
+  # Enable with: docker compose -f docker-compose.prod.yml --profile tunnel up -d
+  tunnel:
+    profiles: ["tunnel"]
+    image: cloudflare/cloudflared:latest
+    container_name: sara-tunnel
+    restart: unless-stopped
+    network_mode: host
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - sara

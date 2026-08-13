@@ -107,6 +107,17 @@ rasa inspect           # local Inspector UI
 
 Re-run `rasa train` after editing `agent.yml`, `integrations.yml`, or any skill.
 
+### Always-on deploy (vacation-safe)
+
+Local ngrok dies when your laptop sleeps. Use Oracle Always Free + Cloudflare
+Tunnel — see [DEPLOY.md](DEPLOY.md):
+
+```bash
+bash scripts/deploy/package-release.sh
+# provision VM + tunnel per DEPLOY.md, then:
+bash scripts/deploy/cutover-checklist.sh https://YOUR_PUBLIC_HOSTNAME
+```
+
 ### Proactive rasa-versary DMs
 
 Sara does not push messages from skills. Use the daily job that reads each

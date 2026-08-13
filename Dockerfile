@@ -18,4 +18,4 @@ USER 1001
 
 EXPOSE 5005
 
-CMD ["rasa", "run", "--enable-api", "--cors", "*", "-p", "5005"]
+CMD ["run", "--enable-api", "--cors", "*", "-p", "5005"]

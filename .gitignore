@@ -26,3 +26,6 @@ docker-compose.override.yml
 
 # Local job state (rasa-versary sent receipts, etc.)
 .data/
+
+# Deploy packaging output
+dist/

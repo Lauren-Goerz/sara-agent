@@ -37,11 +37,15 @@ services:
       # Live project files (skills, integrations, models, lib)
       - ./:/app
     working_dir: /app
-    command: >
-      rasa run
-      --enable-api
-      --cors "*"
-      -p 5005
+    command:
+      [
+        "run",
+        "--enable-api",
+        "--cors",
+        "*",
+        "-p",
+        "5005",
+      ]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5005/')"]
       interval: 30s
