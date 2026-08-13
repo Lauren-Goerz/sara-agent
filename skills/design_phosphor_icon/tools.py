@@ -91,7 +91,88 @@ _PREFERRED_CONCEPTS = {
     "settings": "gear",
     "success": "check-circle",
     "warning": "warning",
+    # Abstract concepts have no literal icon name; map them to the closest
+    # official icon so fuzzy matching cannot pick something unrelated.
+    "confusion": "question-mark",
+    "confused": "question-mark",
+    "uncertainty": "question-mark",
+    "unsure": "question-mark",
+    "puzzled": "question-mark",
+    "idea": "lightbulb",
+    "inspiration": "lightbulb",
+    "brainstorm": "brain",
+    "thinking": "brain",
+    "learning": "graduation-cap",
+    "education": "graduation-cap",
+    "celebration": "confetti",
+    "party": "confetti",
+    "help": "lifebuoy",
+    "support": "lifebuoy",
+    "question": "question",
+    "collaboration": "handshake",
+    "partnership": "handshake",
+    "teamwork": "users-three",
+    "team": "users-three",
+    "growth": "chart-line",
+    "launch": "rocket",
+    "speed": "rocket",
+    "goal": "target",
+    "goals": "target",
+    "win": "trophy",
+    "achievement": "trophy",
+    "security": "shield-check",
+    "privacy": "lock",
+    "time": "clock",
+    "deadline": "clock",
+    "bug": "bug",
+    "fix": "wrench",
+    "magic": "sparkle",
+    "favorite": "star",
+    "love": "heart",
+    "approval": "thumbs-up",
+    "urgent": "fire",
+    "documentation": "books",
+    "sad": "smiley-sad",
+    "sadness": "smiley-sad",
+    "happy": "smiley",
+    "happiness": "smiley",
+    "angry": "smiley-angry",
+    "frustration": "smiley-angry",
+    "overwhelmed": "smiley-melting",
+    "burnout": "smiley-melting",
+    "welcome": "hand-waving",
+    "greeting": "hand-waving",
+    "onboarding": "hand-waving",
+    "budget": "money",
+    "cost": "currency-dollar",
+    "payroll": "money",
+    "email": "envelope",
+    "feedback": "chat-circle",
+    "milestone": "flag",
+    "global": "globe",
+    "remote": "globe",
+    "data": "database",
+    "cloud": "cloud-arrow-up",
+    "ai": "robot",
+    "automation": "robot",
+    "voice": "microphone",
+    "meeting": "calendar-check",
+    "roadmap": "path",
+    "workflow": "tree-structure",
+    "strategy": "strategy",
+    "integration": "puzzle-piece",
+    "visibility": "eye",
+    "risk": "shield-warning",
+    "compliance": "scales",
+    "legal": "gavel",
 }
+
+# Fuzzy similarity below this is noise (e.g. "confusion" vs "construction"
+# scores ~0.67), so it must not decide a match on its own.
+_MIN_FUZZY_RATIO = 0.8
+
+# Anything under this means no token, substring, or strong fuzzy hit.
+_MIN_CONFIDENT_SCORE = 80.0
 
 
 def _parse_catalog(source: str) -> list[dict[str, Any]]:
@@ -166,17 +247,27 @@ def _score(entry: dict[str, Any], query: str) -> float:
     score += 80.0 * len(query_tokens & searchable_tokens)
 
     candidates = [name, pascal, *tags]
-    score += 100.0 * max(
+    best_ratio = max(
         difflib.SequenceMatcher(None, query, candidate).ratio()
         for candidate in candidates
     )
+    # Only credit fuzzy similarity when it is close enough to be a real
+    # typo/variant. Weak similarity used to tie hundreds of icons together
+    # and hand the win to whichever appeared first in the catalog.
+    if best_ratio >= _MIN_FUZZY_RATIO:
+        score += 100.0 * best_ratio
     return score
 
 
 async def _search(query: str, limit: int = 5) -> list[dict[str, Any]]:
     cleaned = _clean_query(query)
     entries = await _catalog()
-    ranked = sorted(entries, key=lambda entry: _score(entry, cleaned), reverse=True)
+    # Break score ties toward the plainest icon ("check" over "calendar-check")
+    # instead of whatever happens to come first in the catalog.
+    ranked = sorted(
+        entries,
+        key=lambda entry: (-_score(entry, cleaned), len(entry["name"]), entry["name"]),
+    )
     preferred_name = _PREFERRED_CONCEPTS.get(cleaned)
     if preferred_name:
         preferred = next(
@@ -186,6 +277,13 @@ async def _search(query: str, limit: int = 5) -> list[dict[str, Any]]:
         if preferred:
             ranked = [preferred, *[entry for entry in ranked if entry is not preferred]]
     return ranked[:limit]
+
+
+def _is_confident(entry: dict[str, Any], query: str) -> bool:
+    cleaned = _clean_query(query)
+    if _PREFERRED_CONCEPTS.get(cleaned) == entry["name"]:
+        return True
+    return _score(entry, cleaned) >= _MIN_CONFIDENT_SCORE
 
 
 def _normalize_color(raw_color: str) -> tuple[str, str]:
@@ -313,6 +411,22 @@ async def generate_phosphor_icon(
         color, color_label = _normalize_color(raw_color)
         matches = await _search(query)
         chosen = matches[0]
+        if not _is_confident(chosen, query):
+            return ToolResult(
+                llm_response={
+                    "ok": False,
+                    "error": "no_confident_match",
+                    "query": query,
+                    "instruction": (
+                        f"Phosphor has no icon that clearly means {query!r}, so "
+                        "nothing was uploaded. Do NOT guess or upload a "
+                        "loosely-related icon. Suggest two or three concrete "
+                        "Phosphor icons that could represent the idea and ask "
+                        "the user to pick one, or ask them for a more literal "
+                        "object (e.g. 'question mark' instead of 'confusion')."
+                    ),
+                }
+            )
         svg, source_url = await _fetch_svg(chosen["name"], color)
         file_format = _requested_format(context)
         rendered_file = _render_file(svg, file_format)

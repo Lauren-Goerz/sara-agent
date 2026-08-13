@@ -1,17 +1,19 @@
 ---
 name: lookup_benefits
 description: >
-  Employer benefits and perks - gym membership, wellness, fitness, learning
-  budget, equipment stipend, parental-adjacent perks listed on Benefits &
+  Employer benefits and perks - gym membership, wellness, fitness,
+  equipment stipend, parental-adjacent perks listed on Benefits &
   Perks 2026, health/wellbeing allowances, and "what benefits do we get".
   Activate for gym, ClassPass, wellbeing, perks, employee benefits, or
-  similar. Do NOT activate for leave balances (leave_check), vacation/sick/
-  parental leave process (leave_vacation / leave_sick / leave_parental),
-  company values, travel insurance / business-trip cover
-  (policy_travel_insurance), business travel booking/spend rules
-  (policy_business_travel), remote / home office budget
-  (lookup_remote_budget), or general Notion policy search unless the ask
-  is clearly a benefit/perk from this page.
+  similar. Do NOT activate for learning & development, education days,
+  L&D / learning budget, courses, or training budget
+  (lookup_learning_development). Do NOT activate for leave balances
+  (leave_check), vacation/sick/ parental leave process (leave_vacation /
+  leave_sick / leave_parental), company values, travel insurance /
+  business-trip cover (policy_travel_insurance), business travel
+  booking/spend rules (policy_business_travel), remote / home office
+  budget (lookup_remote_budget), or general Notion policy search unless
+  the ask is clearly a benefit/perk from this page.
 ---
 
 Answer questions about Rasa employer benefits and perks from the designated

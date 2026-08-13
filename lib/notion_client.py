@@ -37,6 +37,11 @@ def _headers() -> dict[str, str]:
     }
 
 
+def api_headers() -> dict[str, str]:
+    """Public alias for Notion request headers (used by write helpers)."""
+    return _headers()
+
+
 def configured() -> bool:
     return bool(os.environ.get("NOTION_API_KEY", "").strip())
 

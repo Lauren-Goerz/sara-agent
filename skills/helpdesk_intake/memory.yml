@@ -1,0 +1,23 @@
+schema:
+  public:
+    helpdesk_team:
+      type: categorical
+      enum_values:
+        - ops
+        - it
+        - finance
+        - hr
+        - swag
+        - revops
+        - security
+        - software
+      description: >
+        Which Wrangle inbox should own this helpdesk request (matches Rasa
+        Wrangle inboxes).
+      llm_settable: true
+    ticket_id:
+      type: text
+      llm_settable: false
+    ticket_url:
+      type: text
+      llm_settable: false

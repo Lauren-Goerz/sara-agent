@@ -1,5 +1,5 @@
 ---
-name: lookup_work_abroad
+name: policy_work_abroad
 description: >
   Working from other countries / working abroad policy - temporary remote
   work from Denmark, South Africa, or elsewhere, "can I work abroad", "work
@@ -9,7 +9,8 @@ description: >
   (leave_check), parental leave (leave_parental), travel insurance /
   business-trip cover (policy_travel_insurance), business travel booking /
   spend rules (policy_business_travel), or general Notion search when the
-  ask is clearly this policy.
+  ask is clearly this policy. Do NOT activate for relocating to Berlin /
+  Germany permanently (lookup_relocation_germany).
 ---
 
 Answer questions about working from other countries using the designated

@@ -125,13 +125,13 @@ SOURCES: dict[str, NotionSource] = {
     ),
     "rfp_security": NotionSource(
         key="rfp_security",
-        notion_id="2d41a51d8c6d4080b42dc06ce5248cc6",
+        notion_id="0f73f9f5d14342e4bfff68423e73ba3e",
         url=(
             "https://app.notion.com/p/rasa/"
-            "Customer-Information-Security-Questionnaires-"
-            "2d41a51d8c6d4080b42dc06ce5248cc6"
+            "0f73f9f5d14342e4bfff68423e73ba3e"
+            "?v=a22c9219c6a34f24835c43c25b757131"
         ),
-        title="Customer Information Security Questionnaires",
+        title="Vendor Security Questionnaire Bank",
         kind="auto",
         max_blocks=600,
         max_rows=300,
@@ -218,6 +218,221 @@ SOURCES: dict[str, NotionSource] = {
             "internet",
             "utility",
             "payhawk",
+        ),
+    ),
+    "sexual_harassment": NotionSource(
+        key="sexual_harassment",
+        notion_id="bde30194f1794d77a1b8055fca871369",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Sexual-Harassment-Policy-bde30194f1794d77a1b8055fca871369"
+        ),
+        title="Sexual Harassment Policy",
+        max_blocks=600,
+        keywords=(
+            "sexual",
+            "harassment",
+            "harass",
+            "inappropriate",
+            "consent",
+            "complaint",
+            "complaints",
+            "hostile",
+            "workplace",
+        ),
+    ),
+    "employee_handbooks": NotionSource(
+        key="employee_handbooks",
+        notion_id="defd5187553d4e8598e412a115679b40",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Employee-Handbooks-defd5187553d4e8598e412a115679b40"
+        ),
+        title="Employee Handbooks",
+        max_blocks=400,
+        keywords=(
+            "handbook",
+            "handbooks",
+            "employee",
+            "country",
+            "germany",
+            "berlin",
+            "usa",
+            "uk",
+            "ireland",
+            "spain",
+            "netherlands",
+            "canada",
+            "india",
+        ),
+    ),
+    "learning_development": NotionSource(
+        key="learning_development",
+        notion_id="a744377944c1416592c0a9fdb761b2f4",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Learning-Development-a744377944c1416592c0a9fdb761b2f4"
+        ),
+        title="Learning & Development",
+        max_blocks=600,
+        keywords=(
+            "learning",
+            "development",
+            "education",
+            "edu",
+            "budget",
+            "course",
+            "courses",
+            "training",
+            "conference",
+            "conferences",
+            "certification",
+            "study",
+        ),
+    ),
+    "relocation_germany": NotionSource(
+        key="relocation_germany",
+        notion_id="79de728aadc5486b940bdd79b70235d8",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Relocation-Guide-Germany-79de728aadc5486b940bdd79b70235d8"
+        ),
+        title="Relocation Guide Germany",
+        max_blocks=600,
+        keywords=(
+            "relocation",
+            "relocate",
+            "move",
+            "moving",
+            "visa",
+            "permit",
+            "shipping",
+            "package",
+        ),
+    ),
+    "welcome_berlin": NotionSource(
+        key="welcome_berlin",
+        notion_id="fde61822cf77417c8712380d47fba265",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Welcome-to-Berlin-fde61822cf77417c8712380d47fba265"
+        ),
+        title="Welcome to Berlin",
+        max_blocks=600,
+        keywords=(
+            "berlin",
+            "welcome",
+            "neighborhood",
+            "neighbourhood",
+            "apartment",
+            "flat",
+            "anmeldung",
+            "city",
+        ),
+    ),
+    "working_in_germany": NotionSource(
+        key="working_in_germany",
+        notion_id="f9ae50b8c6cc438e8e86b4c5dbaff1ac",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Overview-Working-in-Germany-f9ae50b8c6cc438e8e86b4c5dbaff1ac"
+        ),
+        title="Overview: Working in Germany",
+        max_blocks=600,
+        keywords=(
+            "working",
+            "germany",
+            "employment",
+            "tax",
+            "contract",
+            "payroll",
+            "social",
+            "insurance",
+        ),
+    ),
+    "berlin_office": NotionSource(
+        key="berlin_office",
+        notion_id="7a57e119a0fb443b9c9ce6a481e14578",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Working-from-Berlin-Office-7a57e119a0fb443b9c9ce6a481e14578"
+        ),
+        title="Working from Berlin Office",
+        max_blocks=600,
+        keywords=(
+            "berlin",
+            "office",
+            "desk",
+            "hq",
+            "building",
+            "access",
+            "badge",
+            "wifi",
+            "workplace",
+        ),
+    ),
+    "ai_tools": NotionSource(
+        key="ai_tools",
+        notion_id="ea4e9ed1af46449b9fb036bcf70b2795",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Using-AI-Tools-at-Rasa-ea4e9ed1af46449b9fb036bcf70b2795"
+        ),
+        title="Using AI Tools at Rasa",
+        max_blocks=600,
+        keywords=(
+            "ai",
+            "chatgpt",
+            "claude",
+            "gemini",
+            "copilot",
+            "llm",
+            "tools",
+            "approved",
+            "generative",
+        ),
+    ),
+    "crowdstrike": NotionSource(
+        key="crowdstrike",
+        notion_id="7e762e4d1b4e4beb917b71f4f304d375",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Crowdstrike-7e762e4d1b4e4beb917b71f4f304d375"
+        ),
+        title="Crowdstrike",
+        max_blocks=400,
+        keywords=(
+            "crowdstrike",
+            "crowd",
+            "strike",
+            "falcon",
+            "edr",
+            "endpoint",
+            "browsing",
+            "tracking",
+            "monitoring",
+        ),
+    ),
+    "kandji": NotionSource(
+        key="kandji",
+        notion_id="1f4b9c0d544a8029888cd852181b9b58",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Kandji-Iru-1f4b9c0d544a8029888cd852181b9b58"
+        ),
+        title="Kandji / Iru",
+        max_blocks=400,
+        keywords=(
+            "kandji",
+            "iru",
+            "mdm",
+            "keystroke",
+            "keystrokes",
+            "mac",
+            "device",
+            "management",
+            "tracking",
+            "monitoring",
         ),
     ),
 }

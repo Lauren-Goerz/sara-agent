@@ -7,7 +7,9 @@ description: >
   purple", "colour palette", "which colors can I use in a deck", "brand
   colours". This is the source of truth for colors - answer from it directly
   instead of searching Notion. Share colors freely; just never make up a hex
-  or color that isn't in the official palette.
+  or color that isn't in the official palette. Do NOT activate for
+  illustrations, deck polish, or requesting creative/design work - that is
+  request_design.
 ---
 
 Answer brand-color questions from the official palette below. Match the

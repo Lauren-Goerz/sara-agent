@@ -7,7 +7,7 @@ description: >
   insurance claim", "Travel Insurances 2026", or similar. Do NOT activate for
   flight class, hotel budgets, per diem vs receipts, or other booking/spend
   rules - that is policy_business_travel. Do NOT activate for working from
-  other countries / temporary work abroad (lookup_work_abroad), vacation
+  other countries / temporary work abroad (policy_work_abroad), vacation
   booking (leave_vacation), general benefits/perks (lookup_benefits), or
   generic Notion search when this policy clearly applies.
 ---

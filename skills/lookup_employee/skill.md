@@ -6,8 +6,8 @@ description: >
   asks who someone is, "who is <name>", "tell me about <name>", how to reach them, who manages whom,
   or org/directory questions. Do NOT activate for "who is on the Rasa board" /
   board of directors - that is lookup_board. Do NOT activate for "who built
-  you" / "who made Sara" - that is who_built_sara. Do NOT activate for a fun
-  fact about Rasa the company/product - that is fun_fact_rasa.
+  you" / "who made Sara" - that is faq_creator. Do NOT activate for a fun
+  fact about Rasa the company/product - that is faz_fun_fact_rasa.
 tool_constraints:
   - get_employee_details:
       requires: session.lookup_employee.selected_employee_id

@@ -11,7 +11,7 @@ description: >
   activate for parental, maternity, paternity, or adoption leave - that is
   leave_parental. Do NOT activate for gym membership, wellness, or other
   employer benefits/perks - that is lookup_benefits. Do NOT activate for
-  working from other countries / working abroad - that is lookup_work_abroad.
+  working from other countries / working abroad - that is policy_work_abroad.
   Do NOT activate for public/bank holiday calendar questions - that is
   lookup_holidays. Do NOT activate for payday / days until salary - that is
   lookup_payday.

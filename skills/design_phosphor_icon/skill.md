@@ -4,7 +4,9 @@ description: >
   Find and provide an official Phosphor icon in Slack. Activate when someone
   asks for an icon, symbol, pictogram, or Phosphor asset for a concept such as
   settings, calendar, upload, user, arrow, location, or notification. Do not
-  activate for Rasa's brand color palette unless the user is requesting an icon.
+  activate for Rasa's brand color palette unless the user is requesting an
+  icon. Do NOT activate for illustrations, deck polish, or requesting
+  creative/design work from Marketing - that is request_design.
 ---
 
 Provide an icon from the official Phosphor Icons library.
@@ -33,6 +35,10 @@ reply must name the same icon the tool returned in `icon`/`slug`.
 When the tool returns:
 - If `uploaded_to_slack` is true, confirm in one short line naming the icon and
   color.
+- If `error` is `no_confident_match`, nothing was uploaded because Phosphor has
+  no icon for that concept. Do not pretend an unrelated icon represents it.
+  Name two or three concrete Phosphor icons that could stand in for the idea and
+  ask which they want, or ask for a more literal object.
 - If it failed, say plainly what failed. When `missing_files_write_scope` is
   true, say the Slack app is missing the `files:write` scope and an admin needs
   to add it and reinstall. Share `phosphor_page` so they are unblocked.

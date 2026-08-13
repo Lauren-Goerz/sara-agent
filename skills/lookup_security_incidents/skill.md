@@ -6,8 +6,10 @@ description: >
   compromise", remote code execution / CVE / supply-chain impact on Rasa,
   or similar security-status asks. Activate for those. Do NOT activate for
   product how-tos (redirect_product_docs), competitive analysis, RFP/RFI
-  security questionnaire drafting (rfp_security), or general Notion policy
-  search when the ask is clearly security-incident status.
+  security questionnaire drafting (rfp_security), Security Incident
+  Management / IR plan or other infosec policy docs
+  (policy_security_compliance), or general Notion policy search when the
+  ask is clearly security-incident status.
 ---
 
 Answer security-incident / "were we affected?" questions from the designated

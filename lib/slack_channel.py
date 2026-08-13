@@ -6,7 +6,16 @@ Maestro beta ``rasa train`` cannot parse ``${ENV_VAR}`` inside
 Behaviour:
   - DMs always work (no @mention needed).
   - Channel: first message must @mention Sara; replies go in a thread.
-  - Further messages in that same thread are accepted without another @mention.
+  - Further messages in that same thread are accepted without another @mention,
+    until someone @mentions another person and does not @mention Sara - then
+    she drops out of the thread (quiet until tagged again).
+  - Channels listed in ``SLACK_ALWAYS_REPLY_CHANNELS`` (comma-separated IDs)
+    accept every message without an @mention (Sara must still be a member of
+    the channel, and the Slack app must subscribe to ``message.channels`` /
+    ``message.groups`` with ``channels:history`` / ``groups:history``).
+  - ``SLACK_HELPDESK_CHANNELS`` (defaults to always-reply) marks helpdesk
+    intake channels for the helpdesk_intake skill (Wrangle ticket + Notion
+    mirror). Ignore IDs in ``SLACK_IGNORE_BOT_IDS`` (plus Sara herself).
   - Conversation state is scoped per Slack thread (and per DM channel).
   - Outgoing text is posted as one Slack message (stock Rasa splits on blank
     lines into multiple bubbles).
@@ -20,8 +29,9 @@ Behaviour:
 from __future__ import annotations
 
 import os
+import re
 import time
-from typing import Any, Awaitable, Callable, Dict, Optional, Text
+from typing import Any, Awaitable, Callable, Dict, Optional, Text, Set
 
 import httpx
 import structlog
@@ -40,6 +50,9 @@ structlogger = structlog.get_logger()
 _ACTIVE_THREADS: Dict[str, float] = {}
 _THREAD_TTL_SECONDS = 60 * 60 * 24  # 24 hours
 
+# Slack user / bot-user mentions look like <@U123> or <@W123>.
+_USER_MENTION_RE = re.compile(r"<@([UW][A-Z0-9]+)>")
+
 # Last human sender per conversation, so app-posted GIFs (which carry no user
 # id) continue the same tracker instead of opening a new one.
 _LAST_HUMAN_SENDER: Dict[str, str] = {}
@@ -47,6 +60,31 @@ _LAST_HUMAN_SENDER: Dict[str, str] = {}
 # Sara's own bot identity, resolved once. Used to ignore her own uploads
 # (e.g. Phosphor icons) so she never reacts to herself.
 _OWN_BOT_IDS: Optional[set[str]] = None
+
+
+def _always_reply_channels() -> set[str]:
+    """Channel IDs where Sara answers every message (no @mention required)."""
+    raw = os.environ.get("SLACK_ALWAYS_REPLY_CHANNELS", "").strip()
+    if not raw:
+        return set()
+    return {part.strip() for part in raw.split(",") if part.strip()}
+
+
+def _helpdesk_channels() -> set[str]:
+    """Channels that run helpdesk intake (defaults to always-reply list)."""
+    raw = os.environ.get("SLACK_HELPDESK_CHANNELS", "").strip()
+    if not raw:
+        return _always_reply_channels()
+    return {part.strip() for part in raw.split(",") if part.strip()}
+
+
+def _ignored_bot_ids() -> set[str]:
+    """Extra bot/user IDs to ignore (e.g. Wrangle), plus Sara's own ids."""
+    ids = set(_own_bot_ids())
+    raw = os.environ.get("SLACK_IGNORE_BOT_IDS", "").strip()
+    if raw:
+        ids.update(part.strip() for part in raw.split(",") if part.strip())
+    return ids
 
 
 def _own_bot_ids() -> set[str]:
@@ -93,6 +131,34 @@ def _remember_thread(channel_id: Optional[Text], thread_id: Optional[Text]) -> N
     if key:
         _ACTIVE_THREADS[key] = time.time()
         _prune_threads()
+
+
+def _forget_thread(channel_id: Optional[Text], thread_id: Optional[Text]) -> None:
+    key = _thread_key(channel_id, thread_id)
+    if key:
+        _ACTIVE_THREADS.pop(key, None)
+
+
+def _mentioned_user_ids(text: Optional[Text]) -> Set[str]:
+    if not text:
+        return set()
+    return set(_USER_MENTION_RE.findall(text))
+
+
+def _addresses_other_colleague(event: Dict[Text, Any]) -> bool:
+    """True when the message @mentions someone else and does not @mention Sara.
+
+    Used to drop Sara out of an open thread once the conversation clearly
+    pivots to another person.
+    """
+    mentioned = _mentioned_user_ids(str(event.get("text") or ""))
+    if not mentioned:
+        return False
+
+    sara_ids = _own_bot_ids()
+    mentions_sara = bool(mentioned & sara_ids)
+    mentions_others = bool(mentioned - sara_ids)
+    return mentions_others and not mentions_sara
 
 
 def _is_active_thread(channel_id: Optional[Text], thread_id: Optional[Text]) -> bool:
@@ -203,7 +269,7 @@ class EnvSlackInput(SlackInput):
         return sender_id
 
     def _is_supported_channel(self, slack_event: Dict, metadata: Dict) -> bool:
-        """Accept DMs, @mentions, and follow-ups in threads Sara already joined."""
+        """Accept DMs, @mentions, open threads, and always-reply channels."""
         if self._is_direct_message(slack_event):
             return True
 
@@ -216,10 +282,31 @@ class EnvSlackInput(SlackInput):
             _remember_thread(channel_id, thread_id)
             return True
 
-        # Follow-up in an existing thread — no @mention required.
+        # Follow-up in an existing thread — no @mention required, unless the
+        # message clearly pivots to another colleague (@them, not @Sara).
         # Real replies always include thread_ts; the parent mention does not.
         if event.get("thread_ts") and _is_active_thread(channel_id, event.get("thread_ts")):
-            _remember_thread(channel_id, event.get("thread_ts"))
+            parent_ts = event.get("thread_ts")
+            if _addresses_other_colleague(event):
+                _forget_thread(channel_id, parent_ts)
+                structlogger.info(
+                    "slack_channel.left_thread_for_colleague",
+                    channel_id=channel_id,
+                    thread_ts=parent_ts,
+                    mentioned=_mentioned_user_ids(str(event.get("text") or "")),
+                )
+                return False
+            _remember_thread(channel_id, parent_ts)
+            return True
+
+        # Dedicated always-reply channels (env allowlist) — no @mention needed.
+        if channel_id and str(channel_id) in _always_reply_channels():
+            parent = event.get("thread_ts") or thread_id or event.get("ts")
+            _remember_thread(channel_id, parent)
+            structlogger.info(
+                "slack_channel.always_reply_channel",
+                channel_id=channel_id,
+            )
             return True
 
         if metadata.get("out_channel") == self.slack_channel and self.slack_channel:
@@ -233,13 +320,30 @@ class EnvSlackInput(SlackInput):
         content_type = request.headers.get("content-type")
         slack_user_id = None
         media: list[dict[str, Any]] = []
+        message_ts = None
+        thread_ts = None
+        channel_id = None
         if content_type == "application/json":
             event = (request.json or {}).get("event") or {}
             slack_user_id = event.get("user")
             media = media_from_slack_event(event)
+            message_ts = event.get("ts")
+            thread_ts = event.get("thread_ts")
+            channel_id = event.get("channel")
         metadata = dict(metadata or {})
         if slack_user_id:
             metadata["slack_user_id"] = slack_user_id
+        if message_ts:
+            metadata["message_ts"] = str(message_ts)
+        if thread_ts:
+            metadata["thread_ts"] = str(thread_ts)
+        out_channel = metadata.get("out_channel") or channel_id
+        if out_channel and str(out_channel) in _helpdesk_channels():
+            metadata["is_helpdesk_channel"] = True
+            # Prefer parent ts for ticket dedupe when this is a thread reply.
+            metadata["helpdesk_parent_ts"] = str(
+                thread_ts or message_ts or ""
+            )
         if media:
             metadata["media"] = [
                 {"kind": item.get("kind"), "name": item.get("name")}
@@ -263,9 +367,10 @@ class EnvSlackInput(SlackInput):
 
         if bot_id:
             # Never react to Sara's own posts (e.g. Phosphor icon uploads),
-            # otherwise every upload would trigger another turn.
-            own = _own_bot_ids()
-            if bot_id in own or str(event.get("user") or "") in own:
+            # otherwise every upload would trigger another turn. Also ignore
+            # allowlisted bots such as Wrangle.
+            ignored = _ignored_bot_ids()
+            if bot_id in ignored or str(event.get("user") or "") in ignored:
                 return False
             # /giphy and similar apps post the GIF on the user's behalf.
             if media:
@@ -277,13 +382,18 @@ class EnvSlackInput(SlackInput):
                 return True
             return False
 
+        # Human sender that matches an ignore list (rare; Wrangle may appear
+        # as a user id in some workspaces).
+        user_id = str(event.get("user") or "")
+        if user_id and user_id in _ignored_bot_ids():
+            return False
+
         subtype = event.get("subtype")
         # file_share is how Slack delivers many GIF/image/voice uploads.
         if subtype and subtype not in {"file_share", "file_mention"}:
             return False
 
         # Remember the human so app-posted GIFs can reuse this conversation.
-        user_id = str(event.get("user") or "")
         if user_id:
             key = _sender_key(event.get("channel"), event.get("thread_ts"))
             if key:

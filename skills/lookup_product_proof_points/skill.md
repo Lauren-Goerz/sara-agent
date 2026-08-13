@@ -7,7 +7,9 @@ description: >
   good", "how long to deploy", "customer CSAT", "proof points", "case study
   metrics", "what do customers think", "scale / conversations handled",
   Forrester/Gartner mentions from the proof-points pack, or "send me the
-  proof points PDF". Do NOT activate for Rasa-vs-competitor battle cards -
+  proof points PDF". Do NOT activate for how customers should measure their
+  own AI agent / contact-center KPIs / success metrics - that is
+  lookup_success_metrics. Do NOT activate for Rasa-vs-competitor battle cards -
   that is redirect_competitive_analysis. Do NOT activate for technical
   product how-tos - that is redirect_product_docs.
 ---

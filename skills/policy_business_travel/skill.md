@@ -8,7 +8,7 @@ description: >
   class", "hotel budget", "per diem or receipts", "public transport on
   trips", or similar. Do NOT activate for travel insurance / claims /
   certificates - that is policy_travel_insurance. Do NOT activate for
-  working from other countries (lookup_work_abroad), vacation booking
+  working from other countries (policy_work_abroad), vacation booking
   (leave_vacation), or general benefits (lookup_benefits).
 ---
 

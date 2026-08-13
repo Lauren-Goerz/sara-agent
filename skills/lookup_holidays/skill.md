@@ -8,7 +8,7 @@ description: >
   holiday questions about a place and date. Do NOT activate for Rasa
   company holiday / office closure policies unless they clearly want the
   public-holiday calendar. Do NOT activate for leave booking (leave_vacation)
-  or work-abroad policy (lookup_work_abroad).
+  or work-abroad policy (policy_work_abroad).
 ---
 
 Answer public-holiday questions with `lookup_public_holiday`.

@@ -1,6 +1,0 @@
-schema:
-  public:
-    age_in_days:
-      type: text
-    response_text:
-      type: text

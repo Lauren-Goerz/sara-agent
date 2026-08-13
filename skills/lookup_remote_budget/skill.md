@@ -7,8 +7,11 @@ description: >
   styles, part-time/intern rules. Activate for "home office budget",
   "remote budget", "coworking reimbursement", "internet reimbursement",
   "which remote work style", or similar. Do NOT activate for general
-  benefits/gym/wellness (lookup_benefits), business travel spend
-  (policy_business_travel), or laptop repairs (it_support_laptop_repairs).
+  benefits/gym/wellness (lookup_benefits), learning & development /
+  education days / L&D budget (lookup_learning_development), business
+  travel spend (policy_business_travel), or laptop repairs
+  (it_support_laptop_repairs). Do NOT activate for working from the Berlin
+  office (lookup_berlin_office).
 ---
 
 Answer remote / home-office budget questions from the designated source.

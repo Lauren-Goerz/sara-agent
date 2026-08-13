@@ -1,4 +1,4 @@
-"""Fetch RFP/RFI security questionnaire answers from the Notion bank."""
+"""Fetch vendor / RFP security questionnaire answers from the Notion bank."""
 
 from __future__ import annotations
 
@@ -15,33 +15,34 @@ if str(_ROOT) not in sys.path:
 from lib import notion_sources  # noqa: E402
 
 _SUCCESS = (
-    "Help draft or locate an RFP/RFI security answer using only "
+    "Help draft or locate a vendor/RFP/RFI security answer using only "
     "source_content. Quote or lightly adapt approved bank wording; never "
     "invent certifications, controls, timelines, or audit results that are "
-    "not in the bank. If nothing matches, say so and share source_url or "
-    "suggest Security / the questionnaire owners. If content_truncated is "
+    "not in the bank. Always tell them to open source_url and double-check "
+    "the source before using the answer externally. If nothing matches, say "
+    "so and share source_url or suggest #security. If content_truncated is "
     "true, mention other_sections when relevant. Keep the Slack reply "
     "concise; offer to paste a fuller draft if they want it. Always share "
     "source_url."
 )
 _FAILURE = (
-    "Share source_url. Do not invent questionnaire answers or security "
-    "claims."
+    "Share source_url and ask them to check the Vendor Security Questionnaire "
+    "Bank there. Do not invent questionnaire answers or security claims."
 )
 
 
 @tool(
     description=(
-        "Fetch Rasa's Customer Information Security Questionnaires / RFP "
-        "security question bank from Notion. Call for RFP, RFI, security "
-        "questionnaire, or customer security-assurance answer requests."
+        "Fetch Rasa's Vendor Security Questionnaire Bank from Notion. Call "
+        "for RFP, RFI, vendor security questionnaire, or security-assurance "
+        "wording when no dedicated policy_* skill applies."
     )
 )
 async def get_rfp_security_answers(
     query: str = "",
     context: ToolContext = None,
 ) -> ToolResult:
-    """Return the security questionnaire bank for RFP/RFI answers.
+    """Return the vendor security questionnaire bank for answers.
 
     Args:
         query: The security topic or questionnaire question to look up

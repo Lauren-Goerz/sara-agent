@@ -1,3 +1,0 @@
-responses:
-  utter_who_built_sara:
-    - text: "{session.who_built_sara.response_text}"
