@@ -23,9 +23,7 @@ When the tool succeeds:
 - Official handbooks exist **only** for the countries listed on that page.
   Share the matching country link(s) from the page when present.
 - If they ask for a country that is **not** listed, say clearly that Rasa
-  does not publish an official employee handbook for that country. Offer to
-  help with general Rasa policy questions instead (benefits, leave, travel,
-  etc.) and invite them to ask.
+  does not publish an official employee handbook for that country.
 - Keep it short and Slack-friendly.
 - Always finish with:
   <https://app.notion.com/p/rasa/Employee-Handbooks-defd5187553d4e8598e412a115679b40|Employee Handbooks>

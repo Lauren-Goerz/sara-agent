@@ -33,6 +33,7 @@ be re-added later with admin buy-in.
 | `lookup_company_info` | Addresses, VAT, banking, and phone details from Notion |
 | `lookup_company_values` | Official Rasa company values from Notion |
 | `lookup_benefits` | Employer benefits & perks 2026 (gym, wellness, etc.) from Notion |
+| `lookup_employee_equity` | Employee equity / options (grants, refresh, Carta) from Notion |
 | `lookup_learning_development` | Learning & Development (education days, L&D budget, recommended uses) |
 | `lookup_remote_budget` | Remote / home-office budget 2026 (Berlin, coworking, WFH) |
 | `policy_work_abroad` | Working from other countries / temporary work abroad policy |

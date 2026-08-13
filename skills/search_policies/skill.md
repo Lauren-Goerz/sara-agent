@@ -39,6 +39,8 @@ description: >
   for Yubisneeze / accidental YubiKey OTP undo - that is
   onboarding_yubisneeze. Do NOT activate for employer benefits, gym
   membership, wellness/perks allowances - that is lookup_benefits. Do NOT
+  activate for employee equity / stock options / Carta / refresh grants -
+  that is lookup_employee_equity. Do NOT
   activate for learning & development / education days / L&D or learning
   budget -   that is lookup_learning_development. Do NOT activate for relocating to
   Berlin / Germany (relocation guide, Welcome to Berlin, working in

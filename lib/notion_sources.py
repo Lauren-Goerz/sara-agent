@@ -266,6 +266,90 @@ SOURCES: dict[str, NotionSource] = {
             "india",
         ),
     ),
+    "employee_equity": NotionSource(
+        key="employee_equity",
+        notion_id="1da6be3271984b239d5f441cb968984e",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Employee-Equity-1da6be3271984b239d5f441cb968984e"
+        ),
+        title="Employee Equity",
+        max_blocks=400,
+        keywords=(
+            "equity",
+            "stock",
+            "options",
+            "compensation",
+            "dei",
+        ),
+    ),
+    "employee_equity_how_options_work": NotionSource(
+        key="employee_equity_how_options_work",
+        notion_id="0780fa938be1449385eebd3210c648e5",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Employee-Equity-How-Options-Work-0780fa938be1449385eebd3210c648e5"
+        ),
+        title="Employee Equity: How Options Work",
+        max_blocks=600,
+        keywords=(
+            "carta",
+            "exercise",
+            "vesting",
+            "cliff",
+            "strike",
+            "option",
+            "options",
+            "see",
+            "view",
+            "portal",
+            "login",
+        ),
+    ),
+    "employee_equity_compensation": NotionSource(
+        key="employee_equity_compensation",
+        notion_id="546b37a91911448bbf084be36bd322f6",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Employee-Equity-How-We-Use-Options-as-Compensation-"
+            "546b37a91911448bbf084be36bd322f6"
+        ),
+        title="Employee Equity: How We Use Options as Compensation",
+        max_blocks=600,
+        keywords=(
+            "grant",
+            "initial",
+            "promotion",
+            "refresh",
+            "seniority",
+            "location",
+            "part-time",
+            "leave",
+            "how many",
+            "topped",
+            "top-up",
+            "topup",
+        ),
+    ),
+    "equity_refresh_policy": NotionSource(
+        key="equity_refresh_policy",
+        notion_id="af5be3af4034438c90ddc17f960cce8d",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Equity-Refresh-Policy-af5be3af4034438c90ddc17f960cce8d"
+        ),
+        title="Equity Refresh Policy",
+        max_blocks=600,
+        keywords=(
+            "refresh",
+            "topped",
+            "top-up",
+            "topup",
+            "anniversary",
+            "two year",
+            "2 year",
+        ),
+    ),
     "learning_development": NotionSource(
         key="learning_development",
         notion_id="a744377944c1416592c0a9fdb761b2f4",

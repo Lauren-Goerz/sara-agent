@@ -17,16 +17,16 @@ from lib import notion_sources  # noqa: E402
 _SUCCESS = (
     "Answer using only source_content. Official employee handbooks exist "
     "only for countries listed on the page - share the matching country "
-    "link(s) when present. If their country is not listed, say so clearly "
-    "and offer to help with general Rasa policy questions instead. Never "
-    "invent a handbook or country. Always share source_url. If "
+    "link(s) when present. If their country is not listed, say so clearly. "
+    "Never invent a handbook or country. Always share source_url. Do not "
+    "append a follow-up question or offer other topics. If "
     "content_truncated is true and the answer is not here, check "
     "other_sections and say what you could not confirm."
 )
 _FAILURE = (
     "Share source_url and ask them to check which countries have an "
     "official handbook there. Do not invent countries or handbook links. "
-    "Offer to help with general Rasa policy questions if useful."
+    "Do not append a follow-up question or offer other topics."
 )
 
 
