@@ -29,3 +29,8 @@ docker-compose.override.yml
 
 # Deploy packaging output
 dist/
+
+# Bind-mount side effects from containers
+.cache/
+.config/
+.keras/
