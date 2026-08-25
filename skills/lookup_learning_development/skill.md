@@ -1,14 +1,9 @@
 ---
 name: lookup_learning_development
 description: >
-  Learning & Development - education days, L&D / learning budget amounts,
-  recommended ways to use the budget, courses, training, conferences, and
-  certifications. Activate for "education days", "learning budget", "L&D
-  budget", "how much learning budget", "recommended courses", "can I use
-  budget for a conference", or similar. Do NOT activate for general
-  benefits/gym/wellness (lookup_benefits), remote / home office budget
-  (lookup_remote_budget), or business travel spend (policy_business_travel).
-  Do NOT activate for generic Notion search when this page clearly applies.
+  Learning & Development: education days, L&D budget amounts and uses,
+  courses, training, conferences, and certifications. Not general benefits,
+  remote/home-office budgets, or travel spend.
 ---
 
 Answer Learning & Development questions from the designated Notion page.

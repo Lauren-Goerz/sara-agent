@@ -1,16 +1,9 @@
 ---
 name: policy_sexual_harassment
 description: >
-  Rasa Sexual Harassment Policy - what counts as sexual harassment, how to
-  report, investigation, and related workplace questions. Activate for
-  "sexual harassment policy", "harassment at work", "how do I report sexual
-  harassment", "inappropriate behaviour policy", or similar. Do NOT activate
-  for whistleblower / speak-up / anonymous misconduct reporting in general -
-  that is policy_whistleblower. Do NOT activate for anti-bribery / gifts /
-  hospitality - that is policy_anti_bribery. Do NOT activate for legal
-  counsel / who to contact for legal - that is policy_legal_support. Do NOT
-  activate for People / HR helpdesk ticket intake - that is helpdesk_intake.
-  Do NOT activate for generic Notion search when this policy clearly applies.
+  Rasa Sexual Harassment Policy: definitions, inappropriate workplace
+  behavior, reporting, and investigation. Not general whistleblowing,
+  anti-bribery, legal support, or helpdesk intake.
 ---
 
 Answer sexual-harassment-policy questions from the designated Notion page.

@@ -1,14 +1,9 @@
 ---
 name: leave_sick
 description: >
-  What to do when sick, sick leave steps, sick certificate / doctor's note
-  requirements, or country-specific sick policy (Germany, UK, Serbia, France,
-  US). Activate for phrases like "I'm sick", "I am sick what should I do",
-  "sick leave policy", "do I need a doctor's note", "sick certificate". Do NOT
-  activate for PTO/vacation balances - that is leave_check. Do NOT activate
-  for how to plan vacation, offline days, OOO templates, or carry-over - that
-  is leave_vacation. Do NOT activate for parental, maternity, paternity, or
-  adoption leave - that is leave_parental.
+  What to do when sick: sick-leave steps, doctor's notes/certificates, and
+  country-specific sick policy for Germany, UK, Serbia, France, or US. Not
+  vacation/PTO, leave balances, or parental leave.
 ---
 
 Help someone who is sick (or asking about sick leave) with the official steps.
@@ -33,9 +28,11 @@ Reply in short form:
 3. Include `surgery_section` only when relevant.
 4. End with `source_slack_link`.
 
-The tool personalizes from the Slack *My Location* profile field first, then
-falls back to timezone. Whenever `required_preface` is present, begin the
-personalized part with this exact sentence:
+The tool resolves the country once and shares it with the other country-aware
+skills: what they said this turn, then the country already established in this
+conversation, then the Slack *My Location* profile field, then timezone.
+Whenever `required_preface` is present, begin the personalized part with this
+exact sentence:
 
 "based on the location information you provided in your Slack profile..."
 

@@ -15,7 +15,7 @@ _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from lib import notion_client, slack_client  # noqa: E402
+from lib import notion_client, user_location  # noqa: E402
 
 POLICY_PAGE_ID = "137b9c0d544a80f3aae3eaaec6a7cf0a"
 POLICY_PAGE_URL = (
@@ -28,9 +28,6 @@ POLICY_SLACK_LINK = (
 )
 BAMBOO_HOME_URL = "https://rasa.bamboohr.com/home/"
 BAMBOO_SLACK_LINK = "<https://rasa.bamboohr.com/home/|rasa.bamboohr.com>"
-SLACK_LOCATION_PREFACE = (
-    "based on the location information you provided in your Slack profile..."
-)
 
 # Used only when the Notion page is not yet shared with Sara-Agent.
 _FALLBACK_POLICY_BODY = """
@@ -72,94 +69,6 @@ If the hospital in your location is able to provide a doctor's note, please shar
 Thank you for your cooperation.
 """
 
-# Only these geographies have local policy sections. India is deliberately
-# recognized but has no local section.
-_TIMEZONE_TO_GEO: dict[str, str] = {
-    "Europe/Berlin": "germany",
-    "Europe/Busingen": "germany",
-    "Europe/London": "uk",
-    "Europe/Belfast": "uk",
-    "Europe/Guernsey": "uk",
-    "Europe/Isle_of_Man": "uk",
-    "Europe/Jersey": "uk",
-    "Europe/Belgrade": "serbia",
-    "Europe/Paris": "france",
-    "Asia/Kolkata": "india",
-    "Asia/Calcutta": "india",
-    "America/New_York": "us",
-    "America/Detroit": "us",
-    "America/Kentucky/Louisville": "us",
-    "America/Kentucky/Monticello": "us",
-    "America/Indiana/Indianapolis": "us",
-    "America/Indiana/Vincennes": "us",
-    "America/Indiana/Winamac": "us",
-    "America/Indiana/Marengo": "us",
-    "America/Indiana/Petersburg": "us",
-    "America/Indiana/Vevay": "us",
-    "America/Chicago": "us",
-    "America/Indiana/Tell_City": "us",
-    "America/Indiana/Knox": "us",
-    "America/Menominee": "us",
-    "America/North_Dakota/Center": "us",
-    "America/North_Dakota/New_Salem": "us",
-    "America/North_Dakota/Beulah": "us",
-    "America/Denver": "us",
-    "America/Boise": "us",
-    "America/Phoenix": "us",
-    "America/Los_Angeles": "us",
-    "America/Anchorage": "us",
-    "America/Juneau": "us",
-    "America/Sitka": "us",
-    "America/Metlakatla": "us",
-    "America/Yakutat": "us",
-    "America/Nome": "us",
-    "America/Adak": "us",
-    "Pacific/Honolulu": "us",
-}
-
-_COUNTRY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    (
-        "germany",
-        re.compile(
-            r"\b(germany|deutschland|berlin|munich|m[uü]nchen|hamburg|"
-            r"cologne|k[oö]ln|frankfurt)\b",
-            re.I,
-        ),
-    ),
-    (
-        "uk",
-        re.compile(
-            r"\b(uk|u\.k\.|united kingdom|britain|england|scotland|wales|"
-            r"london|manchester|edinburgh)\b",
-            re.I,
-        ),
-    ),
-    (
-        "serbia",
-        re.compile(r"\b(serbia|serbian|belgrade|beograd)\b", re.I),
-    ),
-    (
-        "france",
-        re.compile(r"\b(france|french|paris|lyon|marseille)\b", re.I),
-    ),
-    (
-        "us",
-        re.compile(
-            r"\b(usa|u\.s\.a\.|u\.s\.|united states|america|"
-            r"san francisco|new york|nyc|seattle|austin|boston)\b",
-            re.I,
-        ),
-    ),
-    (
-        "india",
-        re.compile(
-            r"\b(india|indian|bengaluru|bangalore|mumbai|delhi|"
-            r"hyderabad|chennai|pune)\b",
-            re.I,
-        ),
-    ),
-]
-
 _SECTION_MARKERS: dict[str, tuple[str, ...]] = {
     "everyone": ("for everyone",),
     "germany": ("for employees in germany",),
@@ -177,27 +86,6 @@ _BOUNDARY_MARKERS = (
         for marker in markers
     ),
 )
-
-
-def _slack_user_id(context: ToolContext) -> str | None:
-    for event in reversed(context.events):
-        metadata = getattr(event, "metadata", None) or {}
-        candidate = metadata.get("slack_user_id")
-        if isinstance(candidate, str) and candidate.startswith("U"):
-            return candidate
-        for user in metadata.get("users") or []:
-            if isinstance(user, str) and user.startswith("U"):
-                return user
-    return None
-
-
-def _geo_from_text(value: str | None) -> str | None:
-    if not value:
-        return None
-    for geography, pattern in _COUNTRY_PATTERNS:
-        if pattern.search(value):
-            return geography
-    return None
 
 
 def _clean_line(line: str) -> str:
@@ -275,35 +163,18 @@ async def get_sick_leave_guidance(
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
 
-    override = (location_override or "").strip() or None
-    timezone: str | None = None
-    profile_location: str | None = None
-    geography: str | None = _geo_from_text(override)
-    location_source: str | None = "user_override" if override else None
-
-    if not override:
-        slack_user_id = _slack_user_id(context)
-        if slack_user_id and slack_client.configured():
-            profile = await slack_client.get_user_location(slack_user_id)
-            timezone = profile.get("timezone")
-            profile_location = profile.get("location")
-
-            # Prefer Slack "My Location" (employment geography) over timezone.
-            if profile_location:
-                geography = _geo_from_text(str(profile_location))
-                if geography:
-                    location_source = "slack_profile"
-            if not geography:
-                geography = _TIMEZONE_TO_GEO.get(str(timezone or ""))
-                if geography:
-                    location_source = "slack_timezone"
+    location = await user_location.resolve(
+        context,
+        location_override=location_override,
+    )
+    geography = location["country"]
 
     page = await _load_policy()
     everyone = _extract_section(page["body"], "everyone")
     surgery = _extract_section(page["body"], "surgery")
     local_section = (
         _extract_section(page["body"], geography)
-        if geography in {"germany", "uk", "serbia", "france", "us"}
+        if location["has_local_policy"]
         else None
     )
 
@@ -329,10 +200,6 @@ async def get_sick_leave_guidance(
             flags=re.I,
         )
 
-    inferred_from_slack = location_source in {
-        "slack_timezone",
-        "slack_profile",
-    }
     return ToolResult(
         llm_response={
             "ok": True,
@@ -347,14 +214,12 @@ async def get_sick_leave_guidance(
             "geography": geography,
             "local_section": local_section,
             "surgery_section": surgery,
-            "timezone": timezone,
-            "profile_location": profile_location,
-            "location_source": location_source,
-            "inferred_from_slack": inferred_from_slack,
-            "required_preface": (
-                SLACK_LOCATION_PREFACE if inferred_from_slack else None
-            ),
-            "ask_for_location": geography is None,
+            "timezone": location["timezone"],
+            "profile_location": location["profile_location"],
+            "location_source": location["location_source"],
+            "inferred_from_slack": location["inferred_from_slack"],
+            "required_preface": location["required_preface"],
+            "ask_for_location": location["ask_for_location"],
             "forbid_peopleteam_email": geography == "germany",
             "instruction": (
                 "Use only everyone_section, local_section, and surgery_section "

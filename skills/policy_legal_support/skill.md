@@ -1,14 +1,9 @@
 ---
 name: policy_legal_support
 description: >
-  Legal support / legal counsel at Rasa - who to contact for legal questions,
-  contracts, NDAs, customer/legal review, external counsel, or "who is our
-  lawyer". Activate for "legal support", "legal counsel", "talk to legal",
-  "NDA help", or similar. Do NOT activate for ethics officer questions -
-  that is lookup_ethics_officer. Do NOT activate for intellectual property /
-  IP rights policy - that is policy_intellectual_property. Do NOT activate
-  for HR leave/benefits, travel insurance (policy_travel_insurance),
-  security RFP questionnaires (rfp_security), or product docs.
+  Rasa legal support contact for contracts, NDAs, customer/legal review,
+  external counsel, or "who is our lawyer". Not the Ethics Officer, IP
+  policy, leave/benefits, travel insurance, or security questionnaires.
 ---
 
 Point people to Rasa's internal legal contact. Do not give legal advice.

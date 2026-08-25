@@ -1,15 +1,9 @@
 ---
 name: policy_code_of_conduct
 description: >
-  Rasa Code of Conduct - workplace behaviour expectations, community
-  standards, and how Rasa expects people to treat each other. Activate for
-  "code of conduct", "Rasa code of conduct", "conduct policy", "workplace
-  conduct", or similar. Do NOT activate for sexual harassment policy
-  (policy_sexual_harassment). Do NOT activate for whistleblower / speak-up
-  reporting (policy_whistleblower). Do NOT activate for anti-bribery /
-  gifts / hospitality (policy_anti_bribery). Do NOT activate for legal
-  counsel (policy_legal_support). Do NOT activate for generic Notion search
-  when this page clearly applies.
+  Rasa Code of Conduct link: workplace behavior expectations and community
+  standards. Not sexual harassment, whistleblowing, anti-bribery, or legal
+  support.
 ---
 
 Point people to the Code of Conduct page. Do not explain or summarize it.

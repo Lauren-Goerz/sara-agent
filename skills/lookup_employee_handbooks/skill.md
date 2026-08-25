@@ -1,14 +1,9 @@
 ---
 name: lookup_employee_handbooks
 description: >
-  Official Rasa employee handbooks by country. Activate for "employee
-  handbook", "staff handbook", "handbook for Germany/US/UK/…", "is there a
-  handbook for my country", or similar. Do NOT activate for a specific
-  named policy (travel, benefits, whistleblower, sexual harassment,
-  anti-bribery, etc.) - use that dedicated skill. Do NOT activate for
-  generic Notion search when the ask is clearly for a country handbook.
-  Do NOT activate for People / HR helpdesk ticket intake - that is
-  helpdesk_intake.
+  Find an official Rasa employee/staff handbook for a country and say whether
+  one exists. Not a specific named policy, vacation entitlement, or helpdesk
+  intake.
 ---
 
 Help people find the official employee handbook for their country.

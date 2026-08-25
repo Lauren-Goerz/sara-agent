@@ -1,16 +1,9 @@
 ---
 name: lookup_relocation_germany
 description: >
-  Relocating to Berlin / Germany - relocation package, visas, moving
-  steps, Welcome to Berlin tips, and working-in-Germany overview. Activate
-  for "move to Berlin", "relocate to Germany", "relocation guide",
-  "Welcome to Berlin", "Anmeldung", "working in Germany overview", or
-  similar. Do NOT activate for temporary work from another country while
-  staying employed elsewhere (policy_work_abroad). Do NOT activate for
-  business travel (policy_business_travel) or travel insurance
-  (policy_travel_insurance). Do NOT activate for working from the Berlin
-  office day-to-day (lookup_berlin_office). Do NOT activate for generic
-  Notion search when this clearly applies.
+  Relocating to Berlin/Germany: relocation package, visas, moving steps,
+  Anmeldung, Welcome to Berlin, and working-in-Germany guidance. Not
+  temporary work abroad, business travel, insurance, or office operations.
 ---
 
 Help people relocating to Berlin / Germany using Rasa's relocation pages.

@@ -15,7 +15,7 @@ _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from lib import notion_client, slack_client  # noqa: E402
+from lib import notion_client, user_location  # noqa: E402
 
 POLICY_PAGE_ID = "153b9c0d544a806a9753f70723a1d47a"
 POLICY_PAGE_URL = (
@@ -38,82 +38,6 @@ _GEO_LABELS = {
     "france": "France",
     "other": "another country",
 }
-
-_TIMEZONE_TO_GEO: dict[str, str] = {
-    "Europe/Berlin": "germany",
-    "Europe/Busingen": "germany",
-    "Europe/London": "uk",
-    "Europe/Belfast": "uk",
-    "Europe/Guernsey": "uk",
-    "Europe/Isle_of_Man": "uk",
-    "Europe/Jersey": "uk",
-    "Europe/Belgrade": "serbia",
-    "Europe/Paris": "france",
-    "America/New_York": "us",
-    "America/Detroit": "us",
-    "America/Kentucky/Louisville": "us",
-    "America/Kentucky/Monticello": "us",
-    "America/Indiana/Indianapolis": "us",
-    "America/Indiana/Vincennes": "us",
-    "America/Indiana/Winamac": "us",
-    "America/Indiana/Marengo": "us",
-    "America/Indiana/Petersburg": "us",
-    "America/Indiana/Vevay": "us",
-    "America/Chicago": "us",
-    "America/Indiana/Tell_City": "us",
-    "America/Indiana/Knox": "us",
-    "America/Menominee": "us",
-    "America/North_Dakota/Center": "us",
-    "America/North_Dakota/New_Salem": "us",
-    "America/North_Dakota/Beulah": "us",
-    "America/Denver": "us",
-    "America/Boise": "us",
-    "America/Phoenix": "us",
-    "America/Los_Angeles": "us",
-    "America/Anchorage": "us",
-    "America/Juneau": "us",
-    "America/Sitka": "us",
-    "America/Metlakatla": "us",
-    "America/Yakutat": "us",
-    "America/Nome": "us",
-    "America/Adak": "us",
-    "Pacific/Honolulu": "us",
-}
-
-_COUNTRY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    (
-        "germany",
-        re.compile(
-            r"\b(germany|deutschland|berlin|munich|m[uü]nchen|hamburg|"
-            r"cologne|k[oö]ln|frankfurt)\b",
-            re.I,
-        ),
-    ),
-    (
-        "uk",
-        re.compile(
-            r"\b(uk|u\.k\.|united kingdom|britain|england|scotland|wales|"
-            r"london|manchester|edinburgh)\b",
-            re.I,
-        ),
-    ),
-    (
-        "serbia",
-        re.compile(r"\b(serbia|serbian|belgrade|beograd)\b", re.I),
-    ),
-    (
-        "france",
-        re.compile(r"\b(france|french|paris|lyon|marseille)\b", re.I),
-    ),
-    (
-        "us",
-        re.compile(
-            r"\b(usa|u\.s\.a\.|u\.s\.|united states|america|"
-            r"san francisco|new york|nyc|seattle|austin|boston)\b",
-            re.I,
-        ),
-    ),
-]
 
 _SECTION_MARKERS: dict[str, tuple[str, ...]] = {
     "eligibility": ("who has the eligibility to go on parental leave",),
@@ -151,34 +75,13 @@ _BOUNDARY_MARKERS = tuple(
 ) + ("what are the regulations for rasa",)
 
 
-def _slack_user_id(context: ToolContext) -> str | None:
-    for event in reversed(context.events):
-        metadata = getattr(event, "metadata", None) or {}
-        candidate = metadata.get("slack_user_id")
-        if isinstance(candidate, str) and candidate.startswith("U"):
-            return candidate
-        for user in metadata.get("users") or []:
-            if isinstance(user, str) and user.startswith("U"):
-                return user
-    return None
-
-
-def _geo_from_text(value: str | None) -> str | None:
-    if not value:
-        return None
-    for geography, pattern in _COUNTRY_PATTERNS:
-        if pattern.search(value):
-            return geography
-    return None
-
-
 def _normalize_country(value: str | None) -> str | None:
     raw = (value or "").strip().lower()
     if not raw:
         return None
     if raw in _SUPPORTED or raw == "other":
         return raw
-    mapped = _geo_from_text(raw)
+    mapped = user_location.from_text(raw)
     return mapped or "other"
 
 
@@ -217,26 +120,6 @@ def _extract_section(body: str, section: str) -> str | None:
     return text or None
 
 
-def _detect_from_profile(
-    profile_location: str | None,
-    timezone: str | None,
-) -> tuple[str | None, str | None, str]:
-    """Return (geography, location_source, display_label)."""
-    if profile_location:
-        geography = _geo_from_text(str(profile_location))
-        if geography:
-            return geography, "slack_profile", _GEO_LABELS[geography]
-        return None, "slack_profile", str(profile_location)
-
-    if timezone:
-        geography = _TIMEZONE_TO_GEO.get(str(timezone))
-        if geography:
-            return geography, "slack_timezone", _GEO_LABELS[geography]
-        return None, "slack_timezone", str(timezone)
-
-    return None, None, ""
-
-
 @tool(
     description=(
         "Read the Slack user's location/timezone guess for parental leave. "
@@ -251,21 +134,18 @@ async def detect_parental_leave_location(
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
 
-    timezone: str | None = None
-    profile_location: str | None = None
-    geography: str | None = None
-    location_source: str | None = None
-    display_label = ""
-
-    slack_user_id = _slack_user_id(context)
-    if slack_user_id and slack_client.configured():
-        profile = await slack_client.get_user_location(slack_user_id)
-        timezone = profile.get("timezone")
-        profile_location = profile.get("location")
-        geography, location_source, display_label = _detect_from_profile(
-            profile_location,
-            timezone,
-        )
+    # Reuse the country already established this conversation, but never skip
+    # the confirmation step below - parental leave is too consequential.
+    location = await user_location.resolve(context, remember=False)
+    geography = location["country"]
+    timezone = location["timezone"]
+    profile_location = location["profile_location"]
+    location_source = location["location_source"]
+    display_label = (
+        location["country_label"]
+        or (str(profile_location) if profile_location else "")
+        or (str(timezone) if timezone else "")
+    )
 
     return ToolResult(
         llm_response={
@@ -283,8 +163,8 @@ async def detect_parental_leave_location(
                 "timezone) is their employment country for parental leave. "
                 "If nothing was detected, ask which country they work in. "
                 "Supported country sections are UK, US, Germany, Serbia, and "
-                "France. After they confirm or correct, set parental_country "
-                "and location_confirmed=true, then call "
+                "France. After they confirm or correct, set user_country and "
+                "user_country_confirmed=true, then call "
                 "get_parental_leave_guidance."
             ),
         }
@@ -311,7 +191,7 @@ async def get_parental_leave_guidance(
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
 
-    confirmed = context.memory.get("location_confirmed")
+    confirmed = context.memory.get(user_location.MEMORY_CONFIRMED)
     if not confirmed:
         return ToolResult(
             llm_response={
@@ -321,16 +201,17 @@ async def get_parental_leave_guidance(
                     "Location is not confirmed yet. Call "
                     "detect_parental_leave_location if needed, ask the user "
                     "to confirm their employment country, set "
-                    "location_confirmed=true, then retry."
+                    "user_country_confirmed=true, then retry."
                 ),
             }
         )
 
     geography = _normalize_country(
-        country or str(context.memory.get("parental_country") or "")
+        country or str(context.memory.get(user_location.MEMORY_COUNTRY) or "")
     )
     if geography:
-        context.memory.set("parental_country", geography)
+        context.memory.set(user_location.MEMORY_COUNTRY, geography)
+        context.memory.set(user_location.MEMORY_SOURCE, "user_override")
 
     try:
         page = await notion_client.get_page_with_body(

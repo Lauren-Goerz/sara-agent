@@ -1,14 +1,9 @@
 ---
 name: lookup_kandji
 description: >
-  Kandji / Iru at Rasa - what it is, keystroke tracking concerns, who has
-  access, Mac device management / MDM questions. Activate for "what is
-  Kandji", "what is Iru", "is Rasa tracking my keystrokes", "who has access
-  to Kandji", "who has access to Iru", or similar. Do NOT activate for
-  CrowdStrike (lookup_crowdstrike). Do NOT activate for live security
-  incidents (lookup_security_incidents). Do NOT activate for the
-  security/compliance policies hub (policy_security_compliance). Do NOT
-  activate for generic Notion search when this page clearly applies.
+  Kandji/Iru FAQ: what it is, Mac MDM/device management, keystroke concerns,
+  monitoring, and who has access. Not CrowdStrike, live incidents, or
+  security/compliance policy.
 ---
 
 Answer Kandji / Iru questions from the designated Notion page. Call

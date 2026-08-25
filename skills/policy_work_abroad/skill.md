@@ -1,16 +1,9 @@
 ---
 name: policy_work_abroad
 description: >
-  Working from other countries / working abroad policy - temporary remote
-  work from Denmark, South Africa, or elsewhere, "can I work abroad", "work
-  a few weeks from …", "move abroad for a month while working", digital
-  nomad / temporary relocation while employed. Activate for those asks.
-  Do NOT activate for vacation/PTO booking (leave_vacation), leave balances
-  (leave_check), parental leave (leave_parental), travel insurance /
-  business-trip cover (policy_travel_insurance), business travel booking /
-  spend rules (policy_business_travel), or general Notion search when the
-  ask is clearly this policy. Do NOT activate for relocating to Berlin /
-  Germany permanently (lookup_relocation_germany).
+  Policy for temporarily working from another country: "can I work abroad",
+  digital nomad, or working a few weeks/month from a destination. Not
+  vacation, business travel, travel insurance, or permanent relocation.
 ---
 
 Answer questions about working from other countries using the designated

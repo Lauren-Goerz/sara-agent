@@ -17,7 +17,7 @@ _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from lib import slack_client  # noqa: E402
+from lib import user_location  # noqa: E402
 
 # Pay setups Sara can compute.
 _MONTHLY_26 = frozenset({"germany", "serbia", "france", "uk"})
@@ -34,30 +34,13 @@ _GEO_LABELS = {
     "deel_month_end": "Deel (last day of the month)",
 }
 
-_COUNTRY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("germany", re.compile(r"\b(germany|deutschland|berlin|munich|münchen|hamburg|bavaria|bayern)\b", re.I)),
-    ("serbia", re.compile(r"\b(serbia|serbien|belgrade|beograd)\b", re.I)),
-    ("france", re.compile(r"\b(france|paris|lyon)\b", re.I)),
-    ("uk", re.compile(r"\b(uk|u\.k\.|united kingdom|britain|england|scotland|wales|london)\b", re.I)),
-    ("us", re.compile(r"\b(usa|u\.s\.a\.|united states|\bus\b|new york|san francisco|california|texas)\b", re.I)),
+# Deel schedules are pay setups, not countries, so they stay local to payday.
+# Countries come from lib/user_location.py.
+_DEEL_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("deel_semimonthly", re.compile(r"\bdeel\b.*\b(twice|semi|bi[-\s]?month|15th)\b|\b(twice|semi).*\bdeel\b", re.I)),
     ("deel_month_end", re.compile(r"\bdeel\b.*\b(last|end of month|month[-\s]?end)\b|\b(last day).*\bdeel\b", re.I)),
     ("deel", re.compile(r"\bdeel\b", re.I)),
 ]
-
-_TIMEZONE_TO_GEO: dict[str, str] = {
-    "Europe/Berlin": "germany",
-    "Europe/Busingen": "germany",
-    "Europe/London": "uk",
-    "Europe/Belfast": "uk",
-    "Europe/Belgrade": "serbia",
-    "Europe/Paris": "france",
-    "America/New_York": "us",
-    "America/Chicago": "us",
-    "America/Denver": "us",
-    "America/Los_Angeles": "us",
-    "America/Phoenix": "us",
-}
 
 _GEO_TZ = {
     "germany": "Europe/Berlin",
@@ -78,24 +61,12 @@ _GEO_HOLIDAY_COUNTRY = {
 }
 
 
-def _slack_user_id(context: ToolContext) -> str | None:
-    for event in reversed(context.events):
-        metadata = getattr(event, "metadata", None) or {}
-        candidate = metadata.get("slack_user_id")
-        if isinstance(candidate, str) and candidate.startswith("U"):
-            return candidate
-        for user in metadata.get("users") or []:
-            if isinstance(user, str) and user.startswith("U"):
-                return user
-    return None
-
-
-def _geo_from_text(value: str | None) -> str | None:
+def _deel_from_text(value: str | None) -> str | None:
     if not value:
         return None
-    for geography, pattern in _COUNTRY_PATTERNS:
+    for setup, pattern in _DEEL_PATTERNS:
         if pattern.search(value):
-            return geography
+            return setup
     return None
 
 
@@ -242,23 +213,18 @@ async def get_days_until_payday(
         geo = explicit
         location_source = "user_pay_setup"
     elif override:
-        geo = _geo_from_text(override)
+        geo = _deel_from_text(override)
         location_source = "user_override" if geo else None
 
     if geo is None and context is not None:
-        slack_user_id = _slack_user_id(context)
-        if slack_user_id and slack_client.configured():
-            profile = await slack_client.get_user_location(slack_user_id)
-            timezone = profile.get("timezone")
-            profile_location = profile.get("location")
-            if profile_location:
-                geo = _geo_from_text(str(profile_location))
-                if geo:
-                    location_source = "slack_profile"
-            if geo is None and timezone:
-                geo = _TIMEZONE_TO_GEO.get(str(timezone))
-                if geo:
-                    location_source = "slack_timezone"
+        location = await user_location.resolve(
+            context,
+            location_override=override or None,
+        )
+        geo = location["country"]
+        timezone = location["timezone"]
+        profile_location = location["profile_location"]
+        location_source = location["location_source"]
 
     # Bare "deel" needs a schedule choice.
     if geo == "deel":

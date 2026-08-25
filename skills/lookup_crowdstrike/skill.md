@@ -1,14 +1,9 @@
 ---
 name: lookup_crowdstrike
 description: >
-  CrowdStrike at Rasa - what it is, whether it tracks web browsing, who has
-  access, Falcon/EDR endpoint security questions. Activate for "what is
-  CrowdStrike", "is CrowdStrike tracking my browsing", "who has access to
-  CrowdStrike", or similar. Do NOT activate for live security incidents /
-  "was Rasa affected" (lookup_security_incidents). Do NOT activate for the
-  security/compliance policies hub (policy_security_compliance). Do NOT
-  activate for Kandji / Iru (lookup_kandji). Do NOT activate for generic
-  Notion search when this page clearly applies.
+  CrowdStrike/Falcon FAQ: what it is, EDR/endpoint security, browsing or
+  monitoring concerns, and who has access. Not Kandji/Iru, live incidents,
+  or security/compliance policy.
 ---
 
 Answer CrowdStrike questions from the designated Notion page. Call

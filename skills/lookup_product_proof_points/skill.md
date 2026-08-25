@@ -1,17 +1,10 @@
 ---
 name: lookup_product_proof_points
 description: >
-  Share Rasa product proof points, customer case-study metrics, analyst
-  recognition, deployment speed, customer/analyst quotes, and why customers
-  choose Rasa. Activate for "why do customers use Rasa", "why is Rasa any
-  good", "how long to deploy", "customer CSAT", "proof points", "case study
-  metrics", "what do customers think", "scale / conversations handled",
-  Forrester/Gartner mentions from the proof-points pack, or "send me the
-  proof points PDF". Do NOT activate for how customers should measure their
-  own AI agent / contact-center KPIs / success metrics - that is
-  lookup_success_metrics. Do NOT activate for Rasa-vs-competitor battle cards -
-  that is redirect_competitive_analysis. Do NOT activate for technical
-  product how-tos - that is redirect_product_docs.
+  Rasa product proof points: customer case-study metrics, analyst recognition,
+  deployment speed, quotes, scale, CSAT, why customers choose Rasa, or the
+  proof-points PDF. Not KPI guidance, competitor comparisons, or product
+  how-tos.
 ---
 
 Answer questions about Rasa's product proof points from the live Notion page

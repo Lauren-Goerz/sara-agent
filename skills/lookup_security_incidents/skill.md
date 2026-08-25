@@ -1,15 +1,9 @@
 ---
 name: lookup_security_incidents
 description: >
-  Rasa security incidents and vulnerability impact questions - "has Rasa had
-  any security incidents", "was Rasa affected by the Trivy supply chain
-  compromise", remote code execution / CVE / supply-chain impact on Rasa,
-  or similar security-status asks. Activate for those. Do NOT activate for
-  product how-tos (redirect_product_docs), competitive analysis, RFP/RFI
-  security questionnaire drafting (rfp_security), Security Incident
-  Management / IR plan or other infosec policy docs
-  (policy_security_compliance), or general Notion policy search when the
-  ask is clearly security-incident status.
+  Live Rasa security-incident and vulnerability-impact status: whether Rasa
+  was affected by a named CVE, vendor, RCE, or supply-chain compromise, or
+  what incidents are listed. Not IR policy or security questionnaires.
 ---
 
 Answer security-incident / "were we affected?" questions from the designated

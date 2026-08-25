@@ -1,14 +1,9 @@
 ---
 name: lookup_holidays
 description: >
-  Public / bank holiday lookup worldwide - "is it a holiday in Bayern
-  today?", "is tomorrow a holiday in Germany?", "holidays in Denmark this
-  month", "is Christmas a public holiday in Japan?", US/UK/DE state or
-  country holiday checks. Activate for holiday / public holiday / bank
-  holiday questions about a place and date. Do NOT activate for Rasa
-  company holiday / office closure policies unless they clearly want the
-  public-holiday calendar. Do NOT activate for leave booking (leave_vacation)
-  or work-abroad policy (policy_work_abroad).
+  Worldwide public/bank holiday lookup for a place and date, including
+  country, state, or region checks such as Bayern. Not company closures,
+  leave booking, PTO half-day rules, or work-abroad policy.
 ---
 
 Answer public-holiday questions with `lookup_public_holiday`.

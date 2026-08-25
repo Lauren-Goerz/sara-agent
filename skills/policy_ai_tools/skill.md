@@ -1,14 +1,9 @@
 ---
 name: policy_ai_tools
 description: >
-  Using AI Tools at Rasa - which AI tools are allowed, how to use ChatGPT /
-  Claude / Copilot / Gemini and similar, approved vs restricted AI tooling,
-  and related generative-AI workplace rules. Activate for "can I use
-  ChatGPT", "approved AI tools", "AI tools policy", "using AI at Rasa", or
-  similar. Do NOT activate for Cloud Services Policy / SaaS procurement
-  (policy_security_compliance). Do NOT activate for product how-tos about
-  Rasa's own AI product (redirect_product_docs). Do NOT activate for generic
-  Notion search when this page clearly applies.
+  Workplace rules for using AI tools at Rasa: approved/restricted tooling,
+  ChatGPT, Claude, Copilot, Gemini, and handling company/customer data. Not
+  SaaS procurement or technical Rasa product guidance.
 ---
 
 Answer questions about using AI tools at Rasa from the designated Notion

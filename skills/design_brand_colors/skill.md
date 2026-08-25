@@ -1,15 +1,9 @@
 ---
 name: design_brand_colors
 description: >
-  Rasa's official brand color palette - hex codes, primary/secondary/tertiary
-  colors, product neutrals, and when to use them. Activate for questions like
-  "what are Rasa's brand colors", "what's our purple", "hex code for Rasa
-  purple", "colour palette", "which colors can I use in a deck", "brand
-  colours". This is the source of truth for colors - answer from it directly
-  instead of searching Notion. Share colors freely; just never make up a hex
-  or color that isn't in the official palette. Do NOT activate for
-  illustrations, deck polish, or requesting creative/design work - that is
-  request_design.
+  Rasa's official brand palette: color names, hex codes,
+  primary/secondary/tertiary colors, product neutrals, and usage guidance.
+  Not creative/design requests or deck-polish work.
 ---
 
 Answer brand-color questions from the official palette below. Match the

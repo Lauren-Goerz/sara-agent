@@ -1,14 +1,9 @@
 ---
 name: policy_anti_slavery
 description: >
-  Rasa Anti-slavery Policy - modern slavery, forced labour, human trafficking,
-  or supply-chain slavery compliance questions. Activate for "anti-slavery",
-  "modern slavery policy", "forced labour policy", "human trafficking
-  policy", or similar. Do NOT activate for anti-bribery / gifts /
-  hospitality - that is policy_anti_bribery. Do NOT activate for legal
-  counsel - that is policy_legal_support. Do NOT activate for whistleblower
-  reporting - that is policy_whistleblower. Do NOT activate for generic
-  Notion search when this clearly applies.
+  Rasa Anti-slavery Policy link: modern slavery, forced labor, human
+  trafficking, and supply-chain slavery compliance. Not anti-bribery, legal
+  support, or whistleblowing.
 ---
 
 Point people to the Anti-slavery Policy Notion page. Do not invent policy

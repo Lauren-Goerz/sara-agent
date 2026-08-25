@@ -15,11 +15,24 @@ be re-added later with admin buy-in.
 - `integrations.yml` — LLM + channels (REST, Inspector, Slack)
 - `lib/` — shared clients (`notion_client`, `notion_sources`, `slack_client`,
   `hr_mocks`) and the custom Slack channel (`slack_channel.EnvSlackInput`)
+- `memory.yml` (project root) — memory shared across skills: the resolved
+ `user_country`, how it was established (`user_country_source`), and whether
+ the employee stated it out loud (`user_country_confirmed`). A skill whose
+ answer would be harmful if the country were wrong gates its tool on
+ `requires: session.project.user_country_confirmed` instead of adding its own
+ country and confirmation keys.
+- `lib/user_location.py` — single resolver for the employee's work country
+ (what they said → country already established this conversation → Slack
+ *My Location* → Slack timezone), remembered in `project.user_country`. Any
+ country-aware skill should call `user_location.resolve(context)` rather than
+ keeping its own country patterns or timezone map.
 - `lib/notion_sources.py` — registry of allowlisted Notion pages/databases plus
-  shared fetch, clean, cache, and query-aware trimming. Skills that just read a
-  fixed Notion page should register a source here and keep `tools.py` to a thin
-  wrapper around `notion_sources.load(...)` rather than re-implementing fetch
-  and error handling.
+  shared fetch, clean, cache, and query-aware trimming.
+- `lib/notion_page_tool.py` — factory for skills that only read one registered
+  page. Register the source, then `tools.py` is `notion_page_tool(...)` with
+  that skill's tool name, description, and answer/failure instructions. Keep a
+  custom `tools.py` when the skill parses sections, confirms country, searches,
+  or loads more than one page.
 - `skills/<name>/skill.md` — one skill per user goal
 - `skills/<name>/tools.py` — optional `@tool` functions for that skill
 - `skills/<name>/memory.yml` — skill-scoped memory schema
@@ -81,7 +94,8 @@ be re-added later with admin buy-in.
 | `onboarding_yubisneeze` | Undo an accidental YubiKey sneeze / OTP paste |
 | `leave_check` | Points users to the BambooHR Slack app for leave balances |
 | `leave_sick` | What to do when sick; personalizes by Slack timezone/location |
-| `leave_vacation` | How to book vacation, offline days, carry-over, OOO FAQ |
+| `leave_vacation` | How to book vacation, offline days, OOO FAQ |
+| `policy_vacation` | Country vacation/PTO policy from Slack location + Notion |
 | `leave_parental` | Parental leave guidance; confirms Slack location first |
 | `design_brand_colors` | Official Rasa brand palette |
 | `design_phosphor_icon` | Colored Phosphor icon (PNG default; SVG on request) |
@@ -106,17 +120,6 @@ rasa inspect           # local Inspector UI
 ```
 
 Re-run `rasa train` after editing `agent.yml`, `integrations.yml`, or any skill.
-
-### Always-on deploy (vacation-safe)
-
-Local ngrok dies when your laptop sleeps. Use Oracle Always Free + Cloudflare
-Tunnel — see [DEPLOY.md](DEPLOY.md):
-
-```bash
-bash scripts/deploy/package-release.sh
-# provision VM + tunnel per DEPLOY.md, then:
-bash scripts/deploy/cutover-checklist.sh https://YOUR_PUBLIC_HOSTNAME
-```
 
 ### Proactive rasa-versary DMs
 
@@ -163,5 +166,9 @@ Read them before adding or changing skills.
 - Secrets only via env / `${ENV_VAR}` (or `api_key_env` for LLM) — never inline keys.
 - Do **not** create CALM v1 files (`domain.yml`, `config.yml`, `data/` NLU).
 - Keep each skill focused on one job; add `skills/<name>/` rather than overloading.
+- Keep frontmatter `description` concise: positive triggers plus only the closest
+  ambiguous exclusions. Do not enumerate the whole skill catalog in `Do NOT`
+  clauses. Skill-specific routing and behavior belong in that skill, not duplicated
+  as global `agent.yml` rules.
 
 Docs: https://github.com/RasaHQ/maestro-docs

@@ -21,16 +21,11 @@ models/*.tar.gz
 .idea/
 *.swp
 
-# Docker / local overrides
-docker-compose.override.yml
-
 # Local job state (rasa-versary sent receipts, etc.)
 .data/
 
-# Deploy packaging output
+# Local caches / packaging leftovers
 dist/
-
-# Bind-mount side effects from containers
 .cache/
 .config/
 .keras/

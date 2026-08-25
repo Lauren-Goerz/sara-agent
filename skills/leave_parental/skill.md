@@ -1,17 +1,12 @@
 ---
 name: leave_parental
 description: >
-  Parental leave processes and policy - eligibility, paid leave length,
-  childbirth recovery leave, who to inform, BambooHR parental leave booking,
-  return-to-work, and country-specific parental leave rules (UK, US, Germany,
-  Serbia, France). Activate for "parental leave", "maternity leave",
-  "paternity leave", "adoption leave", "I'm pregnant what leave do I get",
-  or "how do I plan parental leave". Do NOT activate for ordinary sick leave
-  (leave_sick), vacation/PTO planning (leave_vacation), or leave balances
-  (leave_check).
+  Parental, maternity, paternity, and adoption leave: eligibility, paid
+  duration, childbirth recovery, notification, BambooHR booking, return to
+  work, and UK/US/Germany/Serbia/France rules. Not sick leave or vacation.
 tool_constraints:
   - get_parental_leave_guidance:
-      requires: session.leave_parental.location_confirmed
+      requires: session.project.user_country_confirmed
 ---
 
 Help with parental leave using only the official Parental Leave Guide.
@@ -24,8 +19,8 @@ the employment country is confirmed.
    detected, ask whether that is correct for their employment country. If
    nothing was detected, ask which country they work in. Supported local
    sections are UK, US, Germany, Serbia, and France.
-3. When they confirm or correct it, set `parental_country` and
-   `location_confirmed` to true via `set_fields`.
+3. When they confirm or correct it, set `user_country` and
+   `user_country_confirmed` to true via `set_fields`.
 4. Only then call `get_parental_leave_guidance` with that country.
 
 Until location is confirmed, do not summarize eligibility, durations, or

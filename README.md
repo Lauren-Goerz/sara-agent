@@ -19,25 +19,6 @@ ngrok http 5005
 # Slack Event Subscriptions → https://YOUR-NGROK-HOST/webhooks/slack/webhook
 ```
 
-## Always-on deploy (vacation-safe)
-
-Local ngrok dies when your laptop sleeps. Use Docker + a free always-on host:
-
-- **Runbook:** [DEPLOY.md](DEPLOY.md)
-- **Compose:** `docker-compose.yml` (dev) / `docker-compose.prod.yml` (Sara + Cloudflare Tunnel)
-- **Helpers:** `scripts/deploy/`
-
-```bash
-bash scripts/deploy/package-release.sh
-# then follow DEPLOY.md (Oracle Always Free VM + Cloudflare Tunnel + Slack cutover)
-```
-
-Slack production URL shape:
-
-```text
-https://YOUR_PUBLIC_HOSTNAME/webhooks/slack/webhook
-```
-
 ## Layout
 
 | Path | Purpose |

@@ -1,15 +1,9 @@
 ---
 name: policy_travel_insurance
 description: >
-  Rasa travel insurance policy for 2026 - business travel cover, what is
-  insured, how to claim, certificates, and related trip-insurance questions.
-  Activate for "travel insurance", "am I covered on a work trip", "travel
-  insurance claim", "Travel Insurances 2026", or similar. Do NOT activate for
-  flight class, hotel budgets, per diem vs receipts, or other booking/spend
-  rules - that is policy_business_travel. Do NOT activate for working from
-  other countries / temporary work abroad (policy_work_abroad), vacation
-  booking (leave_vacation), general benefits/perks (lookup_benefits), or
-  generic Notion search when this policy clearly applies.
+  Travel Insurances 2026: business-trip coverage, eligibility, claims, and
+  certificates. Not travel booking/spend, temporary work abroad, vacation,
+  or general benefits.
 ---
 
 Answer travel insurance questions from the designated Notion page. Call

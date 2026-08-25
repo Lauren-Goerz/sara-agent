@@ -1,17 +1,9 @@
 ---
 name: lookup_ethics_officer
 description: >
-  Who is Rasa's Ethics Officer and where to find that info. Activate for
-  "ethics officer", "who is the ethics officer", "ethics contact",
-  "ethical concerns contact", or similar. Do NOT activate for legal counsel
-  / Mat / NDAs - that is policy_legal_support. Do NOT activate for
-  whistleblower / speak-up reporting steps - that is policy_whistleblower.
-  Do NOT activate for sexual harassment policy - that is
-  policy_sexual_harassment. Do NOT activate for who owns security /
-  Information Security Responsibilities
-  (policy_security_responsibilities). Do NOT activate for People / HR
-  helpdesk ticket intake - that is helpdesk_intake. Do NOT activate for
-  generic Notion search when this clearly applies.
+  Who Rasa's Ethics Officer is and where to find the current ethics contact.
+  Not legal counsel, whistleblowing steps, harassment policy, security
+  ownership, or helpdesk intake.
 ---
 
 Point people to the Ethics Officer Notion page. Do not invent who the

@@ -1,15 +1,9 @@
 ---
 name: policy_business_travel
 description: >
-  Rasa business travel policy - flight class (economy), public vs private
-  transport, hotel cost guidelines (e.g. European city averages), per diem
-  vs expenses with receipts, booking rules, and related work-trip spend
-  questions. Activate for "business travel policy", "can I book business
-  class", "hotel budget", "per diem or receipts", "public transport on
-  trips", or similar. Do NOT activate for travel insurance / claims /
-  certificates - that is policy_travel_insurance. Do NOT activate for
-  working from other countries (policy_work_abroad), vacation booking
-  (leave_vacation), or general benefits (lookup_benefits).
+  Business travel booking and spend policy: flight class, transport, hotel
+  guidelines, per diem, receipts, and expenses. Not travel insurance,
+  temporary work abroad, vacation, or general benefits.
 ---
 
 Answer business travel policy questions from the designated Notion page.

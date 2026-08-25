@@ -1,14 +1,9 @@
 ---
 name: it_support_laptop_repairs
 description: >
-  IT support for Rasa MacBook / laptop issues, damage, wear and tear, Apple
-  support, repairs, replacements, and leasing-partner Macs. Activate for
-  "my laptop is broken", "Mac needs repair", "Apple support", "substitute
-  Mac", "Rajesh laptop repair", "MacBook damaged", "leasing partner Mac",
-  or "how do I get my work laptop fixed". Do NOT activate when the laptop
-  was stolen or missing presumed stolen - that is it_support_stolen_laptop.
-  Do NOT activate for personal non-Rasa devices, software/product Rasa
-  how-tos (redirect_product_docs), or general Notion policy search.
+  IT support for Rasa work MacBook/laptop damage, wear, Apple repairs,
+  replacements, substitute Macs, Rajesh, or leasing-partner devices. Not
+  stolen laptops, personal devices, or Rasa product how-tos.
 ---
 
 Help Rasa employees with work MacBook issues and repairs. Call

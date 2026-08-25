@@ -1,18 +1,9 @@
 ---
 name: policy_anti_bribery
 description: >
-  Rasa Anti-Bribery, anti-Corruption & Fraud prevention policy - gifts,
-  hospitality, bribery, corruption, fraud, kickbacks, and compliance wording
-  for sales / RFPs. Activate for "anti-bribery", "anti-corruption", "fraud
-  prevention", "bribery policy", "can we give a gift", "hospitality rules",
-  "anti-bribery for an RFP", or similar. Do NOT activate for anti-slavery /
-  modern slavery / forced labour - that is policy_anti_slavery. Do NOT
-  activate for RFP/RFI security questionnaire answers (SOC2/ISO/pen-test) -
-  that is rfp_security. Do NOT activate for whistleblower / speak-up /
-  anonymous misconduct reporting - that is policy_whistleblower. Do NOT
-  activate for legal counsel / who to contact for legal - that is
-  policy_legal_support. Do NOT activate for generic Notion search when this
-  policy clearly applies.
+  Rasa Anti-Bribery, Anti-Corruption & Fraud Prevention policy link: gifts,
+  hospitality, bribery, corruption, fraud, kickbacks, and anti-bribery RFP
+  wording. Not modern slavery, whistleblowing, or general security RFPs.
 ---
 
 Point people to the Anti-Bribery policy page. Do not explain or summarize

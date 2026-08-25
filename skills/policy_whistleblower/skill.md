@@ -1,18 +1,9 @@
 ---
 name: policy_whistleblower
 description: >
-  Rasa Whistleblower Policy (Abridged) - how to raise concerns, anonymous
-  reporting, non-retaliation, and related whistleblowing questions. Activate
-  for "whistleblower", "whistleblowing", "how do I report misconduct",
-  "speak up policy", "anonymous report", "retaliation protection", or
-  similar. Do NOT activate for anti-bribery / gifts / hospitality compliance
-  - that is policy_anti_bribery. Do NOT activate for sexual harassment
-  policy questions - that is policy_sexual_harassment. Do NOT activate for
-  who owns security / Information Security Responsibilities
-  (policy_security_responsibilities). Do NOT activate for legal counsel /
-  who to contact for legal - that is policy_legal_support. Do NOT activate
-  for People / HR helpdesk ticket intake - that is helpdesk_intake. Do NOT
-  activate for generic Notion search when this policy clearly applies.
+  Rasa Whistleblower Policy link: whistleblowing, speak-up, reporting
+  misconduct anonymously, non-retaliation, and retaliation protection. Not
+  sexual harassment, anti-bribery, legal support, or helpdesk intake.
 ---
 
 Point people to the Whistleblower policy page. Do not explain or summarize

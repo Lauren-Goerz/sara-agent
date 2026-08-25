@@ -1,17 +1,10 @@
 ---
 name: redirect_product_docs
 description: >
-  Technical product questions about how Rasa works - APIs, SDKs, CALM,
-  Maestro, flows, NLU, channels, deployment, installation, configuration,
-  custom actions, slots, dialogues, or "how do I build/configure X in Rasa".
-  Activate for developer/product how-to questions that belong in product
-  documentation. Do NOT activate for internal HR/Ops policies, leave, brand
-  colors, Phosphor icons, Who's Who, company info, competitive analysis,
-  product proof points / customer metrics / "why customers use Rasa", laptop
-  / MacBook IT repairs, YubiKey onboarding install, security incident /
-  vulnerability impact status, RFP/RFI security questionnaires, product
-  roadmap / internal or external roadmap, success metrics / agent KPIs /
-  measuring AI agent performance, or Slack announcements.
+  Technical Rasa product how-tos that belong in product docs: APIs, SDKs,
+  CALM, Maestro, flows, NLU, channels, deployment, installation,
+  configuration, custom actions, slots, or dialogue behavior. Not internal
+  Ops/People policy, IT support, roadmap, proof points, or success metrics.
 ---
 
 When someone asks a technical question about the Rasa product, do not invent

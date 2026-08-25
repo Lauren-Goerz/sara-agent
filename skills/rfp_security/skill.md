@@ -1,19 +1,9 @@
 ---
 name: rfp_security
 description: >
-  Vendor / RFP / RFI security questionnaire help from Rasa's Vendor Security
-  Questionnaire Bank - only when no dedicated policy skill answers the ask.
-  Activate for "RFP security question", "RFI security", "vendor security
-  questionnaire", "how do we answer … for an RFP", SOC2/ISO/pen-test wording
-  for questionnaires, or similar. Do NOT activate when
-  policy_security_compliance applies (Information Security, IAM, Acceptable
-  Use, IR, Change Management, Threat/Vuln, Cryptography, AppSec,
-  Supplier/Contractor, Information Transfer, DLP, Cloud Services, Asset
-  Management, Physical Security, etc.). Do NOT activate for
-  policy_security_responsibilities, policy_intellectual_property,
-  policy_anti_bribery, policy_anti_slavery, or policy_whistleblower. Do NOT
-  activate for "was Rasa affected by …" - that is lookup_security_incidents.
-  Do NOT activate for product how-tos (redirect_product_docs).
+  Vendor/RFP/RFI security questionnaire answers from the approved bank:
+  SOC 2, ISO, pen testing, controls, and assurance wording. Use only when no
+  dedicated policy skill answers the question; not live incident status.
 ---
 
 Help answer vendor / RFP / RFI security questionnaire questions from the

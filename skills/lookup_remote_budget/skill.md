@@ -1,17 +1,10 @@
 ---
 name: lookup_remote_budget
 description: >
-  Remote Budget 2026 / home office budget - Berlin office, co-working flex
-  desk, work-from-home only options, one-time equipment budgets, monthly
-  internet or utility allowances, Payhawk categories, switching remote
-  styles, part-time/intern rules. Activate for "home office budget",
-  "remote budget", "coworking reimbursement", "internet reimbursement",
-  "which remote work style", or similar. Do NOT activate for general
-  benefits/gym/wellness (lookup_benefits), learning & development /
-  education days / L&D budget (lookup_learning_development), business
-  travel spend (policy_business_travel), or laptop repairs
-  (it_support_laptop_repairs). Do NOT activate for working from the Berlin
-  office (lookup_berlin_office).
+  Remote Budget 2026: home-office equipment, coworking/flex desks, internet
+  or utility allowances, Payhawk categories, remote-work styles, and
+  part-time/intern rules. Not general benefits, L&D, travel, laptop repairs,
+  or Berlin-office operations.
 ---
 
 Answer remote / home-office budget questions from the designated source.

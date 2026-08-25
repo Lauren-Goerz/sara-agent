@@ -1,14 +1,9 @@
 ---
 name: onboarding_yubisneeze
 description: >
-  Help undo a Yubisneeze - accidental YubiKey touch or OTP paste into chat.
-  Activate for "Yubisneeze", "undo Yubisneeze", "I sneezed my YubiKey",
-  "accidentally pressed YubiKey", "OTP pasted in Slack", "how do I turn off
-  YubiKey OTP", OR when the user message is (or mostly is) a long nonsense
-  string that looks like a YubiKey OTP: usually 32+ characters, 
-  (example shape: ccccccvcutntnejcndfivvkk…). Do NOT activate for normal
-  YubiKey install/setup - that is onboarding_yubikey. Do NOT treat normal
-  typos or short codes as a sneeze.
+  Undo a Yubisneeze: accidental YubiKey touch/OTP paste, turning off OTP, or
+  a message mostly made of a 32+ character YubiKey-like modhex string (often
+  many c's). Not normal YubiKey setup, typos, or short codes.
 ---
 
 Help someone who had a Yubisneeze. Call `get_yubisneeze_undo_guidance` for

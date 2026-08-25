@@ -1,18 +1,10 @@
 ---
 name: redirect_competitive_analysis
 description: >
-  Competitive analysis and competitor comparisons - Rasa vs LangChain, Rasa vs
-  Google Agents, Cognigy, Kore.ai, Dialogflow, Botpress, Voiceflow, or any
-  other rival platform. Activate for "Rasa vs …", "how do we compare to …",
-  "competitive analysis", "battle card", "why Rasa over …", or requests for
-  competitor positioning or differentiation write-ups.
-  Do NOT activate for win/loss analysis, win/loss notes, or the win/loss
-  archive - that is lookup_win_loss_analysis. Do NOT activate for product
-  proof points, customer metrics, deployment speed from the proof-points pack,
-  or "why customers use Rasa" without a named competitor - that is
-  lookup_product_proof_points. Do NOT activate for a one-line cheeky joke
-  about a competitor name with no real comparison ask - those stay as light
-  small-talk.
+  Competitive comparisons and positioning: "Rasa vs ...", battle cards,
+  differentiation, or why Rasa over a named competitor such as LangChain,
+  Google Agents, Cognigy, Kore.ai, Dialogflow, Botpress, or Voiceflow. Not
+  win/loss analysis, generic proof points, or one-line competitor jokes.
 ---
 
 ## Competitive comparison requests

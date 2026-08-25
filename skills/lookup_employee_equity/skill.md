@@ -1,15 +1,9 @@
 ---
 name: lookup_employee_equity
 description: >
-  Employee equity / stock options at Rasa - who gets equity, how grant size
-  is set, promotion grants, refresh / top-up grants, vesting, Carta, and
-  where to see your equity. Activate for "equity", "stock options", "how
-  much equity", "option grant", "refresh grant", "equity top-up", "Carta",
-  "where do I see my options", or similar. Do NOT activate for salary /
-  cash compensation bands unrelated to equity. Do NOT activate for benefits
-  (lookup_benefits), payday (lookup_payday), or People / HR helpdesk intake
-  (helpdesk_intake). Do NOT invent equity platforms that are not on the
-  Notion pages.
+  Employee equity and stock options: grants, grant size, promotions,
+  refresh/top-ups, vesting, Carta, and where to view options. Not salary,
+  cash compensation, benefits, or payday.
 ---
 
 Answer employee-equity questions from Rasa's equity Notion pages. Call
