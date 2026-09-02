@@ -1,4 +1,4 @@
-# Sara — Rasa Ops/HR Maestro agent
+# Sara — Rasa Ops/HR agent
 
 Sara is Rasa’s internal Ops/HR assistant (Slack DMs + `@mention` threads), built on **Rasa Maestro** (`calm_v2`). Behaviour lives in natural language (`agent.yml`, skills), not intents/stories.
 
