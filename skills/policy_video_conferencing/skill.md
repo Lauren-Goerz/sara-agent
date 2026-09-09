@@ -4,8 +4,9 @@ description: >
   Video conferencing at Rasa - Google Meet, Zoom, Zoom license requests,
   which tool to use for calls/meetings, or "how do we do video calls".
   Activate for "Google Meet", "Zoom license", "video conferencing", "which
-  meeting tool", or similar. Do NOT activate for Slack huddles as a general
-  chat question, or for product docs about Rasa voice channels.
+  meeting tool", or similar. Not the Berlin office meeting-room TV / Zoom
+  Room (office_berlin). Do NOT activate for Slack huddles as a
+  general chat question, or for product docs about Rasa voice channels.
 ---
 
 Answer video-conferencing questions briefly and Slack-friendly.

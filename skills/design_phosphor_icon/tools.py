@@ -10,8 +10,8 @@ from typing import Any
 import httpx
 import resvg_py
 import structlog
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 from slack_sdk.web.async_client import AsyncWebClient
 
 structlogger = structlog.get_logger()

@@ -1,0 +1,12 @@
+# Cursor for "the one before that" follow-ups. Holds the event Sara last
+# posted so the next relative request steps off it instead of repeating.
+# Written by get_all_hands_event only — never set by the LLM, so these
+# carry no description (the engine rejects descriptions on tool-only fields).
+schema:
+  public:
+    # ISO date of the All Hands event Sara last shared.
+    last_event_date:
+      type: text
+    # Type (All hands / Townhall / Offsite) Sara last shared.
+    last_event_type:
+      type: text

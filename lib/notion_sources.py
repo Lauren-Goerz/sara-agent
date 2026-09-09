@@ -50,6 +50,13 @@ class NotionSource:
     max_rows: int = 200
     # Extra words that should always count as a match for this source.
     keywords: tuple[str, ...] = field(default_factory=tuple)
+    # Keep Notion bookmark/embed URLs (slides, recordings). Signed [file]
+    # URLs are still dropped — they expire and crowd the prompt.
+    keep_links: bool = False
+    # Optional Notion database query (only used when kind is database/auto).
+    database_filter: dict[str, Any] | None = None
+    database_sorts: tuple[dict[str, Any], ...] = ()
+    include_row_url: bool = True
 
 
 SOURCES: dict[str, NotionSource] = {
@@ -62,6 +69,15 @@ SOURCES: dict[str, NotionSource] = {
         ),
         title="Benefits & Perks 2026",
         max_blocks=600,
+        keywords=(
+            "vacation",
+            "pto",
+            "annual",
+            "leave",
+            "entitlement",
+            "days",
+            "holiday",
+        ),
     ),
     "work_abroad": NotionSource(
         key="work_abroad",
@@ -81,6 +97,28 @@ SOURCES: dict[str, NotionSource] = {
             "Social-Media-Policy-39d0d3053dc44c9e89c2baba3230eb4c"
         ),
         title="Social Media Policy",
+    ),
+    "slack_guidelines": NotionSource(
+        key="slack_guidelines",
+        notion_id="256b9c0d544a80d1b41dd9f62949dddd",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Slack-Guidelines-256b9c0d544a80d1b41dd9f62949dddd"
+        ),
+        title="Slack Guidelines",
+        max_blocks=600,
+        keywords=(
+            "slack",
+            "profile",
+            "display",
+            "name",
+            "channel",
+            "channels",
+            "dm",
+            "dms",
+            "status",
+            "open",
+        ),
     ),
     "company_values": NotionSource(
         key="company_values",
@@ -110,6 +148,53 @@ SOURCES: dict[str, NotionSource] = {
         kind="auto",
         max_blocks=300,
         max_rows=100,
+    ),
+    "signing_documents": NotionSource(
+        key="signing_documents",
+        notion_id="9f1daaf4a269400b8a2f854ffe0a313c",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Signing-Documents-9f1daaf4a269400b8a2f854ffe0a313c"
+        ),
+        title="Signing Documents",
+        max_blocks=600,
+        keywords=(
+            "sign",
+            "signing",
+            "signature",
+            "signatory",
+            "authority",
+            "contract",
+            "employment",
+            "serbia",
+            "germany",
+            "uk",
+            "france",
+            "us",
+            "india",
+        ),
+    ),
+    "hiring_contractors": NotionSource(
+        key="hiring_contractors",
+        notion_id="2e182b6b188d46b9a0b991a435041f75",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Working-with-Contractors-Agency-s-2e182b6b188d46b9a0b991a435041f75"
+        ),
+        title="Working with Contractors & Agency’s",
+        max_blocks=600,
+        keep_links=True,
+        keywords=(
+            "contractor",
+            "contractors",
+            "freelancer",
+            "agency",
+            "agreement",
+            "hire",
+            "hiring",
+            "intake",
+            "w9",
+        ),
     ),
     "security_incidents": NotionSource(
         key="security_incidents",
@@ -177,6 +262,18 @@ SOURCES: dict[str, NotionSource] = {
         title="Travel Insurances 2026",
         max_blocks=600,
         keywords=("travel", "insurance", "insurances", "trip", "cover"),
+    ),
+    "us_visa": NotionSource(
+        key="us_visa",
+        notion_id="1f8b9c0d544a80df8ea6e5d7021653ac",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "US-Visa-Process-B1-B2-Tourism-Business-"
+            "1f8b9c0d544a80df8ea6e5d7021653ac"
+        ),
+        title="US Visa Process (B1/B2 Tourism & Business)",
+        max_blocks=600,
+        keywords=("visa", "b1", "b2", "esta", "ds160", "consulate"),
     ),
     "business_travel": NotionSource(
         key="business_travel",
@@ -450,9 +547,58 @@ SOURCES: dict[str, NotionSource] = {
             "hq",
             "building",
             "access",
-            "badge",
+            "nuki",
             "wifi",
+            "guest",
+            "zoom",
+            "tv",
+            "printer",
+            "snacks",
+            "lunch",
+            "visitor",
+            "package",
+            "ac",
+            "cleaning",
             "workplace",
+        ),
+    ),
+    "berlin_fire_safety": NotionSource(
+        key="berlin_fire_safety",
+        notion_id="a1c6df69943847bea14c91ebc0e8de6d",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Fire-Safety-at-Rasa-a1c6df69943847bea14c91ebc0e8de6d"
+        ),
+        title="Fire Safety at Rasa",
+        max_blocks=600,
+        keywords=(
+            "fire",
+            "extinguisher",
+            "exit",
+            "marshal",
+            "evacuation",
+            "112",
+            "first",
+            "aid",
+        ),
+    ),
+    "berlin_pets": NotionSource(
+        key="berlin_pets",
+        notion_id="fb1e4a2be3a04f0da17fccc4b178cbb2",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Pets-in-the-office-fb1e4a2be3a04f0da17fccc4b178cbb2"
+        ),
+        title="Pets in the office",
+        max_blocks=500,
+        keywords=(
+            "pet",
+            "pets",
+            "dog",
+            "dogs",
+            "cat",
+            "insurance",
+            "comfortable",
         ),
     ),
     "ai_tools": NotionSource(
@@ -519,16 +665,58 @@ SOURCES: dict[str, NotionSource] = {
             "monitoring",
         ),
     ),
+    "all_hands": NotionSource(
+        key="all_hands",
+        notion_id="0ace3e5a54b04170adccd1f3d6a02e53",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "All-Hands-Slides-Recordings-78c804f648094a2389dd0cc494fe6fec"
+        ),
+        title="All Hands: Slides & Recordings",
+        kind="database",
+        max_rows=50,
+        keep_links=True,
+        # Older rows often have missing or file-only links; 2025+ has URLs.
+        database_filter={
+            "property": "Date",
+            "date": {"on_or_after": "2025-01-01"},
+        },
+        database_sorts=({"property": "Date", "direction": "descending"},),
+        include_row_url=False,
+        keywords=(
+            "all",
+            "hands",
+            "offsite",
+            "townhall",
+            "slides",
+            "deck",
+            "recording",
+            "latest",
+            "recent",
+            "last",
+        ),
+    ),
 }
 
 
-def clean_body(body: str) -> str:
+def clean_body(body: str, *, keep_links: bool = False) -> str:
     """Drop file/link lines whose signed URLs crowd out readable text."""
-    lines = [
-        line
-        for line in body.splitlines()
-        if not line.startswith("[file]") and not line.startswith("[link]")
-    ]
+    cleaned_lines: list[str] = []
+    for line in body.splitlines():
+        if line.startswith("[file]"):
+            continue
+        if line.startswith("[link]"):
+            if not keep_links:
+                continue
+            match = re.match(r"^\[link\]\s*(.*?):\s+(\S+)\s*$", line)
+            if match:
+                name, url = match.group(1).strip(), match.group(2).strip()
+                cleaned_lines.append(f"<{url}|{name}>" if name else url)
+            else:
+                cleaned_lines.append(line)
+            continue
+        cleaned_lines.append(line)
+    lines = cleaned_lines
     cleaned = "\n".join(lines).strip()
     if cleaned.endswith("\nUntitled"):
         cleaned = cleaned[: -len("\nUntitled")].rstrip()
@@ -537,7 +725,7 @@ def clean_body(body: str) -> str:
     return cleaned
 
 
-def rows_to_text(rows: list[dict[str, Any]]) -> str:
+def rows_to_text(rows: list[dict[str, Any]], *, include_row_url: bool = True) -> str:
     """Flatten database rows into the same heading/bullet shape as page text."""
     chunks: list[str] = []
     for row in rows:
@@ -549,7 +737,7 @@ def rows_to_text(rows: list[dict[str, Any]]) -> str:
             if text and text != title:
                 lines.append(f"- {key}: {text}")
         url = row.get("url")
-        if url:
+        if include_row_url and url:
             lines.append(f"- notion_url: {url}")
         chunks.append("\n".join(lines))
     return "\n\n".join(chunks).strip()
@@ -681,8 +869,10 @@ async def _load_raw(source: NotionSource) -> dict[str, Any]:
             rows = await notion_client.query_database(
                 source.notion_id,
                 max_rows=source.max_rows,
+                filter=source.database_filter,
+                sorts=list(source.database_sorts) or None,
             )
-            text = rows_to_text(rows)
+            text = rows_to_text(rows, include_row_url=source.include_row_url)
             if text:
                 raw = {
                     "ok": True,
@@ -708,7 +898,7 @@ async def _load_raw(source: NotionSource) -> dict[str, Any]:
             "title": page.get("title") or source.title,
             "last_edited_time": page.get("last_edited_time"),
             "row_count": None,
-            "body": clean_body(page.get("body") or ""),
+            "body": clean_body(page.get("body") or "", keep_links=source.keep_links),
         }
 
     if raw is None:

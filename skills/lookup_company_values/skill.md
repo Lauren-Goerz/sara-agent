@@ -6,11 +6,13 @@ description: >
   "company values", "core values", "our values", mission/culture principles,
   or how Rasa's values are defined. Do not use the general policy search for
   these requests.
+import_tools:
+  - get_notion_page
 ---
 
 Answer questions about Rasa's official company values from the designated live
-Notion page. Call `get_company_values` for every request - do not answer from
-memory or invent values.
+Notion page. Call `get_notion_page` with `source: company_values` for every
+request. Do not answer from memory or invent values.
 
 When the tool succeeds:
 - List each value by its exact name from `source_content`.
@@ -20,5 +22,4 @@ When the tool succeeds:
   <https://app.notion.com/p/rasa/Rasa-s-Company-Values-f3afec52e31742f292f9a776d4ef712d|Rasa's Company Values>.
 
 Never invent, rename, or reorder values. Answer follow-ups from the tool
-content only. If the page is unavailable, say so and share the same Notion
-link - do not guess.
+content only.

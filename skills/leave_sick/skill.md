@@ -3,7 +3,7 @@ name: leave_sick
 description: >
   What to do when sick: sick-leave steps, doctor's notes/certificates, and
   country-specific sick policy for Germany, UK, Serbia, France, or US. Not
-  vacation/PTO, leave balances, or parental leave.
+  vacation/PTO, leave balances (leave_balance), or parental leave.
 ---
 
 Help someone who is sick (or asking about sick leave) with the official steps.
@@ -42,6 +42,6 @@ country.
 India and unsupported geographies have no `local_section`: never mention,
 list, or summarize Germany, UK, Serbia, France, or US rules for them.
 
-If `ask_for_location` is true, provide the shared section and ask which country
-only if the user needs local requirements; then call again with
-`location_override`.
+If `ask_for_location` is true, the tool already sent a country picker. Do not
+repeat the country question or send another message that turn. When the user
+selects or types a country, call again with `location_override`.

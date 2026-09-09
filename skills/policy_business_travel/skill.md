@@ -3,7 +3,10 @@ name: policy_business_travel
 description: >
   Business travel booking and spend policy: flight class, transport, hotel
   guidelines, per diem, receipts, and expenses. Not travel insurance,
-  temporary work abroad, vacation, or general benefits.
+  US visas (travel_visa_USA), temporary work abroad, vacation, or
+  general benefits. Mentioning a country does not make it travel — whether
+  Rasa may sell or license to a customer somewhere is
+  policy_export_control.
 ---
 
 Answer business travel policy questions from the designated Notion page.
@@ -27,4 +30,5 @@ something is not on the page, say so and share the Notion link. If
 `used_fallback` is true, still treat `source_content` as the approved policy.
 
 If they ask about travel *insurance* / cover / claims, hand off to
-@skill.policy_travel_insurance.
+@skill.policy_travel_insurance. If they ask how to get a US visa, that
+is @skill.travel_visa_USA.

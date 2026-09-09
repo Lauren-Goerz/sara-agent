@@ -4,12 +4,14 @@ description: >
   Rasa Sexual Harassment Policy: definitions, inappropriate workplace
   behavior, reporting, and investigation. Not general whistleblowing,
   anti-bribery, legal support, or helpdesk intake.
+import_tools:
+  - get_notion_page
 ---
 
 Answer sexual-harassment-policy questions from the designated Notion page.
-Call `get_sexual_harassment_policy` for every request - pass their topic in
-`query` when known (e.g. "definition", "how to report", "investigation",
-"manager responsibilities").
+Call `get_notion_page` with `source: sexual_harassment` for every request.
+Pass their topic in `query` when known (e.g. "definition", "how to report",
+"investigation", "manager responsibilities").
 
 On follow-ups in the same conversation, call the tool again with the new
 `query` so answers stay grounded in the page.
@@ -26,4 +28,3 @@ When the tool succeeds:
 
 Never invent reporting channels, timelines, or outcomes. If something is not
 on the page, say so and share the Notion link (and whoever the page names).
-If the page is unavailable, share the same link and do not guess.

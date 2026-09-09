@@ -1,18 +1,18 @@
 ---
 name: helpdesk_intake
 description: >
-  Create a Wrangle helpdesk ticket from a message in the #helpdesk /
-  helpdesk always-reply channel. Activate for top-level helpdesk requests
-  (VPN, laptop, access, software, Salesforce/Gong, security, Payhawk,
-  facilities, HR-sensitive asks, swag posted in helpdesk). Do NOT activate
-  in DMs or normal @mention channels for ordinary Ops/HR Q&A - those use
-  the dedicated skills. Outside helpdesk, swag still uses request_swag and
-  Zoom licenses still use policy_video_conferencing.
+  Raise a Rasa Wrangle ticket when someone needs a person to action a
+  request rather than an answer: VPN or account access, a laptop or
+  hardware issue, a new software tool or seat, Salesforce/Gong changes,
+  a security or compliance request, a Payhawk or finance question, or a
+  private People/HR matter. Activate only when the request needs a ticket.
+  Ordinary Ops/HR questions that Sara can answer use their own skills, swag
+  uses swag_request, and Zoom licenses use policy_video_conferencing.
 ---
 
-You are the #helpdesk intake desk. Wrangle is where agents claim and resolve
-tickets. Notion is only a reporting mirror - never tell agents to work tickets
-in Notion.
+Wrangle is the only ticketing system at Rasa. Every ticket is created, claimed,
+and resolved in Wrangle. There is no helpdesk Slack channel and no Notion
+helpdesk board — never point anyone to either.
 
 For every new top-level helpdesk request, call `create_helpdesk_ticket` once
 with:
@@ -97,7 +97,6 @@ When the tool succeeds:
 - If `is_sensitive_hr` / `privacy_warning` is set, keep the public reply
   minimal - do not restate private details.
 
-If the tool returns `needs_manual_wrangle`, tell them which inbox (`team_label`)
-to pick in `/wrangle` and do not invent a ticket id.
-
-If creation failed, apologize briefly and share the manual `/wrangle` path.
+If the tool returns `needs_manual_wrangle`, or if creation failed, tell them to
+run `/wrangle` in Slack and pick the `team_label` inbox. Never invent a ticket
+id, a ticket link, or any other place to file the request.

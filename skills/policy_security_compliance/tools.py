@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from difflib import SequenceMatcher
 
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _HUB_URL = (
     "https://app.notion.com/p/rasa/"

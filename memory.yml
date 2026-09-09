@@ -5,10 +5,10 @@ user_country:
     The employee's work country, resolved once per conversation by
     lib/user_location.py from what they said, their Slack profile Location,
     or their Slack timezone. Shared by sick leave, vacation policy, parental
-    leave, and payday so every skill answers for the same country. Use "other"
+    leave, payday, and payslips so every skill answers for the same country.
+    Use "other"
     for a country Rasa has no local policy section for.
   correctable: true
-  llm_settable: true
 user_country_source:
   type: text
   description: >
@@ -20,4 +20,3 @@ user_country_confirmed:
     True only after the employee said or confirmed their work country out
     loud. A Slack-profile or timezone guess does not count. Skills whose
     answer would be harmful if the country were wrong gate on this.
-  llm_settable: true

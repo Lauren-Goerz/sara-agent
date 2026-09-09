@@ -3,8 +3,10 @@ name: redirect_product_docs
 description: >
   Technical Rasa product how-tos that belong in product docs: APIs, SDKs,
   CALM, Maestro, flows, NLU, channels, deployment, installation,
-  configuration, custom actions, slots, or dialogue behavior. Not internal
-  Ops/People policy, IT support, roadmap, proof points, or success metrics.
+  configuration, custom actions, slots, or dialogue behavior. Not "how do I
+  learn the product" / Rasa University
+  (learning_development_product_onboarding). Not internal Ops/People
+  policy, IT support, roadmap, proof points, or success metrics.
 ---
 
 When someone asks a technical question about the Rasa product, do not invent

@@ -13,8 +13,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 # Allow importing shared clients from project lib/
 _ROOT = Path(__file__).resolve().parents[2]

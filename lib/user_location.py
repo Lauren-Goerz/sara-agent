@@ -1,7 +1,7 @@
 """Shared work-country resolution for Sara's country-aware skills.
 
-One resolver so sick leave, vacation policy, parental leave, and payday all
-answer for the same country. Order of truth: what the user just said, then what
+One resolver so sick leave, vacation policy, parental leave, payday, and
+payslips all answer for the same country. Order of truth: what the user just said, then what
 was already established this conversation, then the Slack profile Location
 field, then the Slack timezone.
 """
@@ -30,6 +30,41 @@ GEO_LABELS = {
     "us": "the US",
     "india": "India",
 }
+
+STANDARD_COUNTRY_OPTIONS = (
+    "Germany",
+    "UK",
+    "Serbia",
+    "France",
+    "US",
+    "India",
+    "Other",
+)
+LOCAL_POLICY_COUNTRY_OPTIONS = (
+    "Germany",
+    "UK",
+    "Serbia",
+    "France",
+    "US",
+    "Other",
+)
+PAYROLL_COUNTRY_OPTIONS = (
+    "Germany",
+    "UK",
+    "Serbia",
+    "France",
+    "US",
+    "Deel",
+    "Other",
+)
+PAYDAY_COUNTRY_OPTIONS = (
+    "Germany",
+    "UK",
+    "Serbia",
+    "France",
+    "US",
+    "Deel",
+)
 
 SLACK_LOCATION_PREFACE = (
     "based on the location information you provided in your Slack profile..."
@@ -150,6 +185,19 @@ def label(country: str | None) -> str | None:
     return GEO_LABELS.get(country or "")
 
 
+async def send_country_picker(
+    context: Any,
+    prompt: str,
+    *,
+    options: tuple[str, ...] = STANDARD_COUNTRY_OPTIONS,
+) -> None:
+    """Send a readable choice list that Slack renders as Block Kit buttons."""
+    if context is None:
+        return
+    choices = " | ".join(options)
+    await context.send(f"{prompt.strip()}\n[Country options: {choices}]")
+
+
 def _remembered(context: Any) -> tuple[str | None, str | None]:
     try:
         country = context.memory.get(MEMORY_COUNTRY)
@@ -160,10 +208,25 @@ def _remembered(context: Any) -> tuple[str | None, str | None]:
     return (country or None), (str(source) if source else None)
 
 
-def _remember(context: Any, country: str, source: str) -> None:
+def confirm(context: Any, country: str) -> None:
+    """Mark a country the employee stated out loud as confirmed."""
+    _remember(context, country, "user_override", confirmed=True)
+
+
+def _remember(
+    context: Any,
+    country: str,
+    source: str,
+    *,
+    confirmed: bool | None = None,
+) -> None:
     try:
         context.memory.set(MEMORY_COUNTRY, country)
         context.memory.set(MEMORY_SOURCE, source)
+        if confirmed is True:
+            context.memory.set(MEMORY_CONFIRMED, True)
+        elif confirmed is False:
+            context.memory.set(MEMORY_CONFIRMED, False)
     except Exception:  # noqa: BLE001 - remembering is best effort
         pass
 
@@ -222,7 +285,12 @@ async def resolve(
 
     read_from_slack_now = source in {"slack_profile", "slack_timezone"}
     if remember and country and source and source != "memory":
-        _remember(context, country, source)
+        _remember(
+            context,
+            country,
+            source,
+            confirmed=True if source == "user_override" else None,
+        )
 
     return {
         "country": country,

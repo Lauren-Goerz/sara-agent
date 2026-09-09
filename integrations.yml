@@ -1,9 +1,17 @@
 # External integrations for your Maestro agent.
 
 llm:
-  provider: openai
-  model: gpt-5.1
-  api_key_env: OPENAI_API_KEY
+  model_group: orchestrator
+  # Skill catalog + a fetched Notion page routinely pushes prompts past the
+  # 8000-token default, which starts trimming conversation history.
+  max_prompt_tokens: 24000
+
+model_groups:
+  - id: orchestrator
+    models:
+      - provider: openai
+        model: gpt-5.1
+        api_key_env: OPENAI_API_KEY
 
 channels:
   rest:

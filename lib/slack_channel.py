@@ -13,9 +13,7 @@ Behaviour:
     accept every message without an @mention (Sara must still be a member of
     the channel, and the Slack app must subscribe to ``message.channels`` /
     ``message.groups`` with ``channels:history`` / ``groups:history``).
-  - ``SLACK_HELPDESK_CHANNELS`` (defaults to always-reply) marks helpdesk
-    intake channels for the helpdesk_intake skill (Wrangle ticket + Notion
-    mirror). Ignore IDs in ``SLACK_IGNORE_BOT_IDS`` (plus Sara herself).
+  - Ignore IDs in ``SLACK_IGNORE_BOT_IDS`` (plus Sara herself).
   - Conversation state is scoped per Slack thread (and per DM channel).
   - Outgoing text is posted as one Slack message (stock Rasa splits on blank
     lines into multiple bubbles).
@@ -28,6 +26,7 @@ Behaviour:
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import time
@@ -39,6 +38,7 @@ from rasa.core.channels.channel import UserMessage
 from rasa.core.channels.slack import SlackBot, SlackInput
 from rasa.shared.exceptions import InvalidConfigException
 from sanic.request import Request
+from slack_sdk.web.async_client import AsyncWebClient
 
 from lib.media_vision import describe_slack_media, media_from_slack_event
 from lib.slack_audio import audio_from_slack_event, transcribe_slack_audio
@@ -61,20 +61,30 @@ _LAST_HUMAN_SENDER: Dict[str, str] = {}
 # (e.g. Phosphor icons) so she never reacts to herself.
 _OWN_BOT_IDS: Optional[set[str]] = None
 
+# Tools append this readable line when Slack should render country buttons.
+# Other channels show it as a normal plain-text list of choices.
+_COUNTRY_OPTIONS_RE = re.compile(
+    r"(?:\n\s*)?\[Country options:\s*([^\]\n]+)\]\s*$",
+    re.IGNORECASE,
+)
+_COUNTRY_ACTION_ID = "sara_country_picker"
+_COUNTRY_VALUES = {
+    "germany": "My employment country is Germany",
+    "uk": "My employment country is the UK",
+    "serbia": "My employment country is Serbia",
+    "france": "My employment country is France",
+    "us": "My employment country is the US",
+    "india": "My employment country is India",
+    "deel": "I am employed through Deel",
+    "other": "My employment country is another country",
+}
+
 
 def _always_reply_channels() -> set[str]:
     """Channel IDs where Sara answers every message (no @mention required)."""
     raw = os.environ.get("SLACK_ALWAYS_REPLY_CHANNELS", "").strip()
     if not raw:
         return set()
-    return {part.strip() for part in raw.split(",") if part.strip()}
-
-
-def _helpdesk_channels() -> set[str]:
-    """Channels that run helpdesk intake (defaults to always-reply list)."""
-    raw = os.environ.get("SLACK_HELPDESK_CHANNELS", "").strip()
-    if not raw:
-        return _always_reply_channels()
     return {part.strip() for part in raw.split(",") if part.strip()}
 
 
@@ -182,6 +192,40 @@ def _prune_threads() -> None:
         _ACTIVE_THREADS.pop(k, None)
 
 
+def _country_picker(text: str) -> tuple[str, list[dict[str, str]]] | None:
+    """Parse a readable country-options suffix into Slack button data."""
+    match = _COUNTRY_OPTIONS_RE.search(text or "")
+    if not match:
+        return None
+
+    prompt = (text[: match.start()] or "Which country do you work in?").strip()
+    buttons: list[dict[str, str]] = []
+    for raw_label in match.group(1).split("|"):
+        label = raw_label.strip()
+        value = _COUNTRY_VALUES.get(label.lower())
+        if label and value:
+            buttons.append({"label": label, "value": value})
+    return (prompt, buttons) if buttons else None
+
+
+def _interactive_payload(request: Request) -> dict[str, Any] | None:
+    """Return a URL-encoded Slack interaction payload, when present."""
+    content_type = str(request.headers.get("content-type") or "").split(";", 1)[0]
+    if content_type != "application/x-www-form-urlencoded":
+        return None
+    raw = request.form.get("payload")
+    if not isinstance(raw, str):
+        try:
+            raw = raw[0]
+        except (IndexError, TypeError):
+            return None
+    try:
+        payload = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
 class CombinedSlackBot(SlackBot):
     """Slack output that keeps paragraphs in a single chat.postMessage."""
 
@@ -192,6 +236,50 @@ class CombinedSlackBot(SlackBot):
         body = (text or "").strip()
         if not body:
             return
+        if getattr(self, "_country_picker_sent", False):
+            structlogger.info("slack_channel.country_picker_duplicate_suppressed")
+            return
+
+        picker = _country_picker(body)
+        if picker:
+            self._country_picker_sent = True
+            prompt, buttons = picker
+            fallback = f"{prompt}\nOptions: {', '.join(b['label'] for b in buttons)}"
+            blocks: list[dict[str, Any]] = [
+                {
+                    "type": "section",
+                    "text": {"type": "mrkdwn", "text": prompt},
+                }
+            ]
+            for start in range(0, len(buttons), 5):
+                blocks.append(
+                    {
+                        "type": "actions",
+                        "elements": [
+                            {
+                                "type": "button",
+                                "action_id": (
+                                    f"{_COUNTRY_ACTION_ID}_{start + offset}"
+                                ),
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": button["label"],
+                                    "emoji": True,
+                                },
+                                "value": button["value"],
+                            }
+                            for offset, button in enumerate(buttons[start : start + 5])
+                        ],
+                    }
+                )
+            await self._post_message(
+                channel=recipient,
+                as_user=True,
+                text=fallback,
+                blocks=blocks,
+            )
+            return
+
         await self._post_message(
             channel=recipient, as_user=True, text=body, type="mrkdwn"
         )
@@ -277,25 +365,30 @@ class EnvSlackInput(SlackInput):
         thread_id = metadata.get("thread_id")
         event = slack_event.get("event") or {}
 
+        # A reply addressed to another person is not for Sara, even in an
+        # always-reply channel or a thread where Sara was previously active.
+        # Check this before every acceptance path so the always-reply fallback
+        # cannot pull her back into the conversation.
+        parent_ts = event.get("thread_ts")
+        if parent_ts and _addresses_other_colleague(event):
+            _forget_thread(channel_id, parent_ts)
+            structlogger.info(
+                "slack_channel.left_thread_for_colleague",
+                channel_id=channel_id,
+                thread_ts=parent_ts,
+                mentioned=_mentioned_user_ids(str(event.get("text") or "")),
+            )
+            return False
+
         if self._is_app_mention(slack_event):
             # Opening @mention becomes the thread parent (ts) when use_threads=True.
             _remember_thread(channel_id, thread_id)
             return True
 
-        # Follow-up in an existing thread — no @mention required, unless the
-        # message clearly pivots to another colleague (@them, not @Sara).
+        # Follow-up in an existing thread — no @mention required.
         # Real replies always include thread_ts; the parent mention does not.
         if event.get("thread_ts") and _is_active_thread(channel_id, event.get("thread_ts")):
             parent_ts = event.get("thread_ts")
-            if _addresses_other_colleague(event):
-                _forget_thread(channel_id, parent_ts)
-                structlogger.info(
-                    "slack_channel.left_thread_for_colleague",
-                    channel_id=channel_id,
-                    thread_ts=parent_ts,
-                    mentioned=_mentioned_user_ids(str(event.get("text") or "")),
-                )
-                return False
             _remember_thread(channel_id, parent_ts)
             return True
 
@@ -337,13 +430,6 @@ class EnvSlackInput(SlackInput):
             metadata["message_ts"] = str(message_ts)
         if thread_ts:
             metadata["thread_ts"] = str(thread_ts)
-        out_channel = metadata.get("out_channel") or channel_id
-        if out_channel and str(out_channel) in _helpdesk_channels():
-            metadata["is_helpdesk_channel"] = True
-            # Prefer parent ts for ticket dedupe when this is a thread reply.
-            metadata["helpdesk_parent_ts"] = str(
-                thread_ts or message_ts or ""
-            )
         if media:
             metadata["media"] = [
                 {"kind": item.get("kind"), "name": item.get("name")}
@@ -434,6 +520,41 @@ class EnvSlackInput(SlackInput):
         metadata: Optional[Dict],
     ) -> Any:
         """Transcribe voice + describe GIFs/images for Maestro (text-only)."""
+        payload = _interactive_payload(request)
+        if payload:
+            actions = payload.get("actions") or []
+            action = actions[0] if actions and isinstance(actions[0], dict) else {}
+            if str(action.get("action_id") or "").startswith(_COUNTRY_ACTION_ID):
+                channel_id = (payload.get("channel") or {}).get("id")
+                message = payload.get("message") or {}
+                message_ts = message.get("ts")
+                selected = ((action.get("text") or {}).get("text") or "").strip()
+                if channel_id and message_ts and selected:
+                    original = str(message.get("text") or "").split("\nOptions:", 1)[0]
+                    updated_text = f"{original}\nSelected: {selected}".strip()
+                    try:
+                        client = AsyncWebClient(self.slack_token, proxy=self.proxy)
+                        await client.chat_update(
+                            channel=channel_id,
+                            ts=message_ts,
+                            text=updated_text,
+                            blocks=[
+                                {
+                                    "type": "section",
+                                    "text": {
+                                        "type": "mrkdwn",
+                                        "text": f"{original}\n*Selected:* {selected}",
+                                    },
+                                }
+                            ],
+                        )
+                    except Exception as error:  # noqa: BLE001 - click still proceeds
+                        structlogger.warning(
+                            "slack_channel.country_picker_cleanup_failed",
+                            error=str(error),
+                            channel_id=channel_id,
+                        )
+
         event: Dict[str, Any] = {}
         if request.headers.get("content-type") == "application/json":
             event = (request.json or {}).get("event") or {}

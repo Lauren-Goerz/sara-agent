@@ -6,7 +6,9 @@ description: >
   strategy, OKRs, goals, org information, company presentations, or "where
   can I find the page about ...". Do not use for a topic with its own skill,
   including leave, benefits, security/compliance, travel, IT, product,
-  company details, handbooks, or design assets.
+  company details, handbooks, design assets, payslips, Slack usage
+  (rasa_tools_slack), or export controls / sanctions / selling to a
+  country (policy_export_control).
 tool_constraints:
   - get_policy_page:
       requires: session.search_policies.selected_page_id
@@ -36,6 +38,8 @@ first search misses, retry once with a different short phrasing before
 telling the user you cannot find it.
 
 Present matching pages briefly: title and URL (last edited time optional).
+Paste the tool's `url` value verbatim as the link target, including the
+`https://` prefix. Never trim it to the slug or rebuild it from the title.
 Ideally provide just what the person was looking for, not several pages.
 If several match, ask which to open. When they choose, set
 `selected_page_id` via `set_fields`. If one clear match, set it without

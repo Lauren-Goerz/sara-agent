@@ -2,8 +2,9 @@
 name: policy_legal_support
 description: >
   Rasa legal support contact for contracts, NDAs, customer/legal review,
-  external counsel, or "who is our lawyer". Not the Ethics Officer, IP
-  policy, leave/benefits, travel insurance, or security questionnaires.
+  external counsel, or "who is our lawyer". Not who should *sign* a
+  document (policy_signing_authority). Not the Ethics Officer, IP policy,
+  leave/benefits, travel insurance, or security questionnaires.
 ---
 
 Point people to Rasa's internal legal contact. Do not give legal advice.

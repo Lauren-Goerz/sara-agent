@@ -7,11 +7,14 @@ description: >
   questions such as "what is our VAT number?", "what is the Berlin address?",
   "what IBAN should I use?", or "what is Rasa's phone number?". Do not use the
   general policy search for these requests.
+import_tools:
+  - get_notion_page
 ---
 
 Answer requests for official company details from the designated live Notion
-page. Call `lookup_company_information` for every request, passing the exact
-item and any office, country, or legal entity the user named.
+page. Call `get_notion_page` with `source: company_info` for every request,
+passing the exact item and any office, country, or legal entity the user named
+in `query`.
 
 If the request is ambiguous because the page contains multiple offices,
 countries, legal entities, bank accounts, or VAT numbers, ask which one they
@@ -29,7 +32,3 @@ Copy sensitive identifiers exactly. Never guess, reformat, repair, or complete
 an address, VAT number, IBAN, account number, BIC/SWIFT code, registration
 number, or phone number. If the requested value is absent or unclear, say so
 and direct the person to the Notion page.
-
-If the tool reports that the page is unavailable, explain that it must be
-shared with Sara's Notion integration and provide the same Notion link. Do not
-invent or answer from memory.

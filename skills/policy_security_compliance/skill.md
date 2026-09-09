@@ -5,8 +5,9 @@ description: >
   Policies & Procedures hub: IAM/access control, acceptable use, incident
   management, change management, vulnerabilities, cryptography, AppSec, DLP,
   cloud, assets, physical security, BCP, logging, suppliers, and related
-  infosec topics. Not live incidents, ownership, vendor questionnaires, or
-  dedicated ethics/People policies.
+  infosec topics. Not live incidents, ownership, vendor questionnaires,
+  dedicated ethics/People policies, or selling to a country / sanctions /
+  export classification (policy_export_control).
 ---
 
 Point people to the matching policy page under the current Security,

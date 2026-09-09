@@ -1,6 +1,6 @@
 # Sara — Rasa Ops/HR agent
 
-Sara is Rasa’s internal Ops/HR assistant (Slack DMs + `@mention` threads), built on **Rasa Maestro** (`calm_v2`). Behaviour lives in natural language (`agent.yml`, skills), not intents/stories.
+Sara is Rasa’s internal Ops/HR assistant (Slack DMs + `@mention` threads), built on **Rasa Maestro** (`mantle`). Behaviour lives in natural language (`agent.yml`, skills), not intents/stories.
 
 ## Quick start (local)
 
@@ -17,7 +17,12 @@ For Slack locally, expose the webhook with a tunnel:
 ```bash
 ngrok http 5005
 # Slack Event Subscriptions → https://YOUR-NGROK-HOST/webhooks/slack/webhook
+# Slack Interactivity Request URL → the same /webhooks/slack/webhook URL
 ```
+
+Enable **Interactivity & Shortcuts** in the Slack app settings so country
+picker button clicks are delivered back to Sara. The custom connector verifies
+Slack signatures and continues the active DM or thread conversation.
 
 ## Layout
 

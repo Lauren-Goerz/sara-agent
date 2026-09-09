@@ -163,7 +163,11 @@ async def _fetch_block_children(
     headers: dict[str, str],
     max_blocks: int,
 ) -> list[dict[str, Any]]:
-    """Fetch block children, including nested toggle/list content."""
+    """Fetch block children, including nested toggle/list content.
+
+    A nested block the integration cannot read (unshared child page, synced
+    block from elsewhere) is skipped rather than failing the whole page.
+    """
     blocks: list[dict[str, Any]] = []
     cursor: str | None = None
 
@@ -184,13 +188,23 @@ async def _fetch_block_children(
 
         for block in payload.get("results", []):
             blocks.append(block)
-            if block.get("has_children") and len(blocks) < max_blocks:
-                nested = await _fetch_block_children(
-                    client,
-                    str(block["id"]),
-                    headers=headers,
-                    max_blocks=max_blocks - len(blocks),
-                )
+            recurse = (
+                block.get("has_children")
+                and len(blocks) < max_blocks
+                # Child pages/databases are separate sources; a skill that needs
+                # them registers them itself.
+                and block.get("type") not in {"child_page", "child_database"}
+            )
+            if recurse:
+                try:
+                    nested = await _fetch_block_children(
+                        client,
+                        str(block["id"]),
+                        headers=headers,
+                        max_blocks=max_blocks - len(blocks),
+                    )
+                except httpx.HTTPStatusError:
+                    continue
                 blocks.extend(nested)
             if len(blocks) >= max_blocks:
                 break
@@ -266,8 +280,10 @@ async def query_database(
     *,
     page_size: int = 100,
     max_rows: int = 500,
+    filter: dict[str, Any] | None = None,
+    sorts: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch all rows of a Notion database as {id, url, title, fields} dicts."""
+    """Fetch Notion database rows as {id, url, title, fields} dicts."""
     headers = _headers()
     rows: list[dict[str, Any]] = []
     cursor: str | None = None
@@ -275,6 +291,10 @@ async def query_database(
     async with httpx.AsyncClient(timeout=30.0) as client:
         while len(rows) < max_rows:
             payload: dict[str, Any] = {"page_size": min(page_size, max_rows - len(rows))}
+            if filter:
+                payload["filter"] = filter
+            if sorts:
+                payload["sorts"] = sorts
             if cursor:
                 payload["start_cursor"] = cursor
             resp = await client.post(

@@ -9,14 +9,19 @@ description: >
 Answer how to **book** vacation or offline days. This skill is the company-wide
 process, not country entitlements.
 
-Match the question:
+Match the question and answer only that part. The sections below are
+reference material, not a script to recite:
 
 - Booking vacation → the vacation checklist + manager rules for 5+ days.
 - Offline days → speak to manager first, then the offline booking steps.
 - OOO email template → the FAQ template only.
 
+One question gets one section. Someone asking about the OOO template does not
+also need the booking checklist, and someone asking about offline days does
+not need the vacation steps.
+
 Never invent balances, approve leave, or quote country-specific allowances.
-For "how many vacation days do I have?", that is @skill.leave_check
+For "how many vacation days do I have?", that is @skill.leave_balance
 (BambooHR). For "how many days do I get", carry-over, half days around
 holidays, or country vacation rules, that is @skill.policy_vacation.
 

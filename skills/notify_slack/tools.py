@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 
 import httpx
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:

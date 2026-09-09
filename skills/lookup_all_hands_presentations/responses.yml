@@ -1,0 +1,6 @@
+responses:
+  utter_all_hands_archive:
+    - text: |-
+        Every All Hands deck and recording lives in one Notion archive: <https://app.notion.com/p/rasa/All-Hands-Slides-Recordings-78c804f648094a2389dd0cc494fe6fec|All Hands Slides & Recordings>
+
+        Sara looks up slides and recordings from January 2025 onward. For older All Hands, open the archive and scroll to the date you need.

@@ -3,13 +3,16 @@ name: policy_work_abroad
 description: >
   Policy for temporarily working from another country: "can I work abroad",
   digital nomad, or working a few weeks/month from a destination. Not
-  vacation, business travel, travel insurance, or permanent relocation.
+  vacation, business travel, travel insurance, US visas, or permanent
+  relocation.
+import_tools:
+  - get_notion_page
 ---
 
 Answer questions about working from other countries using the designated
-Notion page. Call `get_work_abroad_guidance` for every request - pass the
-destination and duration in `query` when known (e.g. "a few weeks from
-Denmark", "one month in South Africa").
+Notion page. Call `get_notion_page` with `source: work_abroad` for every
+request. Pass the destination and duration in `query` when known (e.g.
+"a few weeks from Denmark", "one month in South Africa").
 
 When the tool succeeds:
 - Answer from `source_content` only, focused on their destination/duration.
@@ -20,5 +23,8 @@ When the tool succeeds:
 
 Never invent day limits, visa/immigration rules, tax advice, or approvals.
 If the answer is not on the page, say so and share the Notion link (and
-People Ops if the page points there). If the page is unavailable, share the
-same link and do not guess.
+People Ops if the page points there).
+
+When the tool fails, do not narrate the failure, hedge about whether they can
+go, or list what the policy "usually" covers. Point them straight to the
+Notion link as the place with the rules and to their manager / People Ops.

@@ -4,14 +4,16 @@ description: >
   Vendor/RFP/RFI security questionnaire answers from the approved bank:
   SOC 2, ISO, pen testing, controls, and assurance wording. Use only when no
   dedicated policy skill answers the question; not live incident status.
+import_tools:
+  - get_notion_page
 ---
 
 Help answer vendor / RFP / RFI security questionnaire questions from the
 approved bank — **only** when a dedicated policy skill does not already
 cover the topic.
 
-Call `get_rfp_security_answers` for every request - pass the topic or
-question in `query`.
+Call `get_notion_page` with `source: rfp_security` for every request. Pass the
+topic or question in `query`.
 
 When the tool succeeds:
 - Use only `source_content` from the bank.
@@ -23,5 +25,4 @@ When the tool succeeds:
 
 Never invent certifications, controls, audit dates, or security claims that
 are not in the bank. If nothing matches, say so and share the Notion link
-(and suggest #security if needed). If the page is unavailable, share the
-same link and do not guess.
+(and suggest #security if needed).

@@ -15,12 +15,12 @@ Parental leave rules are geography-specific. Never give policy advice until
 the employment country is confirmed.
 
 1. Call `detect_parental_leave_location`.
-2. Ask the person to confirm before continuing. If a location or country was
-   detected, ask whether that is correct for their employment country. If
-   nothing was detected, ask which country they work in. Supported local
-   sections are UK, US, Germany, Serbia, and France.
-3. When they confirm or correct it, set `user_country` and
-   `user_country_confirmed` to true via `set_fields`.
+2. If confirmation is needed, the tool sends a country picker. Do not repeat
+   its question or send another message that turn. Supported local sections
+   are UK, US, Germany, Serbia, and France.
+3. When they confirm or correct it, call `detect_parental_leave_location`
+   again with `location_override` set to that country (do not use
+   `set_fields` for the shared country — tools write it).
 4. Only then call `get_parental_leave_guidance` with that country.
 
 Until location is confirmed, do not summarize eligibility, durations, or

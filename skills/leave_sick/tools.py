@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
@@ -200,6 +200,14 @@ async def get_sick_leave_guidance(
             flags=re.I,
         )
 
+    if location["ask_for_location"]:
+        await user_location.send_country_picker(
+            context,
+            "Which country are you employed in for local sick-leave rules?",
+            options=user_location.STANDARD_COUNTRY_OPTIONS,
+        )
+        return ToolResult()
+
     return ToolResult(
         llm_response={
             "ok": True,
@@ -228,9 +236,8 @@ async def get_sick_leave_guidance(
                 "content. Include only the matching local_section. India and "
                 "unsupported geographies have local_section=null: do not mention "
                 "any country section. If forbid_peopleteam_email is true, never "
-                "tell them to email peopleteam@rasa.com. If ask_for_location is "
-                "true, give everyone_section and ask for country only if local "
-                "rules are needed. Always paste source_slack_link and "
+                "tell them to email peopleteam@rasa.com. Always paste "
+                "source_slack_link and "
                 "bamboo_slack_link as-is (Slack hyperlinks). Never write bare "
                 "URLs or wrap links in backticks."
             ),

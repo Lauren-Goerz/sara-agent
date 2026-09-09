@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
@@ -122,17 +122,43 @@ def _extract_section(body: str, section: str) -> str | None:
 
 @tool(
     description=(
-        "Read the Slack user's location/timezone guess for parental leave. "
-        "Call this first so you can ask them to confirm before giving any "
-        "parental leave advice."
+        "Read the Slack user's location/timezone guess for parental leave, "
+        "or apply a country the employee just confirmed. Call this first so "
+        "you can ask them to confirm before giving any parental leave advice."
     )
 )
 async def detect_parental_leave_location(
+    location_override: str = "",
     context: ToolContext = None,
 ) -> ToolResult:
-    """Return the Slack-derived employment location for confirmation."""
+    """Return the Slack-derived employment location for confirmation.
+
+    Args:
+        location_override: Country the user just stated or confirmed.
+    """
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
+
+    override = (location_override or "").strip()
+    if override:
+        location = await user_location.resolve(
+            context,
+            location_override=override,
+            remember=True,
+        )
+        geography = location["country"] or "other"
+        user_location.confirm(context, geography)
+        return ToolResult(
+            llm_response={
+                "ok": True,
+                "ready": True,
+                "detected_country": geography,
+                "instruction": (
+                    "Country is confirmed. Call get_parental_leave_guidance "
+                    "next. Do not invent country rules yourself."
+                ),
+            }
+        )
 
     # Reuse the country already established this conversation, but never skip
     # the confirmation step below - parental leave is too consequential.
@@ -146,29 +172,17 @@ async def detect_parental_leave_location(
         or (str(profile_location) if profile_location else "")
         or (str(timezone) if timezone else "")
     )
-
-    return ToolResult(
-        llm_response={
-            "ok": True,
-            "detected_country": geography,
-            "detected_label": display_label or None,
-            "profile_location": profile_location,
-            "timezone": timezone,
-            "location_source": location_source,
-            "supported_countries": list(_SUPPORTED),
-            "source_slack_link": POLICY_SLACK_LINK,
-            "instruction": (
-                "Do NOT give parental leave advice yet. Ask the user to "
-                "confirm whether detected_label (or profile_location/"
-                "timezone) is their employment country for parental leave. "
-                "If nothing was detected, ask which country they work in. "
-                "Supported country sections are UK, US, Germany, Serbia, and "
-                "France. After they confirm or correct, set user_country and "
-                "user_country_confirmed=true, then call "
-                "get_parental_leave_guidance."
-            ),
-        }
+    prompt = (
+        f"Is {display_label} your employment country for parental leave?"
+        if display_label
+        else "Which country are you employed in?"
     )
+    await user_location.send_country_picker(
+        context,
+        prompt,
+        options=user_location.LOCAL_POLICY_COUNTRY_OPTIONS,
+    )
+    return ToolResult()
 
 
 @tool(
@@ -200,8 +214,9 @@ async def get_parental_leave_guidance(
                 "instruction": (
                     "Location is not confirmed yet. Call "
                     "detect_parental_leave_location if needed, ask the user "
-                    "to confirm their employment country, set "
-                    "user_country_confirmed=true, then retry."
+                    "to confirm their employment country, call "
+                    "detect_parental_leave_location with location_override, "
+                    "then retry."
                 ),
             }
         )

@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
@@ -29,6 +29,10 @@ POLICY_SLACK_LINK = (
 HANDBOOKS_SLACK_LINK = (
     "<https://app.notion.com/p/rasa/"
     "Employee-Handbooks-defd5187553d4e8598e412a115679b40|Employee Handbooks>"
+)
+BENEFITS_SLACK_LINK = (
+    "<https://app.notion.com/p/rasa/"
+    "Benefits-Perks-2026-bd1165c5ece74392917d3b3eaffb4388|Benefits & Perks 2026>"
 )
 
 # Used only when the Notion page is not yet shared with Sara-Agent.
@@ -138,10 +142,10 @@ async def _load_policy() -> dict[str, Any]:
 
 @tool(
     description=(
-        "Fetch company vacation policy plus the employee's country rules from "
-        "Notion (Vacation and Sick days + Employee Handbooks). Call for "
-        "entitlements, carry-over, half days, and country PTO policy — not "
-        "for how to book time off."
+        "Fetch vacation day entitlement from Benefits & Perks 2026, plus "
+        "shared vacation rules from Vacation and Sick days. Call for how "
+        "many vacation/PTO days someone gets, carry-over, half days, and "
+        "country PTO policy — not for how to book time off."
     )
 )
 async def get_vacation_policy_guidance(
@@ -153,7 +157,7 @@ async def get_vacation_policy_guidance(
 
     Args:
         location_override: Country they stated or corrected this turn.
-        question: What they asked (carry-over, allowance, half days, …).
+        question: What they asked (how many days, carry-over, half days, …).
     """
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
@@ -163,6 +167,17 @@ async def get_vacation_policy_guidance(
         location_override=location_override,
     )
     geography = location["country"]
+
+    benefits_query = " ".join(
+        part
+        for part in (
+            "vacation days PTO annual leave entitlement allowance",
+            location["country_label"] or geography or "",
+            (question or "").strip(),
+        )
+        if part
+    )
+    benefits = await notion_sources.load("benefits", query=benefits_query)
 
     page = await _load_policy()
     body = page.get("body") or ""
@@ -190,12 +205,24 @@ async def get_vacation_policy_guidance(
         if handbook_ok:
             handbook_section = handbook.get("source_content")
 
+    if location["ask_for_location"]:
+        await user_location.send_country_picker(
+            context,
+            "Which country are you employed in for vacation policy?",
+            options=user_location.STANDARD_COUNTRY_OPTIONS,
+        )
+        return ToolResult()
+
     return ToolResult(
         llm_response={
             "ok": True,
             "source_title": page.get("title"),
             "source_url": page.get("url") or POLICY_PAGE_URL,
             "source_slack_link": POLICY_SLACK_LINK,
+            "entitlement_ok": bool(benefits.get("ok")),
+            "entitlement_content": benefits.get("source_content"),
+            "entitlement_url": benefits.get("source_url"),
+            "entitlement_slack_link": BENEFITS_SLACK_LINK,
             "handbooks_slack_link": HANDBOOKS_SLACK_LINK,
             "source_last_edited_time": page.get("last_edited_time"),
             "source_mode": page.get("source_mode"),
@@ -212,16 +239,16 @@ async def get_vacation_policy_guidance(
             "required_preface": location["required_preface"],
             "ask_for_location": location["ask_for_location"],
             "instruction": (
-                "Use only shared_sections and handbook_section/local_section. "
-                "Never invent statutory days or country rules. If "
-                "required_preface is present, begin with that exact sentence. "
-                "India and unsupported geographies have no local_section: do "
-                "not quote another country's vacation rules. Shared company "
-                "carry-over / half-day / offline allowance / sick-during-"
-                "vacation text may still be used. Always paste "
-                "source_slack_link. Mention handbooks_slack_link when you "
-                "used handbook_section. Never treat sick-certificate country "
-                "blocks as vacation policy."
+                "For how many vacation days they get, use only "
+                "entitlement_content (Benefits & Perks 2026). Quote the "
+                "number for their geography only — never invent days or copy "
+                "another country's figure. Always paste entitlement_slack_link. "
+                "If entitlement_ok is false, share that link and say the "
+                "day count is on the Benefits page. For carry-over, half days, "
+                "offline days, or sick-during-vacation, use shared_sections "
+                "and paste source_slack_link. Handbook text is extra context "
+                "only, never a substitute for the Benefits day count. If "
+                "required_preface is present, begin with that exact sentence."
             ),
         }
     )

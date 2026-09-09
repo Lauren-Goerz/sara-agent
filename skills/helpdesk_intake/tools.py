@@ -12,14 +12,14 @@ from typing import Any
 
 import httpx
 import structlog
-from rasa.calm_v2.tools.decorator import ToolContext, tool
-from rasa.calm_v2.tools.result import ToolResult
+from rasa.mantle.tools.decorator import ToolContext, tool
+from rasa.mantle.tools.result import ToolResult
 
 _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from lib import helpdesk_mirror, wrangle_client  # noqa: E402
+from lib import wrangle_client  # noqa: E402
 
 structlogger = structlog.get_logger()
 
@@ -150,13 +150,6 @@ def _priority_label(priority_value: str) -> str:
     }.get(priority_value, "Normal")
 
 
-def _helpdesk_channels() -> set[str]:
-    raw = os.environ.get("SLACK_HELPDESK_CHANNELS", "").strip()
-    if not raw:
-        raw = os.environ.get("SLACK_ALWAYS_REPLY_CHANNELS", "").strip()
-    return {part.strip() for part in raw.split(",") if part.strip()}
-
-
 def _load_dedup() -> dict[str, Any]:
     if not _DEDUP_PATH.exists():
         return {}
@@ -211,9 +204,9 @@ def _draft_reply(*, team: str, request_text: str, sensitive: bool) -> str:
 
 @tool(
     description=(
-        "Create a Wrangle helpdesk ticket for a #helpdesk channel request, "
-        "mirror it to the Notion reporting database, and return an AI draft "
-        "reply. Pass team as one of: ops, it, finance, hr, swag, revops, "
+        "Create a Rasa Wrangle ticket for a request that needs a person to "
+        "action it, and return an AI draft reply. Wrangle is the only "
+        "ticketing system. Pass team as one of: ops, it, finance, hr, swag, revops, "
         "security, software. IT needs request_category + urgency. Security "
         "needs request_category + optional deadline (YYYY-MM-DD). Software "
         "needs reason + optional cost (numbers only). Priority for "
@@ -260,19 +253,6 @@ async def create_helpdesk_ticket(
         meta.get("helpdesk_parent_ts") or thread_ts or message_ts
     ).strip()
     requester_id = str(meta.get("slack_user_id") or "").strip()
-    helpdesk = _helpdesk_channels()
-
-    if helpdesk and channel_id and channel_id not in helpdesk:
-        return ToolResult(
-            llm_response={
-                "ok": False,
-                "error": "not_helpdesk_channel",
-                "instruction": (
-                    "This is not a helpdesk intake channel. Use the normal "
-                    "Ops/HR skills instead of creating a ticket."
-                ),
-            }
-        )
 
     dedup = _load_dedup()
     if channel_id and parent_ts:
@@ -455,29 +435,6 @@ async def create_helpdesk_ticket(
     number = ticket.get("workspaceTicketNumber")
     display_id = f"#{number}" if number is not None else ticket_id
 
-    mirror_error: str | None = None
-    mirror_url: str | None = None
-    if helpdesk_mirror.configured():
-        try:
-            mirror = await helpdesk_mirror.create_mirror_row(
-                title=title,
-                ticket_id=ticket_id,
-                team=team_key,
-                status=status if status in {
-                    "NEW", "IN_PROGRESS", "ON_HOLD", "RESOLVED", "CLOSED", "Open"
-                } else "Open",
-                wrangle_url=ticket_url or None,
-                requester=requester_id,
-                channel=channel_id,
-                slack_ts=parent_ts or message_ts,
-            )
-            mirror_url = str(mirror.get("url") or "") or None
-        except Exception as error:  # noqa: BLE001
-            mirror_error = str(error)
-            structlogger.error("helpdesk.notion_mirror_failed", error=mirror_error)
-    else:
-        mirror_error = "NOTION_HELPDESK_MIRROR_DB_ID not configured"
-
     if context is not None:
         context.memory.set("ticket_id", ticket_id)
         if ticket_url:
@@ -513,13 +470,11 @@ async def create_helpdesk_ticket(
             "ticket_name": title,
             "suggested_reply": suggested,
             "privacy_warning": bool(is_sensitive_hr),
-            "mirror_url": mirror_url,
-            "mirror_error": mirror_error,
             "instruction": (
                 "Confirm the Wrangle ticket in one short Slack message. Share "
                 "ticket_url as <url|label> when present. Include suggested_reply "
-                "as a clearly labeled draft for agents. Do not tell anyone to "
-                "work the ticket in Notion (mirror is reporting only). "
+                "as a clearly labeled draft for agents. Wrangle is the only "
+                "place tickets live. "
                 "If privacy_warning is true, do not restate private details."
             ),
         }
