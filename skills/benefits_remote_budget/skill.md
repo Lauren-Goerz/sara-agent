@@ -27,6 +27,15 @@ When the tool succeeds:
 - Never quote FAQ questions, paste a section under "The policy says", or
   restate the page heading as if it were the answer.
 
+**Amounts — do not mix these up:**
+- Monthly **flex desk / co-working seat** reimbursement is capped at **€250**
+  (or equivalent) per month. The employee contracts with the space themselves;
+  submit via Payhawk under **Office Co-working**. A €150 seat is reimbursed in
+  full; a €300 seat is reimbursed only up to €250.
+- The overview amounts like $900 / €800 / £870 / CAD 1,190 (coworking style)
+  and $1,800 / €1,600 / … (home only) are **one-time equipment** budgets, not
+  the monthly desk fee. Never quote those as the monthly flex-desk cap.
+
 Someone who says they bought home-office items and needs the money back is
 asking how to claim, not whether they qualify. Give them the claim steps from
 the page (invoices through Payhawk, under the expense category the page names)

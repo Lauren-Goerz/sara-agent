@@ -351,15 +351,15 @@ SOURCES: dict[str, NotionSource] = {
         title="Remote Budget - 2026",
         max_blocks=600,
         keywords=(
-            "remote",
-            "budget",
-            "home",
-            "office",
             "coworking",
             "co-working",
+            "flex",
+            "desk",
+            "seat",
             "internet",
             "utility",
             "payhawk",
+            "berlin",
         ),
     ),
     "sexual_harassment": NotionSource(
@@ -914,6 +914,16 @@ def select_relevant(
         (_score(text, heading, terms), index, heading, text)
         for index, (heading, text) in enumerate(sections)
     ]
+    # Propagate relevance to short follow-up "How?" sections so claim steps
+    # stay with the option the query matched (e.g. Flex desk → How it works?).
+    _HOW = {"how", "how?", "how it works", "how it works?"}
+    for i in range(1, len(scored)):
+        score, index, heading, text = scored[i]
+        prev_score = scored[i - 1][0]
+        heading_key = heading.lower().strip().rstrip(":").strip()
+        if prev_score >= 10 and heading_key in _HOW and score < prev_score - 5:
+            scored[i] = (prev_score - 5, index, heading, text)
+
     matching = sorted(
         (item for item in scored if item[0] > 0),
         key=lambda item: (-item[0], item[1]),
