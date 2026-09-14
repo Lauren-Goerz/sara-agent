@@ -1,7 +1,7 @@
 # Sara — Rasa Ops/HR agent
 
 Sara is Rasa’s internal Ops/HR assistant in Slack (DMs and `@mention` threads).
-She is built on **Rasa Maestro** (`mantle`). Behaviour lives in natural language
+She is built on **Rasa Mantle**. Behaviour lives in natural language
 (`agent.yml`, skills), not intents or stories.
 
 Answers come from allowlisted Notion pages, a few live lookups (directory,
@@ -73,4 +73,5 @@ python scripts/check_notion_access.py
 
 ## Docs
 
-- Maestro: https://github.com/RasaHQ/maestro-docs
+- Mantle: https://rasa-2f7eb63d.mintlify.site
+- Authoring skills (Cursor/Claude): `rasa skills install mantle --yes --ides cursor,claude`

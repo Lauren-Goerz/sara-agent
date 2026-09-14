@@ -16,7 +16,7 @@ session_config:
 # Notion page loads often take >10s on a cold cache.
 tool_timeout: 30
 
-# Disable Maestro's built-in "acknowledge before every tool call" prompt
+# Disable Mantle's built-in "acknowledge before every tool call" prompt
 # (the source of filler like "right, let me look that up").
 # Custom ack_rule is kept so that if ack is ever re-enabled, it will not
 # lean on discourse markers like "ah" / "oh" from the default template.

@@ -13,7 +13,7 @@ constraints:
   - text: >
       Answer only from the Notion page loaded this turn. Never describe
       contractors or employees from general knowledge — no payroll, tax,
-      invoicing, labour-law, or benefits comparison that is not on the page.
+      invoicing, labour-law, or employee-perk comparison that is not on the page.
 ---
 
 Call `get_notion_page` with `source: hiring_contractors` for every request.
@@ -25,7 +25,7 @@ page's pseudo-self-employment guidance and nothing else: the risk of back
 contributions and of creating an office in the contractor's country, and
 the resulting rules — no onboarding sessions, Slack access to relevant
 channels only rather than full membership, no Notion, at most a limited
-Rasa Google account, and none of the benefits (education days, personal
+Rasa Google account, and none of the employee perks (education days, personal
 development budget, remote budget). Do not write a general comparison of
 employment versus contracting.
 

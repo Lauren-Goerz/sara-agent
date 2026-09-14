@@ -1,7 +1,7 @@
 ---
 name: mantle-simulating-evaluating
 description: >
-  Proves a Maestro agent works using the engine's built-in simulation/evaluation
+  Proves a Mantle agent works using the engine's built-in simulation/evaluation
   framework: an LLM user-simulator plays the customer per scenario and an LLM judge
   scores the outcome against natural-language criteria and deterministic assertions.
   Use when validating an agent end to end, writing eval scenarios, or building a
@@ -12,11 +12,11 @@ engine: mantle
 rasa_version: ">=3.18"
 metadata:
   author: rasa
-  version: "0.1.0"
-  docs-url: https://github.com/RasaHQ/maestro-docs
+  version: "0.1.2"
+  docs-url: https://rasa-2f7eb63d.mintlify.site
 ---
 
-# Simulating and evaluating a Maestro agent
+# Simulating and evaluating a Mantle agent
 
 `rasa train` proves the project is well-formed; it says nothing about whether the
 agent *behaves*. This framework does: for each scenario, an **LLM user-simulator**
@@ -26,9 +26,9 @@ conversation. It is how you turn "it worked when I tried it" into a repeatable s
 You **author** scenarios as files under `eval/` (portable, reviewable, version-
 controlled). To **run** a suite against the agent you built, drive the Rasa MCP
 server from your coding agent — see
-https://rasa.com/docs/pro/testing/simulation-evaluation/. The packaged
-`make eval-examples` target only runs the built-in example agents; it is a
-format/behavior reference, not a runner for your project.
+https://rasa.com/docs/pro/testing/simulation-evaluation/. For **engine**
+regression against the shared benchmarking agents, use `make eval-mantle-agents`.
+
 
 ## `eval/` layout
 
@@ -131,15 +131,15 @@ assertions:
 
   # ordered checks — each child must occur, in this order
   - sequencing:
-      - slot_was_set: project.selected_card_id  # set once...
-      - slot_was_set: project.selected_card_id  # ...then re-set (a correction)
+      - slot_was_set: card_replace.selected_card_id  # set once...
+      - slot_was_set: card_replace.selected_card_id  # ...then re-set (a correction)
 ```
 
 The docs list more assertion types you can reach for as needed — `action_executed`,
 `slot_was_not_set`, `bot_uttered`, `bot_did_not_utter`, `pattern_clarification_contains`,
 `generative_response_is_relevant`, `generative_response_is_grounded`. Treat the
-in-branch scenarios as ground truth for exact syntax and check the docs (`docs-url`)
-for the rest.
+in-branch scenarios as ground truth for exact syntax, and the Rasa Pro
+simulation docs for the rest.
 
 ## Writing scenarios
 
@@ -177,29 +177,6 @@ values take precedence. Note: use **`RASA_LICENSE`**, not the legacy
 the simulator can talk to it) and `inspector` (for the per-run Inspector URL).
 Scaffolded agents already do; verify before a first run.
 
-### Packaged examples only (`make eval-examples`)
-
-`make eval-examples` runs `poetry run python scripts/eval_examples.py` against the
-**packaged CALM v2 example agents** in this repo. It cannot select an arbitrary
-project directory — use MCP (above) for the agent you scaffolded.
-
-```bash
-make eval-examples                                          # all example agents
-make eval-examples EVAL_ARGS="--agents guided --scenarios '*happy*' --run-count 3"
-```
-
-| Flag | Effect |
-|---|---|
-| `--agents` | Comma-separated example-agent short names (default: all packaged examples) |
-| `--scenarios` | Glob over scenario file stems, no extension (e.g. `'*happy*'`) |
-| `--run-count` | Repeat each scenario N times (default 1) — surfaces non-determinism |
-| `--no-train` | Reuse the existing model instead of retraining first |
-| `--work-dir` | Persist per-agent JSON results + logs to a directory |
-| `--summarize` | Reprint the summary from a past run's work dir and exit |
-
-Use this target to learn the scenario format and to confirm the framework works —
-not as the runner for a customer project.
-
 ## Reading results
 
 Results land under `eval/results/<timestamp>/` (timestamp like `2026-07-20_14-30-00`):
@@ -214,7 +191,7 @@ A run **passes only when every assertion and every criterion passes**; quality m
 are recorded but do not gate. In the Inspector, simulated conversations carry a `sim-`
 prefix on the sender id, so you can tell them from live traffic. (Result-file names and
 metric labels can shift on a beta build — the run report and summary on disk are
-ground truth; verify against `docs-url` if they differ.)
+ground truth if they differ.)
 
 ## The fix loop
 
@@ -238,7 +215,7 @@ before concluding.
 
 - Simulation & evaluation, incl. the MCP-driven variant:
   https://rasa.com/docs/pro/testing/simulation-evaluation/
-- Maestro docs (`llms.txt`): https://github.com/RasaHQ/maestro-docs
+- Mantle docs: https://rasa-2f7eb63d.mintlify.site (index at https://rasa-2f7eb63d.mintlify.site/llms.txt)
 
 ## Related skills
 
@@ -246,3 +223,15 @@ before concluding.
   the scenarios that evaluate it.
 - `mantle-testing-debugging` — the symptom→lever mapping the fix loop depends on, and
   the manual `rasa inspect` checklist that complements automated evals.
+
+## Further reading
+
+How to read the bundled documentation at `.rasa/docs/mantle/`, and when to reach for
+it, is in `AGENTS.md` under **Documentation** — or the **mantle-docs** skill if this
+project has no `AGENTS.md`. Never read `llms-full.txt` whole; it is ~250 KB.
+
+Most relevant here — read the page rather than guessing:
+
+- `/reference/skill-md` — skill.md reference: the contract a scenario exercises
+- `/reference/conditions` — Conditions: the expression grammar used in assertions on memory
+- `/reference/execution-loop` — Execution loop: turn mechanics behind an unexpected transcript

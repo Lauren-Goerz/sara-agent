@@ -1,4 +1,4 @@
-# External integrations for your Maestro agent.
+# External integrations for your Mantle agent.
 
 llm:
   model_group: orchestrator

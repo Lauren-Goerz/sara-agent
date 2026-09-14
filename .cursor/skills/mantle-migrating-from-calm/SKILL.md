@@ -1,31 +1,33 @@
 ---
 name: mantle-migrating-from-calm
 description: >
-  Migrates a CALM (flows-based) Rasa assistant to the Maestro engine: maps flows to
+  Migrates a CALM (flows-based) Rasa assistant to the Mantle engine: maps flows to
   skills, slots to memory, custom actions to tools, and identifies what has no
   migration path (custom components, command generators, NLU pipeline, rephraser
   customizations). Use when a project contains domain.yml/config.yml/flows and the
-  goal is a Maestro agent.
+  goal is a Mantle agent.
 license: Apache-2.0
 engine: mantle
 rasa_version: ">=3.18"
 metadata:
   author: rasa
-  version: "0.1.1"
-  docs-url: https://github.com/RasaHQ/maestro-docs
+  version: "0.1.8"
+  docs-url: https://rasa-2f7eb63d.mintlify.site
 ---
 
-# Migrating a CALM assistant to Maestro
+# Migrating a CALM assistant to Mantle
 
-Maestro is not a config translation — it's a different control model. CALM encodes
-behavior as explicit flow steps; Maestro encodes it as prose instructions plus
+Mantle is not a config translation — it's a different control model. CALM encodes
+behavior as explicit flow steps; Mantle encodes it as prose instructions plus
 targeted control levers. A mechanical 1:1 port of every flow step into an ordered
 block produces the worst of both worlds. Migrate *intent*, not *structure*.
 
-On the current beta build, target the config shapes the other skills now document:
-top-level `agent.yml` (`engine_version: calm_v2`), a flat `integrations.yml` `llm:`
-block, `memory.yml` `schema:` with every written key declared, one `tools.py` per
-skill, and the `rasa train` → `rasa inspect` loop.
+Target the config shapes the other skills document: an `agent.yml` with an
+`agent:` block carrying `persona`, and `rules` / `prompts` / `session_config` as
+top-level siblings of it; a flat `integrations.yml` `llm:` block plus `channels:`;
+`memory.yml` `schema:` with every written key declared; one `tools.py` per skill;
+and the `rasa train` then `rasa inspect` loop. The engine is selected by project
+layout, so there is no version key to set.
 
 ## Migration workflow
 
@@ -40,34 +42,41 @@ skill, and the `rasa train` → `rasa inspect` loop.
 4. **Rewrite each flow as prose** in `skill.md`: describe the goal and what to
    gather, not step numbering. Let the LLM own sequencing initially.
 5. **Re-add guarantees the old flow actually enforced** using the control ladder
-   (see `mantle-building-skills`): slot preconditions → `requires:`, branching →
-   `if:` markers, confirmations → prose + a confirmation memory key gated with
-   `requires:`, mandated wording → verbatim `utter:` responses, genuinely
-   order-critical sections → one ordered block. Do not map CALM confirmations to
-   `ask_confirmation:` / `on_success:` / `on_failure:` — those are not supported yet.
+   (see `mantle-building-skills`): slot preconditions become `requires:`, branching
+   becomes one `if:` marker per case, confirmations become prose plus a confirmation
+   memory key gated with `requires:`, mandated wording becomes verbatim `utter:`
+   responses, and genuinely order-critical sections become one ordered block. For an
+   irreversible tool call, `requires_confirmation:` plus `on_success:` /
+   `on_failure:` in `tool_constraints` lets the engine pause and emit fixed outcome
+   text instead of relying on prose.
 6. **Port config** to `agent.yml` + `integrations.yml` (see
    `mantle-configuring-agent`).
 7. **Test side by side**: run the same conversations against the old bot and the
    new agent (`rasa inspect`); compare outcomes per the checklist in
-   `mantle-testing-debugging`.
+   `mantle-testing-debugging`. Mantle Inspector records `skill_*`,
+   `ordered_block_*`, `tool_executed` (plus a matching `mcp_tool_executed`), and
+   `memory_set` / `memory_cleared` (plus a matching `slot_set`). CALM
+   conversations still show flow, MCP tool, and `slot_set` events. Do not expect
+   those names to match 1:1.
 
 ## Mapping table
 
-| CALM artifact | Maestro target | Effort |
+| CALM artifact | Mantle target | Effort |
 |---|---|---|
 | Flow (YAML steps) | Skill prose body; ordered block only for order-critical sections | Rewrite, not transform |
-| `call` step → child flow | Same-skill prose section or `@block.<id>`; `@skill.<name>` if reused across skills | Judgment call |
-| `link` step | `@skill.<name>` reference, or plain orchestrator routing | Small |
+| `call` step → child flow | Same-skill prose section or `@block.<block_id>`; `@skill.<skill_id>` if reused across skills | Judgment call |
+| `link` step | `@skill.<skill_id>` reference, or plain orchestrator routing | Small |
 | `collect` step | Prose ("ask for X"); `collect:` step inside an ordered block if strict | Small |
 | Slot | Memory entry in `memory.yml` `schema:` — `public` if other skills read it, else `private`; categorical slots keep their values as `enum_values` | Small |
-| Slot validation action | `set_<memory_entry>` tool (raise `InvalidMemoryValue` to reject) | Small |
-| Dynamic question generation | Prose ask ( **`ask_<memory_entry>` is not implemented yet** ) | Small |
+| Slot validation action | `run_after_setting_<memory_entry>` tool in the same `tools.py`; return a non-null `error` to reject and roll back the write | Small |
+| Dynamic question generation | Prose ask, or `instructions:` + `complete_when:` on an ordered-block step | Small |
 | `utter_` response (must stay exact) | `responses.yml` + `utter:` triggers | Small |
 | `utter_` response (tone only) | Delete — prose instructions + persona cover it | Free |
-| Custom action | `@tool` function in the skill's `tools.py` (import `tool`/`ToolContext`/`ToolResult` from `rasa.calm_v2.tools.*`, not `rasa_sdk`): `tracker.get_slot` → `context.memory.get`, `SlotSet(...)` → `context.memory.set(...)`, `dispatcher.utter_message` → `context.send` or `llm_response` | Medium — code updates + verification |
-| `pattern_session_start` | Greeting via `agent.yml` `persona`/`rules` (a dedicated startup hook is documented; verify on your build) | Small |
-| Rephraser prompt | `agent.yml` `persona:` | Small |
+| Custom action | `@tool` function in the skill's `tools.py` (import `tool`/`ToolContext`/`ToolResult` from `rasa.mantle.tools.*`, not `rasa_sdk`): `tracker.get_slot` → `context.memory.get`, `SlotSet(...)` → `context.memory.set(...)`, `dispatcher.utter_message` → `context.send` or `llm_response` | Medium — code updates + verification |
+| `pattern_session_start` | The bundled `default_session_start` skill's `utter_greet`; redeclare it in your project `responses.yml` to change the wording | Small |
+| Rephraser prompt | `agent.yml` `agent.persona` | Small |
 | `credentials.yml`, `endpoints.yml` model/LLM config | `integrations.yml` (`llm` + `channels`) | Small |
+| `endpoints.yml` Langfuse `tracing:` | `integrations.yml` `tracing:` (`type: langfuse`) | Small |
 | `domain.yml` | Dissolves — slots→memory, responses→responses.yml/prose, actions→tools | Structural |
 
 ## No migration path — flag these to the user, do not silently drop
@@ -78,7 +87,7 @@ skill, and the `rasa train` → `rasa inspect` loop.
 | Custom command generators | The command-generation stage is gone | Usually subsumed by the orchestrator; verify the behaviors it enforced, re-add as levers |
 | NLU pipeline tuning (intents, entities, regexes) | No NLU stage | Intent triggers → skill `description` phrasing; entity extraction → tool arguments typed by the LLM |
 | Standalone rephraser customizations | Stage removed; phrasing is inline | Global tone → `persona`; per-response mandates → verbatim responses |
-| ReAct-style sub-agents | Subsumed by the single orchestrator | Re-express as skills; external A2A agents keep working via tools/MCP |
+| ReAct-style sub-agents | Subsumed by the single orchestrator | Re-express as skills; reach an external agent from inside a tool |
 
 ## Anti-patterns
 
@@ -104,3 +113,17 @@ the new agent and confirm: same data collected, same gates enforced (confirmatio
 auth), same side effects (tool calls that hit real APIs), compliance wording
 byte-identical where required. Log every intentional behavior difference in the
 migration notes for the user — "more natural" is a change too.
+
+## Further reading
+
+How to read the bundled documentation at `.rasa/docs/mantle/`, and when to reach for
+it, is in `AGENTS.md` under **Documentation** — or the **mantle-docs** skill if this
+project has no `AGENTS.md`. Never read `llms-full.txt` whole; it is ~250 KB.
+
+Most relevant here — read the page rather than guessing:
+
+- `/reference/project-structure` — Project structure: the Mantle layout a CALM project maps onto
+- `/reference/skill-md` — skill.md reference: what a flow becomes
+- `/reference/memory-yml` — memory.yml reference: what a slot becomes
+- `/reference/tools` — Tools reference: what a custom action becomes
+- `/reference/conditions` — Conditions: the expression grammar replacing flow conditions

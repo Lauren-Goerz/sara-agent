@@ -75,9 +75,14 @@ Days until the next Rasa payday, from location / Deel setup.
 ### `payroll_payslip`
 
 Where to get a payslip / paycheck by country (DATEV, SequoiaOne, eDoc, Xero, email, Deel).
+Uses `resolve_payslip_country` plus an ordered block; asks only when country is unset.
 
 - Where do I download my payslip?
 - How do I get my paycheck in Germany?
+
+### `default_session_start`
+
+Engine-managed first turn in a new Slack thread: answer the request instead of greeting.
 
 ### `payroll_payslip_details`
 

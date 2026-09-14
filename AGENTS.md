@@ -1,7 +1,7 @@
-# Sara — Rasa Ops/HR Maestro agent
+# Sara — Rasa Ops/HR Mantle agent
 
 This directory is **Sara**, Rasa's internal Ops/HR assistant built on
-**Rasa Maestro** (`mantle`, currently beta). Behaviour is described in natural
+**Rasa Mantle** (currently beta). Behaviour is described in natural
 language (`agent.yml`, skills), not intents/stories/rules.
 
 Sara lives primarily in **Slack** (DMs + `@mention` threads) and helps with
@@ -79,7 +79,8 @@ be re-added later with admin buy-in.
 | `fun_weather` | City weather forecast via free Open-Meteo API (no key) |
 | `fun_play_music` | Share a song link (Spotify if configured, else Apple Music) |
 | `payroll_payday` | Days until next Rasa payday from location / Deel setup |
-| `payroll_payslip` | Where to get a payslip/paycheck by country — ordered block, no tools; answers from `project.user_country`, asks only when unset, then writes it back (DATEV, SequoiaOne, eDoc, Xero, email, Deel) |
+| `payroll_payslip` | Where to get a payslip/paycheck by country — ordered block plus `resolve_payslip_country`; answers from `project.user_country`, asks only when unset, then writes it back (DATEV, SequoiaOne, eDoc, Xero, email, Deel) |
+| `default_session_start` | Engine-managed first turn of a new Slack thread — act on the request instead of greeting |
 | `payroll_payslip_details` | Questions about pay contents (gross/net, tax, deductions, wrong pay) → People Ops ticket via `/wrangle`; never explains amounts |
 | `security_incidents` | Security incidents / "was Rasa affected?" from Notion tracker |
 | `rfp_security` | Vendor/RFP security questionnaire bank (fallback after policy_* skills; always double-check source) |
@@ -200,4 +201,5 @@ Read them before adding or changing skills.
   clauses. Skill-specific routing and behavior belong in that skill, not duplicated
   as global `agent.yml` rules.
 
-Docs: https://github.com/RasaHQ/maestro-docs
+Docs: https://rasa-2f7eb63d.mintlify.site  
+Refresh authoring skills after upgrading rasa-pro: `rasa skills install mantle --yes --ides cursor,claude`

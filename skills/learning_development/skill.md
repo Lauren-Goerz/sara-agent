@@ -20,7 +20,7 @@ remote/home-office, L&D, travel, or something else?
 Otherwise:
 1. Call `get_notion_page` with `source: learning_development` and their topic
    in `query` (e.g. "education days", "budget before 6 months", "conference").
-2. Also call `@tool.get_ld_tenure` (Slack Start date → first-6-months flag).
+2. Also call `get_ld_tenure` (Slack Start date → first-6-months flag).
 
 When the Notion tool succeeds:
 - Paraphrase into a direct answer. Never invent amounts or rules.

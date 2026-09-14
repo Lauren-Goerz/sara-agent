@@ -1,7 +1,7 @@
 ---
 name: mantle-building-from-conversations
 description: >
-  Turns real conversation transcripts (files or pasted logs) into a working Maestro
+  Turns real conversation transcripts (files or pasted logs) into a working Mantle
   agent: clusters transcripts by user goal, one skill per goal, and extracts prose
   instructions, tools, memory, verbatim responses, and control levers. Use when the
   input is chat/voice transcripts ("build an agent from these logs", "turn these
@@ -12,15 +12,15 @@ engine: mantle
 rasa_version: ">=3.18"
 metadata:
   author: rasa
-  version: "0.1.0"
-  docs-url: https://github.com/RasaHQ/maestro-docs
+  version: "0.1.5"
+  docs-url: https://rasa-2f7eb63d.mintlify.site
 ---
 
-# Building a Maestro agent from conversations
+# Building a Mantle agent from conversations
 
 Real transcripts are the best spec for an agent: they show what customers actually
 ask, what a competent human did, and where the branches are. This skill turns them
-into Maestro files. Two entry points:
+into Mantle files. Two entry points:
 
 - **No project yet** — scaffold a NEW agent (config via `mantle-configuring-agent`,
   skills via `mantle-building-skills`).
@@ -95,18 +95,26 @@ account?", "verify identity" — is not part of any one goal. Extract it as a
   memory key. **Declare every key a tool writes in `memory.yml`** — `rasa train`
   rejects an undeclared `context.memory.set()` (`undeclared_memory_write`).
 - **Verbatim responses only for wording that must be exact.** Recording notices,
-  legal disclosures, regulated confirmations → `responses.yml`. Everything else stays
-  prose so the agent sounds natural, not scripted.
+  legal disclosures, regulated confirmations → `responses.yml`. When the **same**
+  mandated line must change with a fact already in memory (fee copy for lost vs
+  stolen, tier-specific disclaimers), use **conditional variants** — multiple
+  entries under one response name with `condition:` — rather than separate response
+  names. For collect steps with a small fixed choice set (shipping speed, yes/no),
+  add `buttons:` on the collect `utterance:` response — plain-text payloads when
+  the LLM should interpret the tap, `set:` payloads when the tap must write memory
+  directly (see `mantle-building-skills`). Everything else stays prose so the
+  agent sounds natural, not scripted.
 - **Control levers only for branching the business requires.** Default to prose and
   let the LLM sequence. Escalate to a lever only when a transcript shows behavior that
   MUST be guaranteed: a tool that fired only after inputs existed (`tool_constraints`
-  → `requires:`), an irreversible action that always waited for an explicit user
-  confirmation (prose + `requires:` on a confirmation memory key), a genuine either/or
-  branch (`if:`/`else:` + a `categorical` memory key), an order that is itself the
-  requirement (one ordered block). Do **not** use `ask_confirmation:`, `on_success:`,
-  or `on_failure:` — they are not supported yet. The full ladder is in
-  `mantle-building-skills`; add levers after you observe drift in testing, never
-  speculatively.
+  → `requires:`), an irreversible action that always waited for explicit
+  confirmation (prose + `requires:` on a confirmation key, or `requires_confirmation:` on
+  the tool), fixed wording after tool success/failure (`on_success:` /
+  `on_failure:`), a branch the transcripts show going one way or the other (one
+  `if:` marker per case, each stating its own condition), an order that is itself
+  the requirement (one ordered block). The full ladder
+  is in `mantle-building-skills`; add levers after you observe drift in testing,
+  never speculatively.
 
 ## Mandatory workflow — propose, then WAIT
 
@@ -125,7 +133,11 @@ Do not generate files before the user confirms the breakdown.
 5. **`rasa train`** — fix train errors (undeclared memory, missing tool or response
    references, YAML quoting) before debugging conversation behavior.
 6. **Hand over** `rasa inspect` so the user can converse with the agent and watch
-   memory and tool calls per turn.
+   memory and tool calls per turn. Skill start/finish shows as `skill_activated` /
+   `skill_completed`; ordered-block start/finish as `ordered_block_entered` /
+   `ordered_block_completed` (flow rows may appear beside both). Tools show as
+   `tool_executed` (plus a matching `mcp_tool_executed`); memory writes as
+   `memory_set` (plus a matching `slot_set`). See `mantle-testing-debugging`.
 
 ## Extending an existing agent
 
@@ -144,8 +156,10 @@ don't recognize" — become two skills, `replace_card` and `dispute_charge`, plu
 shared `select_card` sub-skill for the "which card?" decision both make. `replace_card`
 gets prose for the happy path, a `get_customer_cards` + `order_replacement` tool pair,
 a `replacement_reason` categorical memory key (the transcripts branch on
-lost/stolen/damaged), and a verbatim lock disclosure for the stolen path. Propose that
-breakdown, wait for the nod, then generate.
+lost/stolen/damaged), a verbatim lock disclosure for the stolen path, and — if fee
+wording differs by reason — one `responses.yml` response with a `condition` per
+case instead of separate response names. Propose that breakdown, wait for the nod,
+then generate.
 
 ## Bridge to evaluation
 
@@ -165,3 +179,18 @@ of figuring out what "correct" looks like.
   linear; default to prose and add levers only for behavior that must be guaranteed.
 - Don't ship tools that only `raise NotImplementedError` — stub realistic fake data
   behind a `TODO` so the agent runs end to end.
+
+## Further reading
+
+How to read the bundled documentation at `.rasa/docs/mantle/`, and when to reach for
+it, is in `AGENTS.md` under **Documentation** — or the **mantle-docs** skill if this
+project has no `AGENTS.md`. Never read `llms-full.txt` whole; it is ~250 KB.
+
+Most relevant here — read the page rather than guessing:
+
+- `/reference/project-structure` — Project structure: the layout to scaffold into
+- `/concepts/instructions` — Instructions: what belongs in a prose body
+- `/reference/skill-md` — skill.md reference: the full frontmatter and body contract
+- `/build-guide/tool-constraints` — Progressive control guides: choosing the narrowest lever for an observed drift
+- `/reference/conditions` — Conditions: the expression grammar
+- `/reference/responses-yml` — responses.yml reference: verbatim templates, conditional variants, and static buttons
