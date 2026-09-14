@@ -1,10 +1,8 @@
 ---
 name: sales_asset_win_loss
 description: >
-  Point people to the Win/Loss Analysis Notion page. Activate for "win/loss",
-  "win loss analysis", "where are our win loss notes", "deal win loss", or
-  requests for the win/loss archive. Do NOT activate for drafting a new
-  competitive comparison or battle card - that is redirect_competitive_analysis.
+  Find Rasa's win/loss analysis archive or where to add deal notes. Not new competitor
+  comparisons.
 ---
 
 Point the person to the Win/Loss Analysis page. Reply in one short message with

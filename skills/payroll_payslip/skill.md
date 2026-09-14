@@ -1,15 +1,17 @@
 ---
 name: payroll_payslip
 description: >
-  Where to find a Rasa payslip, paycheck, Lohnabrechnung, wage slip, or
-  payroll PDF (DATEV, SequoiaOne, eDoc, Xero, Deel). Only where to GET the
-  payslip. Not what is on it — amounts, tax, deductions, or wrong pay are
-  payroll_payslip_details. Not payday dates (payroll_payday) or leave
-  balances (leave_balance).
+  Where to find or download a payslip/paycheck by employment country. Not questions about
+  pay amounts or deductions.
 ---
 
 :::ordered_block id=main
 steps:
+  # Infer country from this message / Slack / memory before asking.
+  - id: resolve_country
+    execute_tool: resolve_payslip_country
+    next: route_known_country
+
   # If user_country is already set this session, skip the question.
   - id: route_known_country
     noop: true

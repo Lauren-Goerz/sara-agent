@@ -1,13 +1,8 @@
 ---
 name: payroll_payslip_details
 description: >
-  Questions about what is ON a payslip or in someone's pay: gross vs net,
-  why pay changed, tax, tax class, social contributions, pension, deductions,
-  bonus or commission amounts, overtime, backpay, missing or wrong pay, or
-  "can you explain this line". Activate for "why is my net pay lower", "what
-  is this deduction", "my pay looks wrong", "how much tax did I pay". Not
-  where to download a payslip (payroll_payslip), not payday dates
-  (payroll_payday), not leave balances (leave_balance).
+  Questions or problems about gross/net pay, tax, deductions, or an incorrect payslip.
+  Route to People Ops via Wrangle.
 ---
 
 Anything about the *contents* of someone's pay goes to People Ops as a

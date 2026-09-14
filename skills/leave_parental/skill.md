@@ -1,9 +1,9 @@
 ---
 name: leave_parental
 description: >
-  Parental, maternity, paternity, and adoption leave: eligibility, paid
-  duration, childbirth recovery, notification, BambooHR booking, return to
-  work, and UK/US/Germany/Serbia/France rules. Not sick leave or vacation.
+  Parental, maternity, paternity, or adoption leave eligibility, duration, notification,
+  booking, and return-to-work rules. Not caring for a sick child or relative
+  (leave_dependent_care), and not ordinary sick leave (leave_sick).
 tool_constraints:
   - get_parental_leave_guidance:
       requires: session.project.user_country_confirmed

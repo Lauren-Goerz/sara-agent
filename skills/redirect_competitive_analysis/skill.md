@@ -1,10 +1,8 @@
 ---
 name: redirect_competitive_analysis
 description: >
-  Competitive comparisons and positioning: "Rasa vs ...", battle cards,
-  differentiation, or why Rasa over a named competitor such as LangChain,
-  Google Agents, Cognigy, Kore.ai, Dialogflow, Botpress, or Voiceflow. Not
-  win/loss analysis, generic proof points, or one-line competitor jokes.
+  Route competitor comparisons, battle cards, positioning, and 'Rasa versus X' questions
+  to Product Marketing.
 ---
 
 ## Competitive comparison requests

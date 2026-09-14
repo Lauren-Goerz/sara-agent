@@ -1,12 +1,8 @@
 ---
 name: design_phosphor_icon
 description: >
-  Find and provide an official Phosphor icon in Slack. Activate when someone
-  asks for an icon, symbol, pictogram, or Phosphor asset for a concept such as
-  settings, calendar, upload, user, arrow, location, or notification. Do not
-  activate for Rasa's brand color palette unless the user is requesting an
-  icon. Do NOT activate for illustrations, deck polish, or requesting
-  creative/design work from Marketing - that is design_request.
+  Find and provide a colored Phosphor icon for a named concept. Not general
+  creative/design work.
 ---
 
 Provide an icon from the official Phosphor Icons library.

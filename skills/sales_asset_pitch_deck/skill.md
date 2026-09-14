@@ -1,13 +1,8 @@
 ---
 name: sales_asset_pitch_deck
 description: >
-  Share Rasa's standard pitch deck and the Pitch Decks Notion page (talk
-  tracks, DIY deck, support materials). Activate for "pitch deck", "sales
-  deck", "standard pitch deck", "company pitch", "L1 deck", "talk track for
-  the pitch", or "where is the pitch deck". Do NOT activate for All Hands
-  decks (lookup_all_hands_presentations), product proof points
-  (sales_asset_proof_points), or competitive battle cards
-  (redirect_competitive_analysis).
+  Find Rasa's standard pitch deck, talk tracks, DIY deck, and pitch support materials. Not
+  All Hands decks.
 ---
 
 Call `get_pitch_deck` for every pitch-deck request. Do not invent slide links

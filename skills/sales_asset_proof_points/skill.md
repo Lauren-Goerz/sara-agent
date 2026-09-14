@@ -1,10 +1,8 @@
 ---
 name: sales_asset_proof_points
 description: >
-  Rasa product proof points: customer case-study metrics, analyst recognition,
-  deployment speed, quotes, scale, CSAT, why customers choose Rasa, or the
-  proof-points PDF. Not KPI guidance, competitor comparisons, or product
-  how-tos.
+  Rasa product proof points: customer metrics, analyst recognition, deployment speed,
+  quotes, scale, and the proof-points PDF.
 ---
 
 Answer questions about Rasa's product proof points from the live Notion page

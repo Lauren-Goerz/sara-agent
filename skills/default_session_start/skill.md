@@ -1,6 +1,7 @@
 ---
 name: default_session_start
-description: "Conversation opener: handle the user's first request."
+description: >
+  Handle the user's first request in a new conversation.
 routing:
   engine_managed: true
 ---

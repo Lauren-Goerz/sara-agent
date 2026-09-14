@@ -140,6 +140,14 @@ async def _block_to_text(block: dict[str, Any]) -> str:
         if btype == "code":
             return f"```\n{text}\n```" if text else ""
         return text
+    if btype == "table_row":
+        cells = payload.get("cells") or []
+        texts = [
+            _plain_rich_text(cell) if isinstance(cell, list) else ""
+            for cell in cells
+        ]
+        line = " | ".join(part.strip() for part in texts)
+        return line.strip(" |")
     if btype == "divider":
         return "---"
     if btype in {"child_page", "child_database"}:

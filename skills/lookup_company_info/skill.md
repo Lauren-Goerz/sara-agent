@@ -1,12 +1,8 @@
 ---
 name: lookup_company_info
 description: >
-  Look up official Rasa company and legal-entity information, including office
-  or company addresses, VAT or tax numbers, IBANs, bank account details, BIC or
-  SWIFT codes, registration numbers, and company phone numbers. Activate for
-  questions such as "what is our VAT number?", "what is the Berlin address?",
-  "what IBAN should I use?", or "what is Rasa's phone number?". Do not use the
-  general policy search for these requests.
+  Official Rasa company details: addresses, legal entities, registration, VAT, banking,
+  and phone information.
 import_tools:
   - get_notion_page
 ---
@@ -25,8 +21,6 @@ When the tool succeeds:
   `source_content`.
 - Include the associated office, country, or legal entity when available.
 - Keep the answer concise and do not list unrelated company information.
-- Always finish by telling the person to double-check the value on
-  <https://app.notion.com/p/rasa/Rasa-Offices-banking-important-info-44a36a2d9f8745adbc7827769f530906|Rasa Offices, banking & important info>.
 
 Copy sensitive identifiers exactly. Never guess, reformat, repair, or complete
 an address, VAT number, IBAN, account number, BIC/SWIFT code, registration

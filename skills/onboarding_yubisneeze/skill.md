@@ -1,15 +1,7 @@
 ---
 name: onboarding_yubisneeze
 description: >
-  Undo a Yubisneeze: someone says they accidentally touched their YubiKey or
-  pasted an OTP, asks how to turn OTP off, or sends a message that is mostly
-  one unbroken run of at least 32 letters from the modhex alphabet
-  (c b d e f g h i j k l n r t u v), usually 44 characters and often
-  starting with a long row of c's. That 32-character minimum is required:
-  when the message is a short string, a lone character, a keyboard mash, a
-  typo, an emoji, or a stray accented letter, this skill must not activate
-  and something else should handle it. Not normal YubiKey setup
-  (onboarding_yubikey).
+  Stop accidental YubiKey OTP text, disable OTP, or recover from a YubiKey 'sneeze'.
 import_tools:
   - get_notion_page
 ---
@@ -42,8 +34,6 @@ starting with cccccc / many c's, no real words):
    from the tool.
 4. Keep it short and Slack-friendly.
 
-Always finish with:
-<https://app.notion.com/p/rasa/All-about-Yubikeys-google-phones-5a3e653ef9f54accb8646444263f5f42#e9faa6c469a34069a3f1219bb4bea0f2|Undo the Yubisneeze>
 
 Never invent recovery, YubiKey Manager, or security steps that are not in
 the tool result.

@@ -43,6 +43,9 @@ be re-added later with admin buy-in.
  does — that does not justify a custom tool. Per-source `char_limit` overrides
  live in `_CHAR_LIMITS` there. Keep a custom `tools.py` only when the skill
  parses sections, confirms country, searches, or post-processes the content.
+- `skills/policy_links/` — one deterministic registry for policies Sara only
+  links to and never summarizes; add another topic there instead of creating
+  another one-link skill.
 - `skills/<name>/skill.md` — one skill per user goal
 - `skills/<name>/tools.py` — optional `@tool` functions for that skill
 - `skills/<name>/memory.yml` — skill-scoped memory schema
@@ -58,9 +61,11 @@ be re-added later with admin buy-in.
 | `benefits` | Employer benefits & perks 2026 (gym, wellness, etc.) from Notion |
 | `equity_employee` | Employee equity / options (grants, refresh, Carta) from Notion |
 | `learning_development` | Learning & Development (education days, L&D budget, recommended uses) |
+| `learning_development_mandatory_training` | Mandatory 2026 compliance training (EasyLlama, who must complete it, Harassment/GDPR/Security/EU AI/Occupational Health) |
 | `learning_development_product_onboarding` | How to get to know the product: Rasa University signup + prereqs |
 | `benefits_remote_budget` | Remote / home-office budget 2026 (Berlin, coworking, WFH) |
 | `policy_work_abroad` | Working from other countries / temporary work abroad policy |
+| `policy_part_time` | Working part-time / reduced hours (min hours, benefits, how to request) |
 | `relocation_germany` | Relocating to Berlin/Germany (Relocation Guide, Welcome to Berlin, Working in Germany) |
 | `office_berlin` | Working from the Berlin office / HQ: access, Zoom TV, pets, house rules |
 | `office_berlin_wifi` | Berlin office Wi-Fi: links the Notion Wi-Fi block; never posts the password in Slack |
@@ -69,9 +74,7 @@ be re-added later with admin buy-in.
 | `policy_ai_tools` | Using AI Tools at Rasa (approved tools / usage rules from Notion) |
 | `security_crowdstrike` | CrowdStrike FAQ (what it is, browsing, who has access) |
 | `security_kandji` | Kandji / Iru FAQ (what it is, keystrokes, who has access) |
-| `policy_data_deletion` | Handling Data Deletion Requests — link + ask #security |
-| `policy_security_responsibilities` | Who owns what in security — links Information Security Responsibilities |
-| `policy_intellectual_property` | Intellectual Property Rights — link + ask #security (no Q&A) |
+| `policy_links` | Exact links/referrals for ethics, conduct, Legal, IP, deletion, security ownership, and export controls |
 | `lookup_public_holidays` | Public/bank holiday lookup by country or region (e.g. Bayern today) |
 | `fun_weather` | City weather forecast via free Open-Meteo API (no key) |
 | `fun_play_music` | Share a song link (Spotify if configured, else Apple Music) |
@@ -82,7 +85,6 @@ be re-added later with admin buy-in.
 | `rfp_security` | Vendor/RFP security questionnaire bank (fallback after policy_* skills; always double-check source) |
 | `policy_social_media` | Social media policy (LinkedIn, X/Twitter, personal accounts) |
 | `lookup_board` | Who is on the Rasa board (from Notion) |
-| `policy_legal_support` | Legal support: point people to Mat Searle (@Mat) |
 | `policy_signing_authority` | Who should sign employment contracts and other docs by country — Signing Documents Notion page |
 | `hiring_contractors` | Hire / renew / offboard contractors and agencies — answers from the Working with Contractors page; hiring requests get the intake form link |
 | `swag_request` | Swag/merch: customer/community via /wrangle, events via #events, personal via shop.rasa.com |
@@ -92,15 +94,9 @@ be re-added later with admin buy-in.
 | `policy_travel_insurance` | Travel insurance / business-trip cover from Notion (2026) |
 | `policy_business_travel` | Business travel booking & spend rules (flights, hotels, per diem) |
 | `travel_visa_USA` | US B1/B2 visa process from Notion |
-| `policy_export_control` | Export controls / sanctions on selling to a country — policy link + @Mat (Legal) |
-| `policy_anti_bribery` | Anti-bribery / anti-corruption / fraud policy — link only; further Qs to the Ethics Officer |
-| `policy_anti_slavery` | Anti-slavery / modern slavery policy — links the Notion page |
-| `policy_whistleblower` | Whistleblower policy — link only; further Qs to the Ethics Officer |
-| `policy_code_of_conduct` | Rasa Code of Conduct — link only; further Qs to People Ops |
 | `policy_sexual_harassment` | Sexual harassment policy (definitions, reporting, process) |
 | `lookup_employee_handbooks` | Official employee handbooks by country (only countries listed on Notion) |
-| `lookup_ethics_officer` | Who is Rasa's Ethics Officer — links the Notion page |
-| `lookup_all_hands_presentations` | All Hands / townhall / offsite slides and recordings from Jan 2025 onward (Notion database); older events get the archive link |
+| `lookup_all_hands_presentations` | All Hands slides/recordings by date (Jan 2025+); next date via calendar; broken links → organizer |
 | `sales_asset_win_loss` | Links to the Win/Loss Analysis Notion page; asks people to add notes via @PMM |
 | `product_roadmap` | Links to the Product Roadmap Notion page (Jira sync + external roadmap); points suggestions to @PMM |
 | `sales_asset_pitch_deck` | Standard L1 pitch deck Google Slides link + Pitch Decks Notion page (talk tracks / other decks) |
@@ -112,8 +108,9 @@ be re-added later with admin buy-in.
 | `onboarding_yubikey` | YubiKey / security-key install steps from Notion |
 | `onboarding_yubisneeze` | Undo an accidental YubiKey sneeze / OTP paste |
 | `leave_balance` | Points users to the BambooHR Slack app for leave balances |
-| `leave_sick` | What to do when sick; personalizes by Slack timezone/location |
-| `leave_vacation` | How to book vacation, offline days, OOO FAQ |
+| `leave_sick` | What to do when you yourself are sick; personalizes by Slack location |
+| `leave_dependent_care` | Caring for a sick child or other relative (not own illness) |
+| `leave_vacation` | How to book vacation, offline days (incl. overtime / public holiday), OOO |
 | `policy_vacation` | Country vacation/PTO entitlement from Benefits & Perks 2026; carry-over from Vacation and Sick days |
 | `leave_parental` | Parental leave guidance; confirms Slack location first |
 | `design_brand_colors` | Official Rasa brand palette |
@@ -127,6 +124,8 @@ be re-added later with admin buy-in.
 | `fun_creator` | Rotating YAML responses for "Who built you?" → @lauren + live age |
 | `fun_fact_rasa` | Canned rotating fun facts about Rasa (company/product) |
 | `fun_send_gif` | Search Giphy and post a workplace-safe GIF into the Slack thread |
+| `decline_creative` | Declines off-topic creative/image/research requests with Sara's short cheeky response |
+| `redirect_unknown_work` | Unknown genuine Rasa work questions → `/wrangle` without invented ownership |
 
 ## Build loop
 

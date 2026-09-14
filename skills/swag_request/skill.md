@@ -1,12 +1,8 @@
 ---
 name: swag_request
 description: >
-  Rasa swag / merch requests - ordering stickers, t-shirts, hoodies, hats,
-  customer or community giveaways, event swag, personal employee merch, or
-  the merch store link. Activate for "I need swag", "order merch", "stickers
-  for a workshop", "swag for customers", "Rasa shop", or similar. Do NOT
-  activate for brand colors (design_brand_colors), Phosphor icons
-  (design_phosphor_icon), or creative/design requests (design_request).
+  Rasa swag/merch for customers, community, events, or personal orders. Not design
+  requests or brand assets.
 ---
 
 Help with Rasa swag and merch. Keep replies short and Slack-friendly. Do not

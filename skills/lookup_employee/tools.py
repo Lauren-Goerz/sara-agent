@@ -8,6 +8,7 @@ Env:
 from __future__ import annotations
 
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -25,6 +26,40 @@ from lib import notion_client  # noqa: E402
 
 _CACHE: dict[str, Any] = {"rows": None, "fetched_at": 0.0}
 _CACHE_TTL_SECONDS = 600
+
+_STOPWORDS = frozenset(
+    {
+        "a",
+        "an",
+        "and",
+        "at",
+        "for",
+        "from",
+        "in",
+        "is",
+        "of",
+        "on",
+        "or",
+        "our",
+        "rasa",
+        "the",
+        "to",
+        "who",
+        "whom",
+        "whose",
+        "with",
+    }
+)
+
+# Common role acronyms → phrases also present in the Title field.
+_ROLE_EXPAND: dict[str, tuple[str, ...]] = {
+    "cto": ("chief technology officer", "co-founder & cto", "cofounder & cto"),
+    "ceo": ("chief executive officer",),
+    "cpo": ("chief product officer",),
+    "cro": ("chief revenue officer",),
+    "cfo": ("chief financial officer",),
+    "coo": ("chief operating officer",),
+}
 
 
 def _db_id() -> str:
@@ -49,38 +84,79 @@ async def _roster() -> list[dict[str, Any]]:
     return rows
 
 
+def _tokens(query: str) -> list[str]:
+    raw = re.findall(r"[a-z0-9&+-]+", query.lower())
+    return [t for t in raw if t not in _STOPWORDS and len(t) > 1]
+
+
+def _word_hit(haystack: str, needle: str) -> bool:
+    """True when needle is a whole word/token, not a substring of another word.
+
+    Prevents 'cto' matching inside 'direcTOR'.
+    """
+    if not needle or not haystack:
+        return False
+    if " " in needle or "&" in needle:
+        return needle in haystack
+    return (
+        re.search(rf"(?<![a-z0-9]){re.escape(needle)}(?![a-z0-9])", haystack)
+        is not None
+    )
+
+
 def _score(row: dict[str, Any], query: str) -> float:
     q = query.lower().strip()
     if not q:
         return 0.0
-    title = str(row.get("title", "")).lower()
+
+    name = str(row.get("title", "")).lower()
+    fields = {
+        str(k).lower(): str(v).lower() for k, v in (row.get("fields") or {}).items()
+    }
+    role = fields.get("title") or ""
+    other = " ".join(v for k, v in fields.items() if k != "title")
+    tokens = _tokens(q)
     score = 0.0
-    tokens = [t for t in q.replace(",", " ").split() if t]
-    if q == title:
+
+    if q == name:
         score += 100
-    if q in title:
+    elif _word_hit(name, q) or q in name:
         score += 50
+
     for token in tokens:
-        if token in title:
-            score += 20
-    other = " ".join(str(v).lower() for v in (row.get("fields") or {}).values())
+        if _word_hit(name, token):
+            score += 25
+
+    # Job title is what "who is the CTO" should hit — weight it hard.
     for token in tokens:
-        if token in other:
+        if _word_hit(role, token):
+            score += 40
+        elif _word_hit(other, token):
             score += 5
+
+    for token in tokens:
+        for phrase in _ROLE_EXPAND.get(token, ()):
+            if phrase in role:
+                score += 50
+
+    if len(q) >= 3 and (q == role or _word_hit(role, q)):
+        score += 60
+
     return score
 
 
 @tool(
     description=(
-        "Search Rasa's Who's Who directory (Notion) by name, team, role, or "
-        "location."
+        "Search Rasa's Who's Who directory (Notion) by name, job title/role, "
+        "team, or location. Use for questions like 'who is the CTO' as well as "
+        "name lookups."
     )
 )
 async def search_directory(query: str, context: ToolContext = None) -> ToolResult:
     """Search the Who's Who Notion database.
 
     Args:
-        query: Name, team, role, location, or other fragment to look for.
+        query: Name, job title/role (e.g. CTO), team, location, or fragment.
     """
     if not notion_client.configured():
         return ToolResult(

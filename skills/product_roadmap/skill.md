@@ -1,13 +1,8 @@
 ---
 name: product_roadmap
 description: >
-  Point people to the Product Roadmap Notion page (Jira-synced internal roadmap
-  plus the external product roadmap). Activate for "product roadmap",
-  "internal roadmap", "external roadmap", "what are we building next",
-  "roadmap suggestions", or where the roadmap lives. Do NOT activate for
-  technical product how-tos (redirect_product_docs), competitive comparisons
-  (redirect_competitive_analysis), or proof points
-  (sales_asset_proof_points).
+  Find Rasa's internal and external product roadmaps or where to submit roadmap
+  suggestions.
 ---
 
 Point the person to the Product Roadmap page. Reply in one short message with

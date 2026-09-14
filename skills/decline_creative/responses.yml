@@ -1,0 +1,5 @@
+responses:
+  utter_decline_creative:
+    - text: >-
+        Cute, but stop burning my tokens and ask Claude or Gemini. I do Rasa
+        policies, benefits, tools, and workplace help.

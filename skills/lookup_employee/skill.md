@@ -1,9 +1,8 @@
 ---
 name: lookup_employee
 description: >
-  Look up a coworker in Rasa's Who's Who directory: identity, role, team,
-  location, contact, manager/reporting line, or employee fun fact. Not board
-  membership, who built Sara, or company/product trivia.
+  Find a Rasa employee in Who's Who by name, job title/role (e.g. CTO, CPO), team,
+  location, manager, start date, or expertise.
 tool_constraints:
   - get_employee_details:
       requires: session.lookup_employee.selected_employee_id

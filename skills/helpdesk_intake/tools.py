@@ -234,7 +234,9 @@ async def create_helpdesk_ticket(
             security, or software.
         priority: Ops/Finance/Security/Software priority - Critical, High,
             Normal, Low.
-        request_category: IT or Security request category (see skill.md).
+        request_category: IT: Account Access, Hardware Issue, Laptop Issue,
+            Other, Software Issue, or Technical Difficulties. Security:
+            Customer Questionnaire, General Enquiry, or Security Incident.
         urgency: IT Urgency - Urgent, Not Urgent, or Timely.
         anything_else: Optional IT "Anything else?" notes.
         deadline: Optional Security deadline as YYYY-MM-DD.

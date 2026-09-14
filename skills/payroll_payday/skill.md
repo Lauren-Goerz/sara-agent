@@ -1,13 +1,8 @@
 ---
 name: payroll_payday
 description: >
-  How many days until payday / next salary payment at Rasa. Activate for
-  "when is payday", "how many days until payday", "when do we get paid",
-  "next pay date", or similar. Uses employment location: Germany/Serbia/
-  France/UK around the 26th; US twice a month; Deel twice a month or last
-  day of month. Do NOT activate for leave balances (leave_balance), public
-  holiday calendars (lookup_public_holidays), benefits (benefits), or
-  payslips / paychecks (payroll_payslip).
+  Estimate the next Rasa payday or days until salary payment by employment location or
+  Deel schedule.
 ---
 
 Answer "how many days until payday?" with `get_days_until_payday`.

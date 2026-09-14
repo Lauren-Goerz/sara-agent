@@ -66,9 +66,20 @@ PAYDAY_COUNTRY_OPTIONS = (
     "Deel",
 )
 
-SLACK_LOCATION_PREFACE = (
-    "based on the location information you provided in your Slack profile..."
-)
+def slack_location_preface(country: str | None, source: str | None) -> str | None:
+    """One-line note naming the country inferred from Slack."""
+    country_label = label(country)
+    if not country_label or source not in {"slack_profile", "slack_timezone"}:
+        return None
+    if source == "slack_timezone":
+        return (
+            f"Based on your Slack timezone, I'm treating you as employed in "
+            f"{country_label}. Here is the local guidance that applies."
+        )
+    return (
+        f"Based on the location in your Slack profile, I'm treating you as "
+        f"employed in {country_label}. Here is the local guidance that applies."
+    )
 
 TIMEZONE_TO_GEO: dict[str, str] = {
     "Europe/Berlin": "germany",
@@ -140,11 +151,12 @@ COUNTRY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ),
     (
         "us",
+        # Case-sensitive "US" only — lowercase "us" matches English "tell us".
         re.compile(
-            r"\b(usa|u\.s\.a\.|u\.s\.|united states|america|american|"
+            r"(?i:\b(usa|u\.s\.a\.|u\.s\.|united states|america|american|"
             r"san francisco|new york|nyc|seattle|austin|boston|california|"
-            r"texas)\b",
-            re.I,
+            r"texas)\b)"
+            r"|(?<![A-Za-z])US(?![A-Za-z])"
         ),
     ),
     (
@@ -168,6 +180,17 @@ def slack_user_id(context: Any) -> str | None:
         for user in metadata.get("users") or []:
             if isinstance(user, str) and user.startswith("U"):
                 return user
+    return None
+
+
+def latest_user_text(context: Any) -> str | None:
+    """Text of the most recent user message, if any."""
+    for event in reversed(getattr(context, "events", []) or []):
+        if getattr(event, "type_name", None) != "user":
+            continue
+        text = getattr(event, "text", None)
+        if isinstance(text, str) and text.strip():
+            return text.strip()
     return None
 
 
@@ -247,6 +270,13 @@ async def resolve(
         use_memory: Read a country established earlier in the conversation.
     """
     override = (location_override or "").strip() or None
+    # Ordered-block execute_tool steps have no LLM args — pull country from
+    # the current message when the caller did not pass an override.
+    if not override and context is not None:
+        spoken = latest_user_text(context)
+        if spoken and from_text(spoken):
+            override = spoken
+
     country: str | None = None
     source: str | None = None
     timezone: str | None = None
@@ -301,7 +331,9 @@ async def resolve(
         "inferred_from_slack": read_from_slack_now,
         # Say where the guess came from once, not in every later skill.
         "required_preface": (
-            SLACK_LOCATION_PREFACE if read_from_slack_now else None
+            slack_location_preface(country, source)
+            if read_from_slack_now
+            else None
         ),
         "ask_for_location": country is None,
         "has_local_policy": country in SUPPORTED,

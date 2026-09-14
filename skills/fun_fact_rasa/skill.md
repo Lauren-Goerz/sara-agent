@@ -1,11 +1,8 @@
 ---
 name: fun_fact_rasa
 description: >
-  Fun facts about Rasa the company or product - "tell me a fun fact about
-  Rasa", "Rasa trivia", "interesting fact about Rasa", origin of the name,
-  company history tidbits. Activate for those. Do NOT activate for a fun
-  fact about a specific employee (lookup_employee). Do NOT activate for
-  "who built you" (fun_creator) or company values (lookup_company_values).
+  Share a fun fact or trivia about Rasa the company or product. Not facts about an
+  employee.
 utter:
   - utter_rasa_fun_fact:
       on: activate

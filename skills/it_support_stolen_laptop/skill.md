@@ -1,11 +1,7 @@
 ---
 name: it_support_stolen_laptop
 description: >
-  IT support when a Rasa work laptop / MacBook is stolen or missing presumed
-  stolen. Activate for "my laptop got stolen", "MacBook stolen", "laptop
-  theft", "lost and stolen laptop", or "someone stole my work computer".
-  Do NOT activate for repair / damage / wear-and-tear - that is
-  it_support_laptop_repairs. Do NOT activate for personal non-Rasa devices.
+  A Rasa work laptop is stolen or missing and may have been stolen. Not repairs or damage.
 ---
 
 Help someone whose Rasa work laptop was stolen. Keep the reply short,

@@ -1,10 +1,7 @@
 ---
 name: notify_slack
 description: >
-  Post a message to a Slack channel (general, people-ops, engineering,
-  announcements). Activate when the user asks to announce something, post to
-  Slack, or notify a channel - not for private DMs, HR-sensitive data, or
-  how to use Slack / profile names / open-channel norms (rasa_tools_slack).
+  Post or announce a user-provided message to an allowed Slack channel after confirmation.
 tool_constraints:
   - post_slack_message:
       requires: session.notify_slack.post_confirmed

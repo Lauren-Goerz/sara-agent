@@ -1,14 +1,7 @@
 ---
 name: search_policies
 description: >
-  Fallback search for a Rasa Notion page or file when no dedicated skill
-  matches. Use for broad company policies, guidelines, onboarding pages,
-  strategy, OKRs, goals, org information, company presentations, or "where
-  can I find the page about ...". Do not use for a topic with its own skill,
-  including leave, benefits, security/compliance, travel, IT, product,
-  company details, handbooks, design assets, payslips, Slack usage
-  (rasa_tools_slack), or export controls / sanctions / selling to a
-  country (policy_export_control).
+  Fallback search for a Rasa Notion page or file when no dedicated skill covers the topic.
 tool_constraints:
   - get_policy_page:
       requires: session.search_policies.selected_page_id

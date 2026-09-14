@@ -1,9 +1,7 @@
 ---
 name: design_brand_colors
 description: >
-  Rasa's official brand palette: color names, hex codes,
-  primary/secondary/tertiary colors, product neutrals, and usage guidance.
-  Not creative/design requests or deck-polish work.
+  Official Rasa brand colors, hex codes, palette roles, and usage guidance.
 ---
 
 Answer brand-color questions from the official palette below. Match the

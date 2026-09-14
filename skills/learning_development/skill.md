@@ -1,28 +1,39 @@
 ---
 name: learning_development
 description: >
-  Learning & Development: education days, L&D budget amounts and uses,
-  courses, training, conferences, and certifications. Not how to get to
-  know the Rasa product or Rasa University
-  (learning_development_product_onboarding). Not general benefits,
-  remote/home-office budgets, or travel spend.
+  L&D budget, education days, courses, conferences, certifications, eligibility
+  (including the first 6 months when relevant), and approved uses. Activate only
+  when they name L&D, learning, education days, courses, conferences, or
+  certifications — not bare dollar amounts or unspecified spend. Not mandatory
+  training or Rasa University.
 import_tools:
   - get_notion_page
 ---
 
 Answer Learning & Development questions from the designated Notion page.
-Call `get_notion_page` with `source: learning_development` for every request.
-Pass their topic in `query` when known (e.g. "education days", "budget
-amount", "recommended uses", "conference").
 
-On follow-ups, call the tool again with the new `query`.
+If they only mention a cost or dollar amount without naming L&D, learning,
+education days, a course, conference, or certification, do not call tools and
+do not answer from this page. Ask one short question: which budget —
+remote/home-office, L&D, travel, or something else?
 
-When the tool succeeds:
-- Answer from `source_content` only, focused on what they asked.
-- Keep it short and Slack-friendly.
-- Use exact amounts, day counts, eligibility, and recommended uses from
-  the page - never invent or combine them.- Always finish with:
-  <https://app.notion.com/p/rasa/Learning-Development-a744377944c1416592c0a9fdb761b2f4|Learning & Development>
+Otherwise:
+1. Call `get_notion_page` with `source: learning_development` and their topic
+   in `query` (e.g. "education days", "budget before 6 months", "conference").
+2. Also call `@tool.get_ld_tenure` (Slack Start date → first-6-months flag).
 
-Never invent budget amounts, education-day counts, or approved uses. If
-something is not on the page, say so and share the Notion link.
+When the Notion tool succeeds:
+- Paraphrase into a direct answer. Never invent amounts or rules.
+- Keep exact dollar amounts, education-day counts, and approved uses from the
+  page.
+
+**L&D budget — 6-month allocation** (policy: allocated 6 months after start,
+pro rata; earlier access needs manager + People Ops):
+- Mention it when they ask about early access, the first 6 months, probation,
+  or using the budget before that window.
+- Mention it on budget answers when `get_ld_tenure.within_first_six_months`
+  is true.
+- Otherwise do **not** volunteer it. Never say there is no tenure rule when
+  they do ask.
+
+If something is not on the page, say so and share the Notion link.

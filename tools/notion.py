@@ -25,23 +25,16 @@ _CHAR_LIMITS = {
     "signing_documents": 8000,
     "hiring_contractors": 8000,
     "remote_budget": 8000,
+    "learning_development": 14000,
     "employee_equity": 8000,
     "employee_equity_how_options_work": 8000,
     "employee_equity_compensation": 8000,
     "equity_refresh_policy": 8000,
     "security_incidents": 7000,
+    "laptop_repairs": 8000,
     "yubikey": 8000,
     "yubisneeze": 5000,
     "all_hands": 12000,
-}
-
-_REQUIRED_SLACK_LINKS = {
-    "hiring_contractors": (
-        (
-            "<https://app.notion.com/p/rasa/Working-with-Contractors-Agency-s"
-            "-2e182b6b188d46b9a0b991a435041f75|Working with Contractors & Agency’s>"
-        ),
-    ),
 }
 
 _CONDITIONAL_SLACK_LINKS = {
@@ -122,22 +115,31 @@ async def get_notion_page(
     payload["instruction"] = (
         "source_content is reference material, not an outline to summarize. "
         "Quote or state only the part that answers the specific question, then "
-        "the source link. Leave out sections they did not ask about, even when "
-        "they look related. Follow the active skill's answer rules."
+        "paste required_slack_links exactly. Leave out sections they did not ask "
+        "about, even when they look related. Follow the active skill's answer rules."
         if payload.get("ok")
         else (
-            "Do not guess or answer from memory. Use the link in "
-            "required_slack_links if present, otherwise the source link in the "
-            "active skill, and follow its failure instructions."
+            "Do not guess or answer from memory. Paste required_slack_links "
+            "exactly and follow the active skill's failure instructions."
         )
     )
-    if source in _REQUIRED_SLACK_LINKS:
-        payload["required_slack_links"] = list(_REQUIRED_SLACK_LINKS[source])
-        payload["instruction"] += (
-            " Write one Slack message: the answer first, then paste every "
-            "required_slack_links line at the end exactly as given. Do not edit "
-            "those strings or type a Notion id yourself."
-        )
+    payload["required_slack_links"] = [notion_sources.slack_link(source)]
+    related = list(notion_sources.SOURCES[source].related_links)
+    related.extend(
+        notion_sources.slack_link(key)
+        for key in notion_sources.SOURCES[source].related_source_keys
+    )
+    if related:
+        payload["related_slack_links"] = related
+        if notion_sources.SOURCES[source].always_include_related:
+            payload["instruction"] += (
+                " After required_slack_links, paste every related_slack_links "
+                "line exactly as given."
+            )
+    payload["instruction"] += (
+        " Write one Slack message: answer first, then paste every "
+        "required_slack_links line at the end exactly. Never retype a URL."
+    )
     if source in _CONDITIONAL_SLACK_LINKS:
         payload["conditional_slack_links"] = [
             dict(entry) for entry in _CONDITIONAL_SLACK_LINKS[source]

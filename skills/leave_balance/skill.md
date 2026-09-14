@@ -1,9 +1,8 @@
 ---
 name: leave_balance
 description: >
-  Live BambooHR leave balances or requests: remaining PTO, vacation, or sick
-  days and "request time off for me". Not booking guidance, entitlement,
-  carry-over, sick-leave steps, parental leave, or benefits.
+  Check or request live vacation, PTO, or sick-day balances in BambooHR. Not policy
+  entitlement or booking guidance.
 ---
 
 Sara does not have live BambooHR API access yet, so do not invent balances,
@@ -28,8 +27,11 @@ If they ask how to plan vacation, offline days, or OOO steps, that is
 If they ask how many vacation days they get, carry-over rules, or country
 vacation policy, that is @skill.policy_vacation.
 
-If they ask what to do because they are sick (steps, certificates, country
-rules), that is @skill.leave_sick.
+If they ask what to do because they themselves are sick (steps, certificates,
+country rules), that is @skill.leave_sick.
+
+If they ask about caring for a sick child or other relative, that is
+@skill.leave_dependent_care.
 
 If they ask about parental, maternity, paternity, or adoption leave, that is
 @skill.leave_parental.

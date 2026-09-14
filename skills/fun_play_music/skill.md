@@ -1,10 +1,7 @@
 ---
 name: fun_play_music
 description: >
-  Play or share a song in Slack - "play music", "play a song", "put on
-  some jazz", "play Never Gonna Give You Up", "queue a track", or similar.
-  Activate for those. Do NOT activate for Zoom/Meet (policy_video_conferencing),
-  GIFs (fun_send_gif), or product audio/voice channel docs.
+  Find and share a requested song or style of music in Slack.
 ---
 
 Sara cannot stream live audio into Slack, but she can find a song and post

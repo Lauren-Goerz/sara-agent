@@ -1,13 +1,8 @@
 ---
 name: policy_security_compliance
 description: >
-  Current security, compliance, and risk policy links from the Updated
-  Policies & Procedures hub: IAM/access control, acceptable use, incident
-  management, change management, vulnerabilities, cryptography, AppSec, DLP,
-  cloud, assets, physical security, BCP, logging, suppliers, and related
-  infosec topics. Not live incidents, ownership, vendor questionnaires,
-  dedicated ethics/People policies, or selling to a country / sanctions /
-  export classification (policy_export_control).
+  Find a current security, compliance, risk, privacy, or infosec policy from Rasa's policy
+  hub.
 ---
 
 Point people to the matching policy page under the current Security,
@@ -29,4 +24,3 @@ or "hub".
 - Always call the tool; do not invent policy URLs.
 - Do not summarize, interpret, or answer follow-ups about policy content.
 - Do not invent rules.
-- This reply ends your turn.

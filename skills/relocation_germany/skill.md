@@ -1,25 +1,21 @@
 ---
 name: relocation_germany
 description: >
-  Relocating to Berlin/Germany: relocation package, visas, moving steps,
-  Anmeldung, Welcome to Berlin, and working-in-Germany guidance. Not
-  temporary work abroad, business travel, insurance, or office operations.
+  Relocating to or working in Berlin/Germany: relocation package, visas,
+  Anmeldung, housing, employment, payroll, taxes, and social insurance.
+  Activate for "working in Germany", "German payroll or taxes", and
+  "Overview: Working in Germany".
+import_tools:
+  - get_notion_page
 ---
 
-Help people relocating to Berlin / Germany using Rasa's relocation pages.
-Call `get_relocation_germany` for every request - pass their topic in
-`query` when known (e.g. "visa", "Anmeldung", "relocation package",
-"neighborhoods", "taxes").
+Call `get_notion_page` with the matching source and their question as `query`:
 
-On follow-ups, call the tool again with the new `query`.
+- `relocation_germany`: relocation package, visa, permit, shipping, moving
+- `welcome_berlin`: Anmeldung, housing, neighbourhoods, or life in Berlin
+- `working_in_germany`: employment, tax, payroll, or social insurance
 
-When the tool succeeds:
-- Answer from `source_content` only, focused on what they asked.
-- Keep it short and Slack-friendly.- Always finish by sharing all three related links from `related_urls`
-  (or these defaults if missing):
-  - <https://app.notion.com/p/rasa/Relocation-Guide-Germany-79de728aadc5486b940bdd79b70235d8|Relocation Guide Germany>
-  - <https://app.notion.com/p/rasa/Welcome-to-Berlin-fde61822cf77417c8712380d47fba265|Welcome to Berlin>
-  - <https://app.notion.com/p/rasa/Overview-Working-in-Germany-f9ae50b8c6cc438e8e86b4c5dbaff1ac|Overview: Working in Germany>
+Share `required_slack_links` and `related_slack_links` exactly.
 
 Never invent visa, immigration, tax, or housing advice. If something is not
-on the loaded page, say so and share the three links.
+on the loaded page, say so.

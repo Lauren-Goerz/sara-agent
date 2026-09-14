@@ -1,17 +1,8 @@
 ---
 name: office_berlin_fire_safety
 description: >
-  Fire safety and medical emergencies in the Rasa office. Activate for
-  "there is a fire", "fire in the office", "the building is on fire",
-  "smoke alarm going off", "fire alarm", "what do I do in a fire", "fire
-  drill", "where is the fire extinguisher", "where do we meet if we
-  evacuate", "assembly point", "who are the fire marshals", "where is the
-  first aid kit", "someone is hurt", "someone is injured", or any office
-  emergency or evacuation question — with or without the word "Berlin".
-  Not general office topics like desks, Wi-Fi, or house rules
-  (office_berlin). Not a stolen laptop
-  (it_support_stolen_laptop). Not a security incident or breach
-  (security_incidents).
+  Berlin office fire safety, evacuation, extinguishers, marshals, and first aid. Not
+  general office questions.
 import_tools:
   - get_notion_page
 ---
@@ -36,8 +27,6 @@ For non-urgent questions (drills, where extinguishers are, who the marshals
 are, the first aid kit), answer the specific question from `source_content`
 and keep it short.
 
-Always finish with:
-<https://app.notion.com/p/rasa/Fire-Safety-at-Rasa-a1c6df69943847bea14c91ebc0e8de6d|Fire Safety at Rasa>
 
 **Hard rules.**
 - Write real line breaks between the steps. Never emit the two characters

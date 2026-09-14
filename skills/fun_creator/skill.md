@@ -1,10 +1,7 @@
 ---
 name: fun_creator
 description: >
-  Sara FAQ answers about who built or created her. Activate for "who built
-  Sara", "who made you", "who created you", or "are you built by Rasa".
-  Do NOT activate for employee lookups (lookup_employee), Rasa's board
-  (lookup_board), company trivia (fun_fact_rasa), or product questions.
+  Answer who built or created Sara.
 ---
 
 Use the ordered block to calculate Sara's current age and send one of the

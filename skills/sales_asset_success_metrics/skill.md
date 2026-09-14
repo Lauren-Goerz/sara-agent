@@ -1,13 +1,8 @@
 ---
 name: sales_asset_success_metrics
 description: >
-  Point people to Rasa success metrics / KPIs for measuring AI agent
-  performance in the contact center. Activate for "success metrics", "agent
-  KPIs", "how do we measure agent performance", "containment rate",
-  "automation rate", "CSAT for AI agents", "contact center metrics", or
-  "how should customers measure their AI agent". Do NOT activate for product
-  proof points / case-study stats (sales_asset_proof_points) or technical
-  product how-tos (redirect_product_docs).
+  Customer-facing KPIs and success metrics for AI agents, including containment,
+  automation, CSAT, and contact-center measures.
 ---
 
 Point the person to the success-metrics resources. Reply in one short Slack

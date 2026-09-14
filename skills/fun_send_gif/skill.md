@@ -1,13 +1,8 @@
 ---
 name: fun_send_gif
 description: >
-  Send a GIF in Slack. Activate when someone explicitly asks for a gif
-  ("send a gif", "giphy", "gif of …", "react with a gif"), OR for light
-  celebratory moments where a GIF fits: a thank-you after Sara helped,
-  celebration / high-five energy, someone being impressed by Sara, or when
-  they sent a GIF and a GIF reply is funnier than text alone. Do NOT
-  activate for Phosphor icons (design_phosphor_icon), brand colors, serious
-  HR/security/IT incidents, or every ordinary Ops answer.
+  Send a workplace-safe GIF when asked, or for a fitting thank-you, celebration, or GIF
+  reply. Not serious topics.
 ---
 
 Drop a workplace-safe GIF via `send_slack_gif` with a short search query

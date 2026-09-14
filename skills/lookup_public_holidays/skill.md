@@ -1,9 +1,8 @@
 ---
 name: lookup_public_holidays
 description: >
-  Worldwide public/bank holiday lookup for a place and date, including
-  country, state, or region checks such as Bayern. Not company closures,
-  leave booking, PTO half-day rules, or work-abroad policy.
+  Public or bank holidays by date, country, state, or region. Not Rasa vacation
+  entitlement.
 ---
 
 Answer public-holiday questions with `lookup_public_holiday`.

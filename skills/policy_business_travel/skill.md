@@ -1,33 +1,32 @@
 ---
 name: policy_business_travel
 description: >
-  Business travel booking and spend policy: flight class, transport, hotel
-  guidelines, per diem, receipts, and expenses. Not travel insurance,
-  US visas (travel_visa_USA), temporary work abroad, vacation, or
-  general benefits. Mentioning a country does not make it travel — whether
-  Rasa may sell or license to a customer somewhere is
-  policy_export_control.
+  Business travel approval, booking, flights, hotels, rail, meals, per diem,
+  receipts, and reimbursement. Activate only when they name travel, a trip,
+  flights, hotels, or per diem — not bare dollar amounts or unspecified spend.
+import_tools:
+  - get_notion_page
 ---
 
 Answer business travel policy questions from the designated Notion page.
-Call `get_business_travel_policy` for every request - pass their topic in
-`query` when known (e.g. "economy flights", "hotel budget Europe",
-"per diem vs receipts", "public transport").
+
+If they only mention a cost or dollar amount without naming travel, a trip,
+flights, hotels, or per diem, do not call the tool and do not answer from
+this page. Ask one short question: which budget — remote/home-office, L&D,
+travel, or something else?
+
+Call `get_notion_page` with `source: business_travel` and their topic in
+`query` only when the topic is clearly business travel.
 
 When the tool succeeds:
-- Answer from `source_content` only, focused on what they asked.
-- Keep it short and Slack-friendly.
 - Use exact class, transport, hotel, per diem, and receipt rules from the
   page - never invent amounts or exceptions.
 - For Uber / taxi / airport questions: public transport is the default.
   Only list the exceptions that appear in source_content. Do not invent an
   early-morning or airport exception unless it is written there.
-- Always finish with:
-  <https://app.notion.com/p/rasa/Business-Travel-f5c1d8842db048539e065865d0e066cf|Business Travel>
 
 Never invent flight class, hotel caps, per diem rates, or receipt rules. If
-something is not on the page, say so and share the Notion link. If
-`used_fallback` is true, still treat `source_content` as the approved policy.
+something is not on the page, say so.
 
 If they ask about travel *insurance* / cover / claims, hand off to
 @skill.policy_travel_insurance. If they ask how to get a US visa, that

@@ -1,10 +1,8 @@
 ---
 name: learning_development_product_onboarding
 description: >
-  How to get to know the Rasa product: product onboarding, learning Rasa,
-  Rasa University, developer certification, or "where do I start with the
-  product". Not L&D budget or education days (learning_development). Not
-  a technical how-to that belongs in product docs (redirect_product_docs).
+  Learn the Rasa product through Rasa University, including signup and prerequisites. Not
+  technical product support.
 ---
 
 Point people who want to learn the Rasa product to Rasa University.

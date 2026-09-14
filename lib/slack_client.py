@@ -9,10 +9,67 @@ Env:
 from __future__ import annotations
 
 import asyncio
+import calendar
 import os
+from datetime import date, datetime, timezone
 from typing import Any
 
 import httpx
+
+_START_DATE_FORMATS = (
+    "%Y-%m-%d",
+    "%d.%m.%Y",
+    "%d/%m/%Y",
+    "%m/%d/%Y",
+    "%Y/%m/%d",
+    "%d-%m-%Y",
+    "%B %d, %Y",
+    "%b %d, %Y",
+    "%d %B %Y",
+    "%d %b %Y",
+)
+
+
+def parse_start_date(raw: str | None) -> date | None:
+    """Parse Slack Start date values (unix seconds or common date strings)."""
+    text = (raw or "").strip()
+    if not text:
+        return None
+    if text.isdigit():
+        try:
+            return datetime.fromtimestamp(int(text), tz=timezone.utc).date()
+        except (OverflowError, OSError, ValueError):
+            return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00")).date()
+    except ValueError:
+        pass
+    for fmt in _START_DATE_FORMATS:
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def add_calendar_months(start: date, months: int) -> date:
+    """Advance ``start`` by whole calendar months, clamping the day if needed."""
+    month_index = start.month - 1 + months
+    year = start.year + month_index // 12
+    month = month_index % 12 + 1
+    day = min(start.day, calendar.monthrange(year, month)[1])
+    return date(year, month, day)
+
+
+def within_first_n_months(
+    start: date,
+    months: int = 6,
+    *,
+    today: date | None = None,
+) -> bool:
+    """True when ``today`` is strictly before ``start`` + ``months``."""
+    as_of = today or date.today()
+    return as_of < add_calendar_months(start, months)
 
 SLACK_BASE = "https://slack.com/api"
 

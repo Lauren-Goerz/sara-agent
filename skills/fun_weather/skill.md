@@ -1,11 +1,7 @@
 ---
 name: fun_weather
 description: >
-  Weather forecast for a city or place - "what's the weather in Munich",
-  "forecast for Berlin this week", "is it going to rain in London
-  tomorrow", temperature, or similar. Activate for those. Do NOT activate
-  for travel booking policy (policy_business_travel) or work-abroad policy
-  (policy_work_abroad) unless they clearly want the weather.
+  Current weather or forecast for a city or place.
 ---
 
 Answer weather questions with `get_weather_forecast`.

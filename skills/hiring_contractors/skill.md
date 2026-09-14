@@ -1,19 +1,8 @@
 ---
 name: hiring_contractors
 description: >
-  How to hire, renew, or offboard a Rasa contractor, freelancer, or agency
-  worker: contractor agreements, the request form, approval, tool access,
-  and contractors vs employees. Activate for "I want to hire a contractor",
-  "how do I hire a freelancer", "contractor agreement", "contractor request
-  form", "renew a contractor", "contractor needs Slack/tools", "we're done
-  with this contractor", "what's the difference between a contractor and an
-  employee", "contractor vs employee", "can a contractor join onboarding /
-  get Slack / get Notion / get benefits", or "are we at risk of pseudo
-  self-employment". Answer every contractor-versus-employee question here
-  rather than from general knowledge. Not employee hiring or Who's Who
-  (lookup_employee). Not who should *sign* a document
-  (policy_signing_authority). Not employee perks, L&D, or the remote
-  working budget (those do not apply to contractors).
+  Hire, renew, manage access for, compare, or offboard a contractor, freelancer, or
+  agency. Not document signing authority.
 import_tools:
   - get_notion_page
 constraints:
@@ -25,10 +14,6 @@ constraints:
       Answer only from the Notion page loaded this turn. Never describe
       contractors or employees from general knowledge — no payroll, tax,
       invoicing, labour-law, or benefits comparison that is not on the page.
-  - text: >
-      Every reply ends with the required_slack_links line from the tool
-      result, with no exceptions — including when you are asking a follow-up
-      question and when the page does not cover what they asked.
 ---
 
 Call `get_notion_page` with `source: hiring_contractors` for every request.
@@ -49,11 +34,7 @@ short and Slack-friendly. Never invent an approval step, a rate, or a
 contact who is not on the page.
 
 If the page does not cover what they asked, say so rather than filling the
-gap from general knowledge, and still send the required link.
-
-Write one Slack message: the answer first, then paste every
-`required_slack_links` line from the tool result at the end, exactly as given.
-Do not type a Notion id yourself.
+gap from general knowledge.
 
 The contractor request form is in `conditional_slack_links`. Add it only when
 someone is bringing on a new contractor or agency — then tell them in the

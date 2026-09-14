@@ -57,6 +57,9 @@ class NotionSource:
     database_filter: dict[str, Any] | None = None
     database_sorts: tuple[dict[str, Any], ...] = ()
     include_row_url: bool = True
+    related_links: tuple[str, ...] = ()
+    related_source_keys: tuple[str, ...] = ()
+    always_include_related: bool = False
 
 
 SOURCES: dict[str, NotionSource] = {
@@ -79,6 +82,25 @@ SOURCES: dict[str, NotionSource] = {
             "holiday",
         ),
     ),
+    "vacation_sick": NotionSource(
+        key="vacation_sick",
+        notion_id="137b9c0d544a80f3aae3eaaec6a7cf0a",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Vacation-and-Sick-days-137b9c0d544a80f3aae3eaaec6a7cf0a"
+        ),
+        title="Vacation and Sick days",
+        max_blocks=600,
+        keywords=(
+            "vacation",
+            "sick",
+            "offline",
+            "ooo",
+            "child",
+            "family",
+            "carry",
+        ),
+    ),
     "work_abroad": NotionSource(
         key="work_abroad",
         notion_id="cd21b2caa0214c85aa2410bb0814e446",
@@ -88,6 +110,26 @@ SOURCES: dict[str, NotionSource] = {
         ),
         title="Working from other Countries",
         max_blocks=600,
+    ),
+    "part_time": NotionSource(
+        key="part_time",
+        notion_id="243d2dd4d25a4fe1876b60ef344a8968",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Working-Part-Time-at-Rasa-243d2dd4d25a4fe1876b60ef344a8968"
+        ),
+        title="Working Part-Time at Rasa",
+        max_blocks=400,
+        keywords=(
+            "part-time",
+            "part time",
+            "hours",
+            "week",
+            "teilzeit",
+            "20h",
+            "30h",
+            "reduced",
+        ),
     ),
     "social_media": NotionSource(
         key="social_media",
@@ -251,6 +293,9 @@ SOURCES: dict[str, NotionSource] = {
         ),
         title="Laptop issues & repairs",
         max_blocks=200,
+        related_links=(
+            "<https://getsupport.apple.com/solutions|Apple Support>",
+        ),
     ),
     "travel_insurance": NotionSource(
         key="travel_insurance",
@@ -379,6 +424,12 @@ SOURCES: dict[str, NotionSource] = {
             "compensation",
             "dei",
         ),
+        related_source_keys=(
+            "employee_equity_how_options_work",
+            "employee_equity_compensation",
+            "equity_refresh_policy",
+        ),
+        always_include_related=True,
     ),
     "employee_equity_how_options_work": NotionSource(
         key="employee_equity_how_options_work",
@@ -402,6 +453,12 @@ SOURCES: dict[str, NotionSource] = {
             "portal",
             "login",
         ),
+        related_source_keys=(
+            "employee_equity",
+            "employee_equity_compensation",
+            "equity_refresh_policy",
+        ),
+        always_include_related=True,
     ),
     "employee_equity_compensation": NotionSource(
         key="employee_equity_compensation",
@@ -427,6 +484,12 @@ SOURCES: dict[str, NotionSource] = {
             "top-up",
             "topup",
         ),
+        related_source_keys=(
+            "employee_equity",
+            "employee_equity_how_options_work",
+            "equity_refresh_policy",
+        ),
+        always_include_related=True,
     ),
     "equity_refresh_policy": NotionSource(
         key="equity_refresh_policy",
@@ -446,6 +509,12 @@ SOURCES: dict[str, NotionSource] = {
             "two year",
             "2 year",
         ),
+        related_source_keys=(
+            "employee_equity",
+            "employee_equity_how_options_work",
+            "employee_equity_compensation",
+        ),
+        always_include_related=True,
     ),
     "learning_development": NotionSource(
         key="learning_development",
@@ -469,6 +538,32 @@ SOURCES: dict[str, NotionSource] = {
             "conferences",
             "certification",
             "study",
+            "months",
+            "allocated",
+            "eligibility",
+            "pro-rata",
+            "prorata",
+            "pdp",
+        ),
+    ),
+    "mandatory_training": NotionSource(
+        key="mandatory_training",
+        notion_id="30ab9c0d544a803a90badcbe0de916ef",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Mandatory-Training-Policy-2026-30ab9c0d544a803a90badcbe0de916ef"
+        ),
+        title="Mandatory Training Policy 2026",
+        max_blocks=400,
+        keywords=(
+            "mandatory",
+            "training",
+            "easyllama",
+            "compliance",
+            "gdpr",
+            "harassment",
+            "occupational",
+            "ai act",
         ),
     ),
     "relocation_germany": NotionSource(
@@ -490,6 +585,8 @@ SOURCES: dict[str, NotionSource] = {
             "shipping",
             "package",
         ),
+        related_source_keys=("welcome_berlin", "working_in_germany"),
+        always_include_related=True,
     ),
     "welcome_berlin": NotionSource(
         key="welcome_berlin",
@@ -510,6 +607,8 @@ SOURCES: dict[str, NotionSource] = {
             "anmeldung",
             "city",
         ),
+        related_source_keys=("relocation_germany", "working_in_germany"),
+        always_include_related=True,
     ),
     "working_in_germany": NotionSource(
         key="working_in_germany",
@@ -530,6 +629,8 @@ SOURCES: dict[str, NotionSource] = {
             "social",
             "insurance",
         ),
+        related_source_keys=("relocation_germany", "welcome_berlin"),
+        always_include_related=True,
     ),
     "berlin_office": NotionSource(
         key="berlin_office",
@@ -906,6 +1007,54 @@ async def _load_raw(source: NotionSource) -> dict[str, Any]:
 
     _cache[source.key] = (time.monotonic(), raw)
     return raw
+
+
+def slack_link(key: str) -> str:
+    """Return the canonical Slack hyperlink for a registered source."""
+    source = SOURCES[key]
+    return f"<{source.url}|{source.title}>"
+
+
+async def load_full(key: str) -> dict[str, Any]:
+    """Return one registered source without query-aware trimming."""
+    source = SOURCES[key]
+    try:
+        raw = await _load_raw(source)
+    except notion_client.NotionConfigError as exc:
+        return {
+            "ok": False,
+            "error": "not_configured",
+            "message": str(exc),
+            "source_url": source.url,
+            "page_title": source.title,
+        }
+    except httpx.HTTPStatusError as exc:
+        return {
+            "ok": False,
+            "error": "notion_page_unavailable",
+            "message": (
+                f"'{source.title}' is not visible to Sara's Notion integration."
+            ),
+            "status_code": exc.response.status_code,
+            "source_url": source.url,
+            "page_title": source.title,
+        }
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "ok": False,
+            "error": "notion_error",
+            "message": str(exc),
+            "source_url": source.url,
+            "page_title": source.title,
+        }
+    return {
+        "ok": True,
+        "source_url": source.url,
+        "page_title": raw.get("title") or source.title,
+        "last_edited_time": raw.get("last_edited_time"),
+        "source_kind": raw.get("source_kind"),
+        "body": raw.get("body") or "",
+    }
 
 
 async def load(
