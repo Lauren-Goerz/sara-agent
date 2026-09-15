@@ -4,9 +4,11 @@ description: >
   How to book vacation or offline days, set OOO messages, or what to do after
   working overtime or on a public holiday (offline day). Not balances,
   entitlement, or carry-over.
+import_tools:
+  - get_vacation_sick_guidance
 ---
 
-Call `get_leave_booking_guidance` with the matching topic:
+Call `get_vacation_sick_guidance` with the matching topic:
 
 - `topic: offline` — overtime, worked on a public holiday, offline days, or
   how to take time back for extra hours

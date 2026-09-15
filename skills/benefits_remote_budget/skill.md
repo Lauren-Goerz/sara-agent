@@ -1,9 +1,11 @@
 ---
 name: benefits_remote_budget
 description: >
-  Remote / home-office budget 2026: WFH equipment, coworking, internet/utilities,
-  claim via Payhawk. Activate only when they name remote, home-office, coworking,
-  or WFH setup — not bare dollar amounts or unspecified spend.
+  Remote Budget 2026: choosing Berlin office / coworking / home-only work style
+  (including how long after joining to decide), WFH equipment, coworking flex
+  desk, internet/utilities, Payhawk claims. Activate when they name remote
+  budget, home-office, coworking, WFH setup, or remote work option/style —
+  not bare dollar amounts, and not temporary work from another country.
 import_tools:
   - get_notion_page
 ---
@@ -11,13 +13,14 @@ import_tools:
 Answer remote / home-office budget questions from the designated Notion page.
 
 If they only mention a cost, dollar amount, or “something expensive” and do
-**not** name remote, home-office, coworking, WFH equipment, or this budget,
-do not call the tool and do not answer from this page. Ask one short question:
-which budget — remote/home-office, L&D, travel, or something else?
+**not** name remote, home-office, coworking, WFH equipment, remote work
+option/style, or this budget, do not call the tool and do not answer from
+this page. Ask one short question: which budget — remote/home-office, L&D,
+travel, or something else?
 
 Call `get_notion_page` with `source: remote_budget` only when the topic is
 clearly this budget. Pass their topic in `query` when known (e.g. "coworking
-flex desk", "home only utility", "Berlin office internet").
+flex desk", "decide remote option after joining", "home only utility").
 
 When the tool succeeds:
 - Answer in your own words from `source_content`. Lead with the direct answer
@@ -26,6 +29,11 @@ When the tool succeeds:
   never invent or combine them.
 - Never quote FAQ questions, paste a section under "The policy says", or
   restate the page heading as if it were the answer.
+
+**Choosing a remote work option/style** (Berlin office, coworking, or home
+only) is answered from this page’s FAQ — not from work-abroad policy. Do not
+confuse that deadline with the separate window to *spend* the one-time
+home-office equipment budget after start date.
 
 **Amounts — do not mix these up:**
 - Monthly **flex desk / co-working seat** reimbursement is capped at **€250**

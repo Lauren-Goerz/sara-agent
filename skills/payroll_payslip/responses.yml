@@ -1,8 +1,21 @@
 responses:
   utter_ask_payslip_country:
-    - text: |-
-        Happy to point you to the right place. Which country are you employed in?
-        [Country options: Germany | UK | France | US | Serbia | India | Other]
+    - text: Happy to point you to the right place. Which country are you employed in?
+      buttons:
+        - title: Germany
+          payload: set:session.payroll_payslip.stated_country=germany
+        - title: UK
+          payload: set:session.payroll_payslip.stated_country=uk
+        - title: France
+          payload: set:session.payroll_payslip.stated_country=france
+        - title: US
+          payload: set:session.payroll_payslip.stated_country=us
+        - title: Serbia
+          payload: set:session.payroll_payslip.stated_country=serbia
+        - title: India
+          payload: set:session.payroll_payslip.stated_country=india
+        - title: Other
+          payload: set:session.payroll_payslip.stated_country=other
 
   utter_payslip_germany:
     - text: >-

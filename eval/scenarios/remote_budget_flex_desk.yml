@@ -1,0 +1,17 @@
+scenario:
+  name: Coworking flex desk monthly cap is €250
+
+  simulation_context: >
+    You are a Rasa employee asking how the co-working flex desk reimbursement
+    works. Ask about the monthly flex desk / hot desk co-working reimbursement.
+    Stop once you understand the monthly cap and how to claim. Do not ask about
+    the one-time home-office equipment budget unless the agent confuses them.
+
+  goals:
+    criteria:
+      - The agent states the monthly flex-desk reimbursement cap is €250 (or
+        equivalent), not $900 / €800 as a monthly desk fee
+      - The agent mentions submitting via Payhawk and/or the Office Co-working
+        category when explaining how to claim
+      - The agent does not tell the user that Rasa signs the co-working contract
+        for them

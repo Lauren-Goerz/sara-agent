@@ -284,6 +284,49 @@ class CombinedSlackBot(SlackBot):
             channel=recipient, as_user=True, text=body, type="mrkdwn"
         )
 
+    async def send_text_with_buttons(
+        self,
+        recipient_id: Text,
+        text: Text,
+        buttons: list,
+        **kwargs: Any,
+    ) -> None:
+        """Post Mantle/response buttons; Slack allows 5 per actions row."""
+        recipient = self.slack_channel or recipient_id
+        body = (text or "").strip() or "Choose an option:"
+        if not buttons:
+            await self.send_text_message(recipient, body, **kwargs)
+            return
+
+        blocks: list[dict[str, Any]] = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": body}}
+        ]
+        for start in range(0, len(buttons), 5):
+            blocks.append(
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": str(button.get("title") or "")[:75],
+                                "emoji": True,
+                            },
+                            "value": str(button.get("payload") or button.get("title") or ""),
+                        }
+                        for button in buttons[start : start + 5]
+                    ],
+                }
+            )
+        fallback = f"{body}\nOptions: {', '.join(str(b.get('title') or '') for b in buttons)}"
+        await self._post_message(
+            channel=recipient,
+            as_user=True,
+            text=fallback,
+            blocks=blocks,
+        )
+
 
 class EnvSlackInput(SlackInput):
     """SlackInput that loads secrets from env and continues open threads."""

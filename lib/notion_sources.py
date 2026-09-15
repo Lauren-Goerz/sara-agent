@@ -351,6 +351,10 @@ SOURCES: dict[str, NotionSource] = {
         title="Remote Budget - 2026",
         max_blocks=600,
         keywords=(
+            "style",
+            "option",
+            "decide",
+            "joining",
             "coworking",
             "co-working",
             "flex",

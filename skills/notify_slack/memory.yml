@@ -8,10 +8,6 @@ schema:
       type: text
       description: Final message text confirmed by the user.
       llm_settable: true
-    post_confirmed:
-      type: bool
-      description: User confirmed channel and message before posting.
-      llm_settable: true
   private:
     last_message_ts:
       type: text

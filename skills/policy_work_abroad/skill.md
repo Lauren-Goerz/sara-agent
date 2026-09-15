@@ -1,8 +1,9 @@
 ---
 name: policy_work_abroad
 description: >
-  Temporary work from another country or digital-nomad requests. Not vacation, business
-  travel, or permanent relocation.
+  Temporary work from another country or digital-nomad requests (weeks abroad
+  while already employed). Not choosing Berlin/coworking/home remote-work
+  style, remote budget, vacation, business travel, or permanent relocation.
 import_tools:
   - get_notion_page
 ---
@@ -11,6 +12,10 @@ Answer questions about working from other countries using the designated
 Notion page. Call `get_notion_page` with `source: work_abroad` for every
 request. Pass the destination and duration in `query` when known (e.g.
 "a few weeks from Denmark", "one month in South Africa").
+
+If they ask how long they have to **choose** their remote work option/style
+after joining (Berlin office vs coworking vs home only), that is
+@skill.benefits_remote_budget — do not answer from this page.
 
 When the tool succeeds:
 - Answer from `source_content` only, focused on their destination/duration.

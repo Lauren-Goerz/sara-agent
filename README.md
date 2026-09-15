@@ -10,6 +10,8 @@ invent Slack channels, and **Wrangle is the only ticketing system**.
 
 Skill catalog with sample questions: [SKILLS.md](SKILLS.md).
 Authoring notes live in [AGENTS.md](AGENTS.md).
+Regression scenarios live under [eval/](eval/) (run via Rasa MCP /
+`rasa tools run`).
 
 ## What she can help with
 

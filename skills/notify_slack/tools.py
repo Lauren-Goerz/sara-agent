@@ -56,23 +56,14 @@ async def list_slack_channels(context: ToolContext = None) -> ToolResult:
 
 @tool(
     description=(
-        "Post a confirmed message to Slack. Requires post_confirmed, "
-        "channel_id, and message_text in skill memory."
+        "Post a message to Slack after the user confirms. Requires channel_id "
+        "and message_text in skill memory; confirmation is engine-gated."
     )
 )
 async def post_slack_message(context: ToolContext = None) -> ToolResult:
     """Post via Slack chat.postMessage after user confirmation."""
     if context is None:
         return ToolResult(llm_response={"ok": False, "error": "no_context"})
-
-    if not context.memory.get("post_confirmed"):
-        return ToolResult(
-            llm_response={
-                "ok": False,
-                "error": "not_confirmed",
-                "hint": "Confirm channel and message with the user first.",
-            }
-        )
 
     channel_id = context.memory.get("channel_id")
     message_text = context.memory.get("message_text")

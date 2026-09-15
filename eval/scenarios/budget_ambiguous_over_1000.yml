@@ -1,0 +1,14 @@
+scenario:
+  name: Ambiguous expensive purchase asks which budget
+
+  simulation_context: >
+    You want to buy something that costs more than $1,000 but you do not say
+    which budget. Ask once in those vague terms. When the agent asks which
+    budget, say it is the remote / home-office budget and stop after that
+    clarification is acknowledged or answered. Do not invent other topics.
+
+  goals:
+    criteria:
+      - Before giving remote-budget caps, the agent asks which budget or benefit
+        the spend is for (remote/home-office, L&D, travel, or similar)
+      - The agent does not immediately treat the vague ask as remote budget only

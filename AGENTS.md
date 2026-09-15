@@ -43,6 +43,10 @@ be re-added later with admin buy-in.
  does — that does not justify a custom tool. Per-source `char_limit` overrides
  live in `_CHAR_LIMITS` there. Keep a custom `tools.py` only when the skill
  parses sections, confirms country, searches, or post-processes the content.
+- `tools/vacation_sick.py` — shared `get_vacation_sick_guidance` for
+  `leave_sick`, `leave_dependent_care`, and `leave_vacation` (topic =
+  sick / dependent_* / vacation / offline / ooo). `policy_vacation` keeps its
+  own tool because it also reads Benefits & handbooks.
 - `skills/policy_links/` — one deterministic registry for policies Sara only
   links to and never summarizes; add another topic there instead of creating
   another one-link skill.
