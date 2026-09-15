@@ -14,7 +14,7 @@ be re-added later with admin buy-in.
 - `agent.yml` — persona, global rules, identity
 - `integrations.yml` — LLM + channels (REST, Inspector, Slack)
 - `lib/` — shared clients (`notion_client`, `notion_sources`, `slack_client`,
-  `hr_mocks`) and the custom Slack channel (`slack_channel.EnvSlackInput`)
+  `user_location`, …) and the custom Slack channel (`slack_channel.EnvSlackInput`)
 - `memory.yml` (project root) — memory shared across skills: the resolved
  `user_country`, how it was established (`user_country_source`), and whether
  the employee stated it out loud (`user_country_confirmed`). `user_country` is

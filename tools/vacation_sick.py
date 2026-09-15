@@ -6,17 +6,11 @@ Topics: sick, dependent_child, dependent_family, vacation, offline, ooo.
 from __future__ import annotations
 
 import re
-import sys
-from pathlib import Path
 
 from rasa.mantle.tools.decorator import ToolContext, tool
 from rasa.mantle.tools.result import ToolResult
 
-_ROOT = Path(__file__).resolve().parents[1]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from lib import notion_sources, user_location, vacation_sick  # noqa: E402
+from lib import notion_sources, user_location, vacation_sick
 
 _BOOKING_TOPICS = {
     "vacation": "vacation_booking",

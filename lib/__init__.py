@@ -1,1 +1,1 @@
-# Package marker so skills can `from lib.hr_mocks import ...`.
+# Shared clients and helpers (notion_*, slack_*, user_location, …).

@@ -4,20 +4,14 @@ from __future__ import annotations
 
 import calendar
 import re
-import sys
 from datetime import date, datetime, timedelta
-from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import holidays
 from rasa.mantle.tools.decorator import ToolContext, tool
 from rasa.mantle.tools.result import ToolResult
 
-_ROOT = Path(__file__).resolve().parents[2]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from lib import user_location  # noqa: E402
+from lib import user_location
 
 # Pay setups Sara can compute.
 _MONTHLY_26 = frozenset({"germany", "serbia", "france", "uk"})

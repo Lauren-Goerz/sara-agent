@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import re
-import sys
 from io import BytesIO
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -16,11 +15,7 @@ from rasa.mantle.tools.decorator import ToolContext, tool
 from rasa.mantle.tools.result import ToolResult
 from slack_sdk.web.async_client import AsyncWebClient
 
-_ROOT = Path(__file__).resolve().parents[2]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from lib import notion_client  # noqa: E402
+from lib import notion_client
 
 structlogger = structlog.get_logger()
 

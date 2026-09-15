@@ -3,18 +3,12 @@
 from __future__ import annotations
 
 import re
-import sys
-from pathlib import Path
 
 import httpx
 from rasa.mantle.tools.decorator import ToolContext, tool
 from rasa.mantle.tools.result import ToolResult
 
-_ROOT = Path(__file__).resolve().parents[2]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from lib import notion_client  # noqa: E402
+from lib import notion_client
 
 PITCH_DECKS_PAGE_ID = "24db9c0d544a80278370e2d100f4e3d4"
 PITCH_DECKS_PAGE_URL = (

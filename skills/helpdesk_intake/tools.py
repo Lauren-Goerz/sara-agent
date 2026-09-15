@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import os
 import re
-import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -15,12 +14,9 @@ import structlog
 from rasa.mantle.tools.decorator import ToolContext, tool
 from rasa.mantle.tools.result import ToolResult
 
+from lib import wrangle_client
+
 _ROOT = Path(__file__).resolve().parents[2]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from lib import wrangle_client  # noqa: E402
-
 structlogger = structlog.get_logger()
 
 _DEDUP_PATH = _ROOT / ".data" / "helpdesk_tickets.json"
