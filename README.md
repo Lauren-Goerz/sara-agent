@@ -9,9 +9,8 @@ She is built on **Rasa Mantle**. Behaviour lives in natural language
 
 Answers come from allowlisted Notion pages and a few live lookups (directory,
 holidays, All Hands, Slack profile). When someone needs a human to action a
-request, she names the right **Wrangle** inbox and points them at `/wrangle` —
-she does **not** create tickets via API. She does not invent Slack channels;
-**Wrangle is the only ticketing system**.
+request, she asks them to fill out a ticket at `/wrangle` —
+she does **not yet** create tickets via API. 
 
 Skill catalog with sample questions: [SKILLS.md](SKILLS.md).
 Authoring notes live in [AGENTS.md](AGENTS.md).
