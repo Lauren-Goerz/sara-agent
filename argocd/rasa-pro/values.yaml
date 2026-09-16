@@ -1,0 +1,157 @@
+rasa:
+  settings:
+    enableApi: false
+    scheme: https
+    mountDefaultConfigmap: true
+    mountModelsVolume: false
+    credentials:
+      rest:
+      rasa:
+        url: "https://bot-sara-agent-platform.demo.rasa.ai/api"
+      socketio:
+        bot_message_evt: bot_uttered
+        session_persistence: true
+        user_message_evt: user_uttered
+      audiocodes:
+        token: token
+    endpoints:
+      action_endpoint:
+        actions_module: "actions"
+      nlg:
+        type: rephrase
+      tracker_store:
+        type: sql
+        dialect: postgresql
+        url: ${DB_HOST}
+        port: ${DB_PORT}
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
+        db: ${DB_NAME}
+        login_db: ${DB_NAME}
+      event_broker:
+        type: kafka
+        url: ${KAFKA_BROKER_ADDRESS}
+        security_protocol: SASL_PLAINTEXT
+        sasl_mechanism: ${KAFKA_SASL_MECHANISM}
+        sasl_username: ${KAFKA_SASL_USERNAME}
+        sasl_password: ${KAFKA_SASL_PASSWORD}
+        topic: ${KAFKA_TOPIC}
+        client_id: kafka-rasa-assistant
+  tolerations:
+    - key: pulumi-stack
+      value: sara-agent-platform-dev
+      effect: NoSchedule
+      operator: Equal
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: sara-agent-platform-dev-nodegroup
+  command:
+    - rasa
+  args:
+    - run
+    - --cors
+    - "*"
+    - --debug
+    - --inspect
+  additionalEnv:
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: openaiApiKey
+    - name: KAFKA_SASL_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: kafka-kafka-credentials
+          key: KAFKA_SASL_USERNAME
+    - name: KAFKA_SASL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: kafka-kafka-credentials
+          key: KAFKA_SASL_PASSWORD
+    - name: KAFKA_SASL_MECHANISM
+      valueFrom:
+        secretKeyRef:
+          name: kafka-kafka-credentials
+          key: KAFKA_SASL_MECHANISM
+    - name: KAFKA_BROKER_ADDRESS
+      valueFrom:
+        secretKeyRef:
+          name: kafka-kafka-credentials
+          key: KAFKA_BROKER_ADDRESS
+    - name: KAFKA_TOPIC
+      value: rasa-events
+    - name: MAX_NUMBER_OF_PREDICTIONS
+      value: "1000"
+    - name: DB_HOST
+      valueFrom:
+        secretKeyRef:
+          name: "postgres-op-kits-pg-superuser"
+          key: host
+    - name: DB_PORT
+      valueFrom:
+        secretKeyRef:
+          name: "postgres-op-kits-pg-superuser"
+          key: port
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: "postgres-op-kits-pg-superuser"
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "postgres-op-kits-pg-superuser"
+          key: password
+    - name: DB_NAME
+      value: "postgres"
+  volumes:
+    - name: tmp
+      emptyDir: {}
+    - name: rasa-cache
+      emptyDir: {}
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+    - name: rasa-cache
+      mountPath: /app/.rasa
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+  ingress:
+    enabled: true
+    className: "alb"
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+      alb.ingress.kubernetes.io/backend-protocol: 'HTTP'
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:536697228103:certificate/a82cf6e5-aedc-4779-b458-9a4d583f9d71
+      external-dns.alpha.kubernetes.io/hostname: bot-sara-agent-platform.demo.rasa.ai
+    hosts: [{"extraPaths": [], "host": "bot-sara-agent-platform.demo.rasa.ai", "paths": [{"path": "/", "pathType": "Prefix"}]}]
+rasaProServices:
+  enabled: false
+  tolerations:
+    - key: pulumi-stack
+      value: sara-agent-platform-dev
+      effect: NoSchedule
+      operator: Equal
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: sara-agent-platform-dev-nodegroup
+actionServer:
+  enabled: false
