@@ -15,6 +15,19 @@ Skill catalog with sample questions: [SKILLS.md](SKILLS.md).
 Authoring notes live in [AGENTS.md](AGENTS.md).
 Regression scenarios live under [eval/](eval/).
 
+## Why not one giant Notion search skill?
+
+We tried that first. The skills in this agent are what remained after plain
+Notion search plus tweaks to `agent.yml` stopped being enough.
+
+Often there was too much overlap across pages for search to pick a clear
+source. Other times Sara would invent details that were not on the page unless
+a skill spelled out how to answer (do this, not that).
+
+So there are many skills on purpose: each one owns a user goal with clear
+guidance, usually pinned to a specific Notion source (or a small set of them).
+`search_policies` is still there as a broad fallback when nothing else fits.
+
 ## What she can help with
 
 - [People and company](SKILLS.md#people-and-company)
