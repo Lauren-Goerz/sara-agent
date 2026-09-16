@@ -1,0 +1,6 @@
+cluster: rasa-demo-eu-cluster-prod
+namespace: sara-agent-platform-dev
+name: rasa-pro
+repo: europe-west3-docker.pkg.dev/rasa-releases/helm-charts
+chart: rasa
+version: 2.1.0
