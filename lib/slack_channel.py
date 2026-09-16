@@ -89,7 +89,7 @@ def _always_reply_channels() -> set[str]:
 
 
 def _ignored_bot_ids() -> set[str]:
-    """Extra bot/user IDs to ignore (e.g. Wrangle), plus Sara's own ids."""
+    """Extra bot/user IDs to ignore, plus Sara's own ids."""
     ids = set(_own_bot_ids())
     raw = os.environ.get("SLACK_IGNORE_BOT_IDS", "").strip()
     if raw:
@@ -497,7 +497,7 @@ class EnvSlackInput(SlackInput):
         if bot_id:
             # Never react to Sara's own posts (e.g. Phosphor icon uploads),
             # otherwise every upload would trigger another turn. Also ignore
-            # allowlisted bots such as Wrangle.
+            # allowlisted bots on SLACK_IGNORE_BOT_IDS.
             ignored = _ignored_bot_ids()
             if bot_id in ignored or str(event.get("user") or "") in ignored:
                 return False
@@ -511,8 +511,7 @@ class EnvSlackInput(SlackInput):
                 return True
             return False
 
-        # Human sender that matches an ignore list (rare; Wrangle may appear
-        # as a user id in some workspaces).
+        # Human sender that matches an ignore list (rare).
         user_id = str(event.get("user") or "")
         if user_id and user_id in _ignored_bot_ids():
             return False

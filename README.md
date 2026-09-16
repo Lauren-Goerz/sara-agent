@@ -70,7 +70,7 @@ python scripts/check_notion_access.py
 | `skills/` | One skill per user goal |
 | `tools/` | Shared tools, including the allowlisted Notion loader |
 | `lib/notion_sources.py` | Canonical Notion IDs, URLs, titles, caching, and trimming |
-| `lib/` | Shared clients (Notion, Slack, Wrangle, …) |
+| `lib/` | Shared clients (Notion, Slack, …) |
 | `.env` | Secrets (`RASA_LICENSE`, Slack, Notion, …) — gitignored |
 
 ## Docs

@@ -1,34 +1,27 @@
 ---
 name: helpdesk_intake
 description: >
-  Create a Wrangle ticket for requests needing human action: Ops, IT, software, Finance,
-  People, Rev Ops, Security, or swag.
+  Route requests that need a person to action them: Ops, IT, software, Finance,
+  People, Rev Ops, Security, or swag. Points at /wrangle — does not create tickets.
 ---
 
-Wrangle is Rasa's only ticketing system. For each new top-level request, call
-`create_helpdesk_ticket` once with the full `request_text` and one inbox:
+Wrangle is Rasa's only ticketing system. Sara does not open tickets herself.
 
-- `ops`: General/Ops, also the default when unsure
-- `it`: VPN, access, hardware, laptop, or technical trouble
-- `software`: a new tool, seat, or license
-- `finance`: Payhawk or Finance
-- `hr`: private People/pay/performance matters
-- `swag`: merchandise
-- `revops`: Salesforce, Gong, or revenue systems
-- `security`: security, compliance, incidents, or questionnaires
+For each request that needs a human, name the right inbox and tell them to
+type `/wrangle` in any Slack channel and pick that inbox:
 
-Pass optional fields only when relevant and known. Set `is_sensitive_hr` for
-private People matters. The tool owns field mappings, defaults, validation,
-and normalization; never invent missing values.
+- **General / Ops request** — general Ops, also the default when unsure
+- **IT Support** — VPN, access, hardware, laptop, or technical trouble
+- **Software request** — a new tool, seat, or license
+- **Payhawk / Finance** — Payhawk or Finance
+- **People / HR Issues** — private People / pay / performance matters
+- **Rasa Swag** — merchandise for customers or community
+- **Rev Ops** — Salesforce, Gong, or revenue systems
+- **Security and Compliance** — security, compliance, incidents, or questionnaires
 
-Do not call the tool again for thread follow-ups once a ticket already exists
-for this request (the tool returns `already_ticketed` if so).
+Keep the reply short. For private People matters, do not restate sensitive
+details in a public channel — say they should open the People / HR Issues
+inbox via `/wrangle` and share details there.
 
-When the tool succeeds, confirm the ticket, link `ticket_url`, name
-`team_label`, and label `suggested_reply` as an editable draft.
-- If `is_sensitive_hr` / `privacy_warning` is set, keep the public reply
-  minimal - do not restate private details.
-
-If the tool returns `needs_manual_wrangle`, or if creation failed, tell them to
-run `/wrangle` in Slack and pick the `team_label` inbox. Never invent a ticket
-id, a ticket link, or any other place to file the request.
+Never invent a ticket id, ticket link, Slack channel, or email contact.
+Never invent ownership outside these inboxes.

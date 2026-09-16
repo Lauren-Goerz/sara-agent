@@ -447,7 +447,8 @@ Technical product how-tos → Docs + the docs bot.
 
 ### `helpdesk_intake`
 
-Anything that needs a *person* to action it: classify into a Wrangle inbox (or tell them to run `/wrangle`).
+Anything that needs a *person* to action it: name the right Wrangle inbox and
+tell them to run `/wrangle` (Sara does not create tickets).
 
 - I need VPN access.
 - Can someone add me to Salesforce?

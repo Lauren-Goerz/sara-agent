@@ -107,7 +107,7 @@ be re-added later with admin buy-in.
 | `sales_asset_pitch_deck` | Standard L1 pitch deck Google Slides link + Pitch Decks Notion page (talk tracks / other decks) |
 | `sales_asset_success_metrics` | Links Notion success metrics page + Lauren's customer-safe blog on measuring AI agent performance |
 | `sales_asset_proof_points` | Answers from / uploads the Product Proof Points PDF (customer metrics, analysts, deploy speed) |
-| `helpdesk_intake` | Requests needing a ticket: classify into a Wrangle inbox, create the ticket (or point at `/wrangle`), draft an agent reply |
+| `helpdesk_intake` | Requests needing a ticket: name the right Wrangle inbox and point at `/wrangle` (Sara does not create tickets) |
 | `it_support_laptop_repairs` | MacBook / laptop repair process (Apple Support first, then Rajesh paths) |
 | `it_support_stolen_laptop` | Stolen work laptop: police report + notify Ops/Security |
 | `onboarding_yubikey` | YubiKey / security-key install steps from Notion |
@@ -179,16 +179,11 @@ Connections → Sara-Agent).
 **Wrangle is the only ticketing system.** There is no helpdesk Slack channel
 and no Notion helpdesk board — never add either back, in a skill or in prose.
 
-When a request needs a person to action it, `helpdesk_intake` classifies it
-into a Wrangle inbox (General / Ops, IT Support, Software request, Payhawk /
+When a request needs a person to action it, `helpdesk_intake` names the right
+Wrangle inbox (General / Ops, IT Support, Software request, Payhawk /
 Finance, People / HR Issues, Rasa Swag, Rev Ops, Security and Compliance) and
-either creates the ticket or tells the employee to run `/wrangle` and pick that
-inbox. It is not gated to any channel.
-
-Automatic ticket creation needs the Wrangle API: set the `WRANGLE_*` env vars
-and each `WRANGLE_INBOX_*` id. Without them Sara still names the right inbox
-and points at `/wrangle`, which is the current behaviour since `WRANGLE_API_KEY`
-is unset.
+tells the employee to run `/wrangle` and pick that inbox. Sara does not create
+tickets via API. It is not gated to any channel.
 
 ## Where coding-agent guidance lives
 
