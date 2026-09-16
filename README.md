@@ -4,14 +4,18 @@ Sara is Rasa’s internal Ops/HR assistant in Slack (DMs and `@mention` threads)
 She is built on **Rasa Mantle**. Behaviour lives in natural language
 (`agent.yml`, skills), not intents or stories.
 
-Answers come from allowlisted Notion pages, a few live lookups (directory,
-holidays, All Hands), and Wrangle when someone needs a ticket. She does not
-invent Slack channels, and **Wrangle is the only ticketing system**.
+**Repo:** [rasa-customers/sara-agent](https://github.com/rasa-customers/sara-agent)
+(also mirrored on RasaHQ).
+
+Answers come from allowlisted Notion pages and a few live lookups (directory,
+holidays, All Hands, Slack profile). When someone needs a human to action a
+request, she names the right **Wrangle** inbox and points them at `/wrangle` —
+she does **not** create tickets via API. She does not invent Slack channels;
+**Wrangle is the only ticketing system**.
 
 Skill catalog with sample questions: [SKILLS.md](SKILLS.md).
 Authoring notes live in [AGENTS.md](AGENTS.md).
-Regression scenarios live under [eval/](eval/) (run via Rasa MCP /
-`rasa tools run`).
+Regression scenarios live under [eval/](eval/).
 
 ## What she can help with
 
@@ -35,8 +39,10 @@ work-country for the conversation, remembered for about 60 minutes.
 ```bash
 cp .env.example .env   # fill secrets — never commit .env
 python -m venv .venv && source .venv/bin/activate
-# install Rasa Pro / project deps per your Rasa setup
+# Install Rasa Pro (private registry) per your Rasa setup, then:
 rasa train
+rasa inspect            # local Inspector UI
+# or Slack:
 rasa run                # http://localhost:5005
 ```
 
@@ -64,14 +70,19 @@ python scripts/check_notion_access.py
 
 | Path | Purpose |
 |---|---|
-| `agent.yml` | Persona, global rules |
-| `integrations.yml` | LLM + channels |
+| `agent.yml` | Persona, global rules, session config |
+| `integrations.yml` | LLM + channels (REST, Inspector, Slack) |
 | `memory.yml` | Shared session memory (work country) |
 | `skills/` | One skill per user goal |
-| `tools/` | Shared tools, including the allowlisted Notion loader |
-| `lib/notion_sources.py` | Canonical Notion IDs, URLs, titles, caching, and trimming |
-| `lib/` | Shared clients (Notion, Slack, …) |
-| `.env` | Secrets (`RASA_LICENSE`, Slack, Notion, …) — gitignored |
+| `tools/notion.py` | Shared allowlisted Notion page loader |
+| `tools/vacation_sick.py` | Shared leave guidance for sick / dependent / vacation |
+| `lib/notion_sources.py` | Notion IDs, URLs, cache, query-aware trimming |
+| `lib/user_location.py` | Shared work-country resolver |
+| `lib/slack_channel.py` | Slack connector (env secrets, threads, always-reply) |
+| `lib/` | Other shared clients (Notion, Slack, …) |
+| `scripts/` | `check_notion_access.py`, `rasa_versary.py`, … |
+| `eval/` | Small Mantle simulation / regression scenarios |
+| `.env` / `.env.example` | Secrets template — never commit `.env` |
 
 ## Docs
 

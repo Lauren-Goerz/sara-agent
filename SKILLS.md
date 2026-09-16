@@ -75,14 +75,10 @@ Days until the next Rasa payday, from location / Deel setup.
 ### `payroll_payslip`
 
 Where to get a payslip / paycheck by country (DATEV, SequoiaOne, eDoc, Xero, email, Deel).
-Uses `resolve_payslip_country` plus an ordered block; asks only when country is unset.
+Uses shared work-country memory; asks (Slack country buttons) only when unset.
 
 - Where do I download my payslip?
 - How do I get my paycheck in Germany?
-
-### `default_session_start`
-
-Engine-managed first turn in a new Slack thread: answer the request instead of greeting.
 
 ### `payroll_payslip_details`
 
@@ -100,7 +96,7 @@ Vacation / PTO *entitlement* by country, carry-over, holiday half-days, sickness
 
 ### `leave_vacation`
 
-How to *book* vacation / offline days (including overtime or public-holiday make-up), BambooHR, manager notice, OOO.
+How to *book* vacation / offline days (including overtime or public-holiday make-up), BambooHR, manager notice, OOO. Guidance from the shared Vacation and Sick days page.
 
 - How do I request vacation?
 - I worked overtime — what do I do?
@@ -115,14 +111,14 @@ Point people at the BambooHR Slack app for live balances (Sara does not fetch th
 
 ### `leave_sick`
 
-What to do when you yourself are sick, including country-specific notes / certificates and surgery leave.
+What to do when you yourself are sick, including country-specific notes / certificates and surgery leave. Guidance from the shared Vacation and Sick days page.
 
 - I’m sick, what do I do?
 - Do I need a doctor’s note in Germany?
 
 ### `leave_dependent_care`
 
-Time off to care for a sick child or another relative (parent, partner, sibling). Not own illness or parental leave.
+Time off to care for a sick child or another relative (parent, partner, sibling). Not own illness or parental leave. Guidance from the shared Vacation and Sick days page.
 
 - My kid is sick — do I book a sick day?
 - My mum is in hospital — what leave do I take?
@@ -133,6 +129,13 @@ Parental / maternity / paternity / adoption leave (confirms country first).
 
 - How much parental leave do I get?
 - How do I book maternity leave?
+
+### `policy_part_time`
+
+Working part-time or reduced hours: minimum hours, country benefit notes, and how to request.
+
+- Can I work part time?
+- Can I work 30 hours a week?
 
 ### `lookup_public_holidays`
 
@@ -150,11 +153,12 @@ Employer benefits & perks 2026 (gym, ClassPass, wellness, health allowances).
 
 ### `benefits_remote_budget`
 
-Remote / home-office budget 2026: equipment, coworking, internet/utility, Payhawk.
+Remote / home-office budget 2026: choosing Berlin / coworking / home-only style (not work-abroad), WFH equipment, coworking flex desk, internet/utility, Payhawk.
 Bare “costs more than $X” with no category → ask which budget first.
 
 - How do I claim my home-office budget?
 - Can I get a coworking desk reimbursed?
+- How long after joining do I choose a remote option?
 
 ### `equity_employee`
 
@@ -260,16 +264,10 @@ Business-trip cover 2026: eligibility, claims, certificates.
 ### `policy_work_abroad`
 
 Temporary work from another country (not vacation, not permanent relocation).
+Choosing Berlin / coworking / home-only *remote work style* is `benefits_remote_budget`, not this skill.
 
 - Can I work from Spain for a month?
 - What’s the digital-nomad / work-abroad policy?
-
-### `policy_part_time`
-
-Working part-time or reduced hours: minimum hours, country benefit notes, and how to request.
-
-- Can I work part time?
-- Can I work 30 hours a week?
 
 ### `travel_visa_USA`
 
@@ -389,6 +387,8 @@ Definitions, reporting, investigation process.
 
 - What’s the sexual harassment policy?
 - How do I report harassment?
+
+---
 
 ## Sales and product marketing
 
@@ -510,10 +510,14 @@ All Hands / townhall / offsite slides and recordings (Jan 2025+). Next date: Thu
 
 ### `notify_slack`
 
-Post to an allowed Slack channel (with confirm). Not for HR-sensitive content.
+Post to an allowed Slack channel. Engine asks for confirmation before the post runs. Not for HR-sensitive content.
 
 - Can you post this in #announcements?
 - Please announce the office closure in #general.
+
+### `default_session_start`
+
+Engine-managed first turn in a new Slack thread: answer the request instead of greeting.
 
 ---
 
