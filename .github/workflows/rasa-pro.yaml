@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  main:
+    name: Build and deploy Rasa Pro
+    uses: RasaHQ/infrasec-workflows/.github/workflows/build-push-ecr-image.yml@main
+    with:
+      aws-region: eu-central-1
+      aws-role-to-assume: arn:aws:iam::536697228103:role/github_actions_aws_iam_role-5222c06
+      ecr-repo: 536697228103.dkr.ecr.eu-central-1.amazonaws.com/sara-agent-platform/dev
+      yq-script: |
+        yq eval '.rasa.image.repository = strenv(IMAGE_REPO)' -i argocd/rasa-pro/values.yaml
+        yq eval '.rasa.image.tag = strenv(IMAGE_TAG)' -i argocd/rasa-pro/values.yaml
+    secrets: inherit
