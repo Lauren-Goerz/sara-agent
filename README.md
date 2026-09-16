@@ -1,8 +1,7 @@
 # Sara — Rasa Ops/HR agent
 
 Sara is Rasa’s internal Ops/HR assistant in Slack (DMs and `@mention` threads).
-She is built on **Rasa Mantle**. Behaviour lives in natural language
-(`agent.yml`, skills), not intents or stories.
+She is built on **Rasa Mantle**. 
 
 **Repo:** [rasa-customers/sara-agent](https://github.com/rasa-customers/sara-agent)
 (also mirrored on RasaHQ).
