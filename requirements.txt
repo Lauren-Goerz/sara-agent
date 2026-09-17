@@ -1,0 +1,13 @@
+# Runtime dependencies for Sara (Rasa Mantle agent).
+#
+# Mantle (`rasa.mantle`, used by every skills/*/tools.py) is NOT in the stable
+# rasa-pro line yet — it ships only in the 3.20 dev builds, so this is pinned to
+# an exact pre-release. Bump it deliberately; `>=` would resolve to 3.19.x and
+# the agent would fail to import.
+rasa-pro[channels]==3.20.0.dev20260916133327
+
+# Imported directly by lib/ and skills/*/tools.py, not pulled in by rasa-pro.
+holidays>=0.104         # skills/lookup_public_holidays, skills/payroll_payday
+httpx>=0.28             # lib/ clients (Notion, Deepgram, Giphy, Spotify, …)
+pypdf>=6.0              # skills/sales_asset_proof_points (PDF text extraction)
+resvg-py>=0.5.0         # skills/design_phosphor_icon (SVG -> PNG)
