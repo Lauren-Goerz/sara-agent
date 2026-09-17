@@ -1,0 +1,22 @@
+user_country:
+  type: categorical
+  enum_values: [germany, uk, serbia, france, us, india, other]
+  description: >
+    The employee's work country, resolved once per conversation by
+    lib/user_location.py from what they said, their Slack profile Location,
+    or their Slack timezone. Shared by sick leave, vacation policy, parental
+    leave, payday, and payslips so every skill answers for the same country.
+    Use "other"
+    for a country Rasa has no local policy section for.
+  correctable: true
+user_country_source:
+  type: text
+  description: >
+    How user_country was established: user_override, slack_profile, or
+    slack_timezone.
+user_country_confirmed:
+  type: bool
+  description: >
+    True only after the employee said or confirmed their work country out
+    loud. A Slack-profile or timezone guess does not count. Skills whose
+    answer would be harmful if the country were wrong gate on this.

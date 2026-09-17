@@ -1,0 +1,6 @@
+schema:
+  public:
+    icon_query:
+      type: text
+    icon_color:
+      type: text

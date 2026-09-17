@@ -1,0 +1,4 @@
+responses:
+  utter_unknown_work:
+    - text: >-
+        I don't know who owns that. Please raise it via `/wrangle`.

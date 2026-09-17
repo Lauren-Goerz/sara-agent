@@ -1,0 +1,17 @@
+scenario:
+  name: Choose remote work option within 15 days of joining
+
+  simulation_context: >
+    You just joined Rasa and ask how long you have to choose your remote work
+    option (Berlin office, coworking, or home only) after you join. Stop once
+    you have a clear deadline. Do not ask about working from another country
+    for a few weeks.
+
+  goals:
+    criteria:
+      - The agent says to decide within about 15 days of joining (not that the
+        page has no deadline)
+      - The agent does not answer as if this were temporary work-abroad policy
+        (weeks in another country)
+      - The agent does not confuse the deadline with the 3-month window to spend
+        the one-time home-office equipment budget

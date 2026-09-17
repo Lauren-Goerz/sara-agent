@@ -1,0 +1,15 @@
+scenario:
+  name: L&D early access asks about the 6-month allocation rule
+
+  simulation_context: >
+    You are a Rasa employee asking about Learning & Development. Ask whether you
+    can use the L&D budget before you have been at the company for 6 months.
+    Stop once you have a clear yes/no with conditions. Do not ask about remote
+    budget or travel.
+
+  goals:
+    criteria:
+      - The agent says L&D budget is normally allocated after about 6 months
+        (or equivalent tenure wording), not that there is no tenure rule
+      - The agent mentions manager and/or People Ops for earlier access
+      - The agent does not invent dollar amounts that contradict the policy

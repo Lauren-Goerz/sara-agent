@@ -1,0 +1,13 @@
+schema:
+  public:
+    channel_id:
+      type: text
+      description: Slack channel id to post to (e.g. C_GENERAL).
+      llm_settable: true
+    message_text:
+      type: text
+      description: Final message text confirmed by the user.
+      llm_settable: true
+  private:
+    last_message_ts:
+      type: text

@@ -1,0 +1,57 @@
+responses:
+  utter_ask_payslip_country:
+    - text: Happy to point you to the right place. Which country are you employed in?
+      buttons:
+        - title: Germany
+          payload: set:session.payroll_payslip.stated_country=germany
+        - title: UK
+          payload: set:session.payroll_payslip.stated_country=uk
+        - title: France
+          payload: set:session.payroll_payslip.stated_country=france
+        - title: US
+          payload: set:session.payroll_payslip.stated_country=us
+        - title: Serbia
+          payload: set:session.payroll_payslip.stated_country=serbia
+        - title: India
+          payload: set:session.payroll_payslip.stated_country=india
+        - title: Other
+          payload: set:session.payroll_payslip.stated_country=other
+
+  utter_payslip_germany:
+    - text: >-
+        If you're employed in Germany/GmbH, you can access your payslips on
+        the DATEV platform: <https://apps.datev.de/ano/en/|Arbeitnehmer
+        online>. If you can't get in, raise a People Ops ticket and we'll
+        sort it out.
+
+  utter_payslip_us:
+    - text: >-
+        If you're employed in the USA, you can access your payslips on
+        <https://one.sequoia.com/|SequoiaOne> — they're on your profile. If
+        you can't get in, raise a People Ops ticket and we'll sort it out.
+
+  utter_payslip_france:
+    - text: >-
+        If you're employed in France, your payslips come through eDoc. When
+        your first payslip is issued you'll get an invite to your personal
+        email to activate your eDoc account, and after that a monthly email
+        whenever a new payslip is ready. If nothing arrives, raise a People
+        Ops ticket and we'll sort it out.
+
+  utter_payslip_uk:
+    - text: >-
+        If you're employed in the UK, you can download your payslips from the
+        <https://go.xero.com/|Xero> platform. If you can't get in, raise a
+        People Ops ticket and we'll sort it out.
+
+  utter_payslip_serbia:
+    - text: >-
+        If you're employed in Serbia, you'll receive your payslips by personal
+        email, protected with a password to open the file. If one doesn't turn
+        up, raise a People Ops ticket and we'll sort it out.
+
+  utter_payslip_deel:
+    - text: >-
+        You can access your payslips directly on the
+        <https://app.deel.com/|Deel> platform. If you can't get in, raise a
+        People Ops ticket and we'll sort it out.

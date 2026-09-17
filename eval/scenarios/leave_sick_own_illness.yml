@@ -1,0 +1,13 @@
+scenario:
+  name: Own sick leave is distinct from caring for a sick child
+
+  simulation_context: >
+    You yourself are sick today and need to know what to do (Bamboo, manager,
+    doctor note). Do not mention a child or relative. Stop after you get clear
+    steps for your own illness.
+
+  goals:
+    criteria:
+      - The agent gives own-illness sick leave guidance (e.g. book sick leave /
+        tell manager), not dependent-care or "sick child" leave rules
+      - The agent does not invent a special leave type for this case

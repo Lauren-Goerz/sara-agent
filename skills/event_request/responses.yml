@@ -1,0 +1,5 @@
+responses:
+  utter_event_request:
+    - text: |-
+        Use the event request form: <https://form.asana.com/?k=zOysWIkNbwVpXDVKvIgcYA&d=1173877611850981|Event request form>
+        Submitting it creates an Asana ticket where Marketing tracks the request. Further questions go in #events.

@@ -1,0 +1,8 @@
+schema:
+  public:
+    selected_employee_id:
+      type: text
+      description: BambooHR employee id selected for this lookup.
+      llm_settable: true
+    selected_employee_name:
+      type: text

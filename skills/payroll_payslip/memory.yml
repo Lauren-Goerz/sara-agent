@@ -1,0 +1,17 @@
+# Holding place for the picker only. The engine rejects collect: on
+# project.user_country, so this is filled then immediately copied there.
+schema:
+  public:
+    stated_country:
+      type: categorical
+      enum_values:
+        - germany
+        - uk
+        - france
+        - us
+        - serbia
+        - india
+        - other
+      description: >
+        Country just picked for payslips. Copied into project.user_country
+        on the next step. Not a second location store.

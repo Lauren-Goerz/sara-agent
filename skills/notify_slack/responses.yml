@@ -1,0 +1,8 @@
+responses:
+  utter_ask_post_confirmation:
+    - text: >
+        Ready to post to {session.notify_slack.channel_id}:
+        "{session.notify_slack.message_text}" — should I send it?
+
+  utter_post_cancelled:
+    - text: Okay, I will not post that message.

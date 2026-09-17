@@ -1,0 +1,9 @@
+schema:
+  public:
+    swag_purpose:
+      type: categorical
+      enum_values: [customer_community, events, personal]
+      description: >
+        Why they need swag: customer/community giveaway, company events, or
+        personal/employee purchase.
+      llm_settable: true
