@@ -104,6 +104,74 @@ rasa:
           key: password
     - name: DB_NAME
       value: "postgres"
+    # --- Notion (handbook + Who's Who directory) ---
+    - name: NOTION_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: notionApiKey
+    - name: NOTION_WHOS_WHO_DB_ID
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: notionWhosWhoDbId
+    # --- Slack (notify_slack + Events API) ---
+    - name: SLACK_BOT_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: slackBotToken
+    - name: SLACK_SIGNING_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: slackSigningSecret
+    # Optional: comma-separated channel names the agent may post to (without #)
+    - name: SLACK_ALLOWED_CHANNELS
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: slackAllowedChannels
+          optional: true
+    # Channels where Sara replies without @mention
+    - name: SLACK_ALWAYS_REPLY_CHANNELS
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: slackAlwaysReplyChannels
+          optional: true
+    # Optional: extra Slack bot/user IDs to ignore (comma-separated)
+    - name: SLACK_IGNORE_BOT_IDS
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: slackIgnoreBotIds
+          optional: true
+    # --- Deepgram (Slack voice message transcription) ---
+    - name: DEEPGRAM_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: deepgramApiKey
+    # --- Giphy (outbound GIF replies) ---
+    - name: GIPHY_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: giphyApiKey
+    # --- Spotify (play_music; falls back to Apple Music if empty) ---
+    - name: SPOTIFY_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: spotifyClientId
+          optional: true
+    - name: SPOTIFY_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: "rasa-secrets"
+          key: spotifyClientSecret
+          optional: true
   volumes:
     - name: tmp
       emptyDir: {}
