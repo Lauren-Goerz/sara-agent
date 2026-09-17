@@ -144,6 +144,9 @@ rasa:
       alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:536697228103:certificate/a82cf6e5-aedc-4779-b458-9a4d583f9d71
       external-dns.alpha.kubernetes.io/hostname: bot-sara-agent-platform.demo.rasa.ai
     hosts: [{"extraPaths": [], "host": "bot-sara-agent-platform.demo.rasa.ai", "paths": [{"path": "/", "pathType": "Prefix"}]}]
+  image:
+    repository: 536697228103.dkr.ecr.eu-central-1.amazonaws.com/sara-agent-platform/dev
+    tag: "35209033672"
 rasaProServices:
   enabled: false
   tolerations:
