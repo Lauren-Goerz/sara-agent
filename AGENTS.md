@@ -84,8 +84,7 @@ be re-added later with admin buy-in.
 | `fun_play_music` | Share a song link (Spotify if configured, else Apple Music) |
 | `payroll_payday` | Days until next Rasa payday from location / Deel setup |
 | `payroll_payslip` | Where to get a payslip/paycheck by country — ordered block plus `resolve_payslip_country`; answers from `project.user_country`, asks only when unset, then writes it back (DATEV, SequoiaOne, eDoc, Xero, email, Deel) |
-| `default_session_start` | Engine-managed first turn: verbatim privacy notice, then act on the request |
-| `privacy_data_handling` | Replays the same privacy notice when asked what happens to their data |
+| `default_session_start` | Engine-managed first turn of a new Slack thread — act on the request instead of greeting |
 | `payroll_payslip_details` | Questions about pay contents (gross/net, tax, deductions, wrong pay) → People Ops ticket via `/wrangle`; never explains amounts |
 | `security_incidents` | Security incidents / "was Rasa affected?" from Notion tracker |
 | `rfp_security` | Vendor/RFP security questionnaire bank (fallback after policy_* skills; always double-check source) |
@@ -93,6 +92,7 @@ be re-added later with admin buy-in.
 | `lookup_board` | Who is on the Rasa board (from Notion) |
 | `policy_signing_authority` | Who should sign employment contracts and other docs by country — Signing Documents Notion page |
 | `hiring_contractors` | Hire / renew / offboard contractors and agencies — answers from the Working with Contractors page; hiring requests get the intake form link |
+| `gdpr_data_requests` | GDPR data-subject request process from Notion; Privacy Team reply letters delivered verbatim |
 | `payhawk_payments` | Payhawk payments & reimbursements (vendor bank transfers, payables emails, personal reimbursements, virtual cards) plus per diem & mileage process |
 | `swag_request` | Swag/merch: customer/community via /wrangle, events via #events, personal via shop.rasa.com |
 | `design_request` | Creative/design requests → Asana form (Marketing tracks in Asana) |

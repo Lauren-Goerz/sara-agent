@@ -216,6 +216,14 @@ Hire, renew, or offboard a contractor / freelancer / agency; contractors vs empl
 - How do I renew a contractor?
 - What’s the difference between a contractor and an employee?
 
+### `gdpr_data_requests`
+
+GDPR data-subject request process from Notion (forward to privacy@rasa.com, identity check, deadlines). Privacy Team email templates delivered verbatim: Request for Data, Data Deletion Confirmation, Generic Response (no data found).
+
+- Someone asked us to delete their data. What do I do?
+- Can I have the deletion confirmation email template?
+- GDPR access request reply letter?
+
 ### `policy_signing_authority`
 
 Who should sign employment contracts and other documents, including by country / entity.
@@ -533,16 +541,7 @@ Post to an allowed Slack channel. Engine asks for confirmation before the post r
 
 ### `default_session_start`
 
-Engine-managed first turn in a new Slack thread: sends the verbatim privacy
-notice (`utter_privacy_notice`), then handles the request on the following turn.
-
-### `privacy_data_handling`
-
-Replays the same `utter_privacy_notice` when someone asks what happens to their
-data, whether messages are logged, or for the privacy / DPO notice.
-
-- What happens to my data?
-- Is this conversation logged?
+Engine-managed first turn in a new Slack thread: answer the request instead of greeting.
 
 ---
 

@@ -2,9 +2,10 @@
 name: policy_links
 description: >
   Official links or contacts for ethics/legal policies: anti-bribery, anti-slavery,
-  whistleblowing, Code of Conduct, IP, data deletion, security ownership, export
+  whistleblowing, Code of Conduct, IP, data deletion board link, security ownership, export
   controls or selling to a country, Legal review, contracts/NDAs, @Mat, external
-  counsel, or the Ethics Officer. Not who signs a document.
+  counsel, or the Ethics Officer. Not who signs a document, and not GDPR request
+  process or Privacy Team reply letter templates.
 ---
 
 Call `get_policy_link` with the matching topic:

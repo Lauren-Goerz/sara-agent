@@ -1,0 +1,18 @@
+schema:
+  private:
+    request_kind:
+      type: categorical
+      enum_values:
+        - process
+        - letter_access
+        - letter_deletion
+        - letter_generic
+      llm_settable: true
+      description: >
+        process for how to handle a GDPR request; letter_access for the Request
+        for Data email template; letter_deletion for Data Deletion Confirmation;
+        letter_generic for the Generic Response when no data was found.
+    process_answered:
+      type: bool
+      llm_settable: true
+      description: True after a process or FAQ answer was sent from Notion.
