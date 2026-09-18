@@ -98,7 +98,7 @@ be re-added later with admin buy-in.
 | `policy_video_conferencing` | Google Meet is default; Zoom licenses via /wrangle software request |
 | `policy_travel_insurance` | Travel insurance / business-trip cover from Notion (2026) |
 | `policy_business_travel` | Business travel booking & spend rules (flights, hotels, per diem) |
-| `travel_visa_USA` | US B1/B2 visa process from Notion |
+| `travel_visa_USA` | US B1/B2 process from Notion; employee applies; People Ops for letter/certificate only |
 | `policy_sexual_harassment` | Sexual harassment policy (definitions, reporting, process) |
 | `lookup_employee_handbooks` | Official employee handbooks by country (only countries listed on Notion) |
 | `lookup_all_hands_presentations` | All Hands slides/recordings by date (Jan 2025+); next date via calendar; broken links → organizer |

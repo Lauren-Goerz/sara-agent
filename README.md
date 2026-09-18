@@ -57,13 +57,25 @@ rasa inspect            # local Inspector UI
 rasa run                # http://localhost:5005
 ```
 
-For Slack locally, expose the webhook with a tunnel:
+For Slack against a **local** `rasa run`, expose the webhook with a tunnel:
 
 ```bash
 ngrok http 5005
 # Slack Event Subscriptions → https://YOUR-NGROK-HOST/webhooks/slack/webhook
 # Slack Interactivity Request URL → the same /webhooks/slack/webhook URL
 ```
+
+## Deployed demo
+
+Sara on the Rasa demo platform:
+
+- Inspector:
+  https://bot-sara-agent-platform.demo.rasa.ai/webhooks/socketio/inspect.html
+- Slack webhook (Event Subscriptions + Interactivity Request URL):
+  `https://bot-sara-agent-platform.demo.rasa.ai/webhooks/slack/webhook`
+
+Point the Slack app at the demo Slack webhook when you want workspace traffic
+to hit the deployed bot instead of ngrok.
 
 Enable **Interactivity & Shortcuts** in the Slack app settings so country
 picker button clicks are delivered back to Sara. The custom connector verifies

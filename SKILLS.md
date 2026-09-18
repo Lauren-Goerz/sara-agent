@@ -153,12 +153,13 @@ Employer benefits & perks 2026 (gym, ClassPass, wellness, health allowances).
 
 ### `benefits_remote_budget`
 
-Remote / home-office budget 2026: choosing Berlin / coworking / home-only style (not work-abroad), WFH equipment, coworking flex desk, internet/utility, Payhawk.
-Bare “costs more than $X” with no category → ask which budget first.
+Remote Budget 2026 from Notion: work style (Berlin / coworking / home), equipment,
+flex desk, utilities, Payhawk. Ambiguous dollar amounts → clarify which budget first.
 
 - How do I claim my home-office budget?
 - Can I get a coworking desk reimbursed?
 - How long after joining do I choose a remote option?
+- Can I switch from home office to coworking?
 
 ### `equity_employee`
 
@@ -271,10 +272,13 @@ Choosing Berlin / coworking / home-only *remote work style* is `benefits_remote_
 
 ### `travel_visa_USA`
 
-US B1/B2 visa process from Notion (not needed for US citizens).
+US B1/B2 (and ESTA) process from Notion. Employee applies themselves; People Ops
+only for Letter of Recommendation / Employment Certificate (share reason, dates,
+stay location). Not for US citizens.
 
 - How do I get a US visa for a customer visit?
 - Do I need ESTA or a B1?
+- Who writes my employment letter for the US consulate?
 
 ---
 
