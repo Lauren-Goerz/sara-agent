@@ -533,7 +533,16 @@ Post to an allowed Slack channel. Engine asks for confirmation before the post r
 
 ### `default_session_start`
 
-Engine-managed first turn in a new Slack thread: answer the request instead of greeting.
+Engine-managed first turn in a new Slack thread: sends the verbatim privacy
+notice (`utter_privacy_notice`), then handles the request on the following turn.
+
+### `privacy_data_handling`
+
+Replays the same `utter_privacy_notice` when someone asks what happens to their
+data, whether messages are logged, or for the privacy / DPO notice.
+
+- What happens to my data?
+- Is this conversation logged?
 
 ---
 
