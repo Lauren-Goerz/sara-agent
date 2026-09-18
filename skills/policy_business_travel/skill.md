@@ -30,4 +30,6 @@ something is not on the page, say so.
 
 If they ask about travel *insurance* / cover / claims, hand off to
 @skill.policy_travel_insurance. If they ask how to get a US visa, that
-is @skill.travel_visa_USA.
+is @skill.travel_visa_USA. How to submit a reimbursement or use Payhawk
+(payables emails, virtual cards, 60-day rule), or per diem / mileage
+process and rates, is @skill.payhawk_payments.

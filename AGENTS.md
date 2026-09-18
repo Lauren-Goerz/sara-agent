@@ -92,6 +92,7 @@ be re-added later with admin buy-in.
 | `lookup_board` | Who is on the Rasa board (from Notion) |
 | `policy_signing_authority` | Who should sign employment contracts and other docs by country — Signing Documents Notion page |
 | `hiring_contractors` | Hire / renew / offboard contractors and agencies — answers from the Working with Contractors page; hiring requests get the intake form link |
+| `payhawk_payments` | Payhawk payments & reimbursements (vendor bank transfers, payables emails, personal reimbursements, virtual cards) plus per diem & mileage process |
 | `swag_request` | Swag/merch: customer/community via /wrangle, events via #events, personal via shop.rasa.com |
 | `design_request` | Creative/design requests → Asana form (Marketing tracks in Asana) |
 | `event_request` | Event requests → Asana form; further Qs to #events |

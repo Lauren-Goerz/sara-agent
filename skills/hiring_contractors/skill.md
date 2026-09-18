@@ -36,6 +36,10 @@ contact who is not on the page.
 If the page does not cover what they asked, say so rather than filling the
 gap from general knowledge.
 
+How to pay a contractor or vendor invoice, which payables email to use, or
+Payhawk reimbursement / virtual-card process is @skill.payhawk_payments — not
+this page.
+
 The contractor request form is in `conditional_slack_links`. Add it only when
 someone is bringing on a new contractor or agency — then tell them in the
 answer to fill it in. Renewals, tool access, offboarding, and general policy

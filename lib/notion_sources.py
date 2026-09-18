@@ -238,6 +238,57 @@ SOURCES: dict[str, NotionSource] = {
             "w9",
         ),
     ),
+    "payhawk": NotionSource(
+        key="payhawk",
+        notion_id="efb2b83a212c42e9924dc632a65004b0",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Payhawk-Payments-Reimbursement-2026-efb2b83a212c42e9924dc632a65004b0"
+        ),
+        title="Payhawk: Payments & Reimbursement - 2026",
+        max_blocks=600,
+        related_source_keys=("per_diem_mileage", "business_travel"),
+        keywords=(
+            "payhawk",
+            "payment",
+            "payments",
+            "reimburse",
+            "reimbursement",
+            "invoice",
+            "payables",
+            "bank",
+            "transfer",
+            "virtual",
+            "card",
+            "expense",
+            "serbia",
+        ),
+    ),
+    "per_diem_mileage": NotionSource(
+        key="per_diem_mileage",
+        notion_id="a44345104a2544c3b191e7e41a75b220",
+        url=(
+            "https://app.notion.com/p/rasa/"
+            "Per-Diem-Mileage-process-2025-a44345104a2544c3b191e7e41a75b220"
+        ),
+        title="Per Diem & Mileage process - 2025",
+        max_blocks=400,
+        related_source_keys=("payhawk", "business_travel"),
+        keywords=(
+            "perdiem",
+            "per-diem",
+            "per diem",
+            "mileage",
+            "km",
+            "kilometre",
+            "kilometer",
+            "food",
+            "meals",
+            "deel",
+            "serbia",
+            "payhawk",
+        ),
+    ),
     "security_incidents": NotionSource(
         key="security_incidents",
         notion_id="202b9c0d544a8143be59e3e3568b1b4d",

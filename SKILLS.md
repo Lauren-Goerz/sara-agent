@@ -161,6 +161,18 @@ flex desk, utilities, Payhawk. Ambiguous dollar amounts → clarify which budget
 - How long after joining do I choose a remote option?
 - Can I switch from home office to coworking?
 
+### `payhawk_payments`
+
+Payhawk: Payments & Reimbursement 2026 plus Per Diem & Mileage process 2025 —
+vendor bank transfers / payables emails, personal-fund reimbursements, virtual
+cards, per diem, and mileage claims.
+
+- Where do I send a USD vendor invoice?
+- How do I get reimbursed for something I paid myself?
+- How do I add funds to my Payhawk virtual card?
+- How do I claim per diem in Payhawk?
+- What’s the mileage process?
+
 ### `equity_employee`
 
 Employee equity / options: grants, refresh, vesting, Carta.
