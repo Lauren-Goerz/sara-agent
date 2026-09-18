@@ -25,6 +25,9 @@ When the tool succeeds:
 - Keep monthly flex-desk reimbursement separate from one-time equipment
   budgets — use the figures and Payhawk categories on the page for the
   topic they asked about; never invent or combine amounts.
+- For **coworking / flex desk**: the employee contracts directly with the
+  co-working space. Rasa does **not** sign that contract or pay the space;
+  the employee pays and claims reimbursement via Payhawk as the page describes.
 - For reimbursements (“I bought X, how do I get money back?”), give claim
   steps from the page first.
 

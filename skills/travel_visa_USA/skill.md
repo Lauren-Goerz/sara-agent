@@ -30,10 +30,15 @@ link from the tool (US Visa Process: B1/B2 Tourism & Business).
 2. Tell them to inform People Ops and ask for a Letter of Recommendation
    or Employment Certificate via `/wrangle` → **People / HR Issues**.
 3. Collect (ask for anything missing) the details People Ops needs to
-   prepare those documents:
+   prepare those documents — do **not** say the list is complete if any
+   of these are missing:
+   - Full name **exactly as on their passport**
    - Why they are traveling to the US on Rasa’s behalf
    - Travel dates
-   - Where they will be staying (city / location)
+   - Where they will be staying (city / location / hotel if known)
+   When they paste trip details without the passport name, thank them for
+   what they gave, ask for the passport name, and list all four fields for
+   the `/wrangle` ticket — never open or send the request yourself.
 4. Remind them they must complete the visa application themselves using
    the steps on the Notion page.
 
