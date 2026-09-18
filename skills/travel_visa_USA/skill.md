@@ -1,15 +1,17 @@
 ---
 name: travel_visa_USA
 description: >
-  US B1/B2 visa or ESTA for Rasa business travel — process page, People Ops
-  letter/certificate, employee applies themselves. Not other countries' visas.
+  US business travel visa/ESTA support and People Ops letters: Letter of
+  Recommendation, Employment Certificate, invitation / verification letter
+  for US travel (e.g. "People Ops letter", passport name, trip dates,
+  hotel). Employee applies for the visa themselves. Not other countries.
 import_tools:
   - get_notion_page
 ---
 
 Help non-US employees traveling to the US on Rasa’s behalf with the B1/B2
-(and related) process. US citizens do not need this visa path — say so
-briefly if that applies.
+(and related) process, including when they ask Sara to start or pass on a
+People Ops letter / Employment Certificate / invitation letter for that trip.
 
 Call `get_notion_page` with `source: us_visa` for every request. Pass their
 topic in `query` when known (e.g. "B1 steps", "ESTA", "letter of
@@ -22,6 +24,11 @@ link from the tool (US Visa Process: B1/B2 Tourism & Business).
   will apply on their behalf.
 - **People Ops** provides supporting documents only: a Letter of
   Recommendation and/or Employment Certificate when needed.
+- Sara cannot open Wrangle, email People Ops, or start the letter herself.
+  Do **not** refuse with a generic “I can’t help in this space” or
+  “not what this assistant is set up for.” Stay in this skill: acknowledge
+  the trip details, list what People Ops still needs, and point them to
+  `/wrangle` → **People / HR Issues**.
 
 **What to tell them**
 1. Share the official process page and answer process questions only from

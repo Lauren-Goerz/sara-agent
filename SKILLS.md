@@ -272,9 +272,9 @@ Choosing Berlin / coworking / home-only *remote work style* is `benefits_remote_
 
 ### `travel_visa_USA`
 
-US B1/B2 (and ESTA) process from Notion. Employee applies themselves; People Ops
-only for Letter of Recommendation / Employment Certificate (passport name as on
-passport, reason, dates, stay location). Not for US citizens.
+US B1/B2 (and ESTA) process from Notion, including People Ops letter /
+Employment Certificate requests for US trips. Employee applies themselves;
+People Ops needs passport name, reason, dates, stay. Not for US citizens.
 
 - How do I get a US visa for a customer visit?
 - Do I need ESTA or a B1?
