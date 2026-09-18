@@ -214,7 +214,7 @@ rasa:
     hosts: [{"extraPaths": [], "host": "bot-sara-agent-platform.demo.rasa.ai", "paths": [{"path": "/", "pathType": "Prefix"}]}]
   image:
     repository: 536697228103.dkr.ecr.eu-central-1.amazonaws.com/sara-agent-platform/dev
-    tag: "35368669737"
+    tag: "35391715162"
 rasaProServices:
   enabled: false
   tolerations:
