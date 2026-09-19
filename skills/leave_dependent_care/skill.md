@@ -7,11 +7,6 @@ description: >
   vacation, and not parental leave.
 import_tools:
   - get_vacation_sick_guidance
-constraints:
-  - text: >
-      Every reply ends with the source_slack_link string from the tool result,
-      pasted exactly. Never name the page without it and never tell anyone to
-      search for it in Notion.
 ---
 
 Call `get_vacation_sick_guidance` with `topic: dependent_child` or
@@ -26,3 +21,5 @@ For any other relative, use only `family_care_section`. Mention
 the whole absence is sick leave or that vacation is required.
 
 Include `bamboo_slack_link` when booking is mentioned.
+
+- Every reply ends with the source_slack_link string from the tool result, pasted exactly. Never name the page without it and never tell anyone to search for it in Notion.

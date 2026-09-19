@@ -92,13 +92,14 @@ be re-added later with admin buy-in.
 | `lookup_board` | Who is on the Rasa board (from Notion) |
 | `policy_signing_authority` | Who should sign employment contracts and other docs by country — Signing Documents Notion page |
 | `hiring_contractors` | Hire / renew / offboard contractors and agencies — answers from the Working with Contractors page; hiring requests get the intake form link |
+| `payhawk_payments` | Payhawk payments & reimbursements (vendor bank transfers, payables emails, personal reimbursements, virtual cards) plus per diem & mileage process |
 | `swag_request` | Swag/merch: customer/community via /wrangle, events via #events, personal via shop.rasa.com |
 | `design_request` | Creative/design requests → Asana form (Marketing tracks in Asana) |
 | `event_request` | Event requests → Asana form; further Qs to #events |
 | `policy_video_conferencing` | Google Meet is default; Zoom licenses via /wrangle software request |
 | `policy_travel_insurance` | Travel insurance / business-trip cover from Notion (2026) |
 | `policy_business_travel` | Business travel booking & spend rules (flights, hotels, per diem) |
-| `travel_visa_USA` | US B1/B2 visa process from Notion |
+| `travel_visa_USA` | US B1/B2 process from Notion; employee applies; People Ops for letter/certificate only |
 | `policy_sexual_harassment` | Sexual harassment policy (definitions, reporting, process) |
 | `lookup_employee_handbooks` | Official employee handbooks by country (only countries listed on Notion) |
 | `lookup_all_hands_presentations` | All Hands slides/recordings by date (Jan 2025+); next date via calendar; broken links → organizer |

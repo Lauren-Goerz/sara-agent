@@ -10,7 +10,7 @@ model_groups:
   - id: orchestrator
     models:
       - provider: openai
-        model: gpt-5.1
+        model: gpt-4o
         api_key_env: OPENAI_API_KEY
 
 channels:

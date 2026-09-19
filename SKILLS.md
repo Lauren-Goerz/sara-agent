@@ -153,12 +153,25 @@ Employer benefits & perks 2026 (gym, ClassPass, wellness, health allowances).
 
 ### `benefits_remote_budget`
 
-Remote / home-office budget 2026: choosing Berlin / coworking / home-only style (not work-abroad), WFH equipment, coworking flex desk, internet/utility, Payhawk.
-Bare “costs more than $X” with no category → ask which budget first.
+Remote Budget 2026 from Notion: work style (Berlin / coworking / home), equipment,
+flex desk, utilities, Payhawk. Ambiguous dollar amounts → clarify which budget first.
 
 - How do I claim my home-office budget?
 - Can I get a coworking desk reimbursed?
 - How long after joining do I choose a remote option?
+- Can I switch from home office to coworking?
+
+### `payhawk_payments`
+
+Payhawk: Payments & Reimbursement 2026 plus Per Diem & Mileage process 2025 —
+vendor bank transfers / payables emails, personal-fund reimbursements, virtual
+cards, per diem, and mileage claims.
+
+- Where do I send a USD vendor invoice?
+- How do I get reimbursed for something I paid myself?
+- How do I add funds to my Payhawk virtual card?
+- How do I claim per diem in Payhawk?
+- What’s the mileage process?
 
 ### `equity_employee`
 
@@ -271,10 +284,13 @@ Choosing Berlin / coworking / home-only *remote work style* is `benefits_remote_
 
 ### `travel_visa_USA`
 
-US B1/B2 visa process from Notion (not needed for US citizens).
+US B1/B2 (and ESTA) process from Notion, including People Ops letter /
+Employment Certificate requests for US trips. Employee applies themselves;
+People Ops needs passport name, reason, dates, stay. Not for US citizens.
 
 - How do I get a US visa for a customer visit?
 - Do I need ESTA or a B1?
+- Who writes my employment letter for the US consulate?
 
 ---
 
