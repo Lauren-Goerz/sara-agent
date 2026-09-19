@@ -24,7 +24,6 @@ _CHAR_LIMITS = {
     "rfp_security": 8000,
     "signing_documents": 8000,
     "hiring_contractors": 8000,
-    "gdpr_data_requests": 8000,
     "payhawk": 10000,
     "per_diem_mileage": 6000,
     "remote_budget": 8000,

@@ -238,28 +238,6 @@ SOURCES: dict[str, NotionSource] = {
             "w9",
         ),
     ),
-    "gdpr_data_requests": NotionSource(
-        key="gdpr_data_requests",
-        notion_id="ba51d9f2da534025bd13027546ea12c5",
-        url=(
-            "https://app.notion.com/p/rasa/"
-            "GDPR-Data-Requests-ba51d9f2da534025bd13027546ea12c5"
-        ),
-        title="GDPR Data Requests",
-        max_blocks=400,
-        keywords=(
-            "gdpr",
-            "erasure",
-            "deletion",
-            "portability",
-            "rectification",
-            "privacy",
-            "dpo",
-            "subject",
-            "request",
-            "forward",
-        ),
-    ),
     "payhawk": NotionSource(
         key="payhawk",
         notion_id="efb2b83a212c42e9924dc632a65004b0",

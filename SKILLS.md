@@ -216,14 +216,6 @@ Hire, renew, or offboard a contractor / freelancer / agency; contractors vs empl
 - How do I renew a contractor?
 - What’s the difference between a contractor and an employee?
 
-### `gdpr_data_requests`
-
-GDPR data-subject request process from Notion (forward to privacy@rasa.com, identity check, deadlines). Privacy Team email templates delivered verbatim: Request for Data, Data Deletion Confirmation, Generic Response (no data found).
-
-- Someone asked us to delete their data. What do I do?
-- Can I have the deletion confirmation email template?
-- GDPR access request reply letter?
-
 ### `policy_signing_authority`
 
 Who should sign employment contracts and other documents, including by country / entity.
