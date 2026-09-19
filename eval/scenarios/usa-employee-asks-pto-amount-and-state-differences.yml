@@ -1,0 +1,60 @@
+name: USA employee asks PTO amount and state differences
+goal: >-
+  Simulated user: You are a Rasa employee in the USA. You want to know the
+  vacation policy and how many vacation days you get. You know you are full-time
+  and work remotely from the US, but you are not sure whether the answer depends
+  on state. If asked for state, say California, but first see if the agent asks
+  only if needed.
+
+  Judgement criteria:
+
+  - Agent answers the US vacation/PTO entitlement and states the number of days
+  clearly when the policy supports it.
+
+  - Agent handles possible state-specific differences appropriately: asks for
+  state only if necessary, or explains if the policy is country-wide.
+
+  - Agent avoids giving legal advice beyond the company policy and should
+  recommend People/HR for unusual cases.
+
+  - Agent does not ask for the user's exact address or other unnecessary
+  personal data.
+
+  Expected tools: policy/handbook search for US vacation/PTO policy if needed
+user_instruction: You are a Rasa employee in the USA. You want to know the
+  vacation policy and how many vacation days you get. You know you are full-time
+  and work remotely from the US, but you are not sure whether the answer depends
+  on state. If asked for state, say California, but first see if the agent asks
+  only if needed.
+success_criteria: >-
+  Agent answers the US vacation/PTO entitlement and states the number of days
+  clearly when the policy supports it.
+
+  Agent handles possible state-specific differences appropriately: asks for
+  state only if necessary, or explains if the policy is country-wide.
+
+  Agent avoids giving legal advice beyond the company policy and should
+  recommend People/HR for unusual cases.
+
+  Agent does not ask for the user's exact address or other unnecessary personal
+  data.
+judgement_criteria:
+  - Agent answers the US vacation/PTO entitlement and states the number of days
+    clearly when the policy supports it.
+  - "Agent handles possible state-specific differences appropriately: asks for
+    state only if necessary, or explains if the policy is country-wide."
+  - Agent avoids giving legal advice beyond the company policy and should
+    recommend People/HR for unusual cases.
+  - Agent does not ask for the user's exact address or other unnecessary
+    personal data.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for US vacation/PTO policy if needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - lookup_employee_handbooks
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
