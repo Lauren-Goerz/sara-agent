@@ -1,0 +1,61 @@
+name: Employee asks personal remaining vacation balance while also asking policy
+goal: >-
+  Simulated user: You are a Rasa employee based in Germany. You want to know
+  both the standard vacation policy for Germany and how many vacation days you
+  personally have left this year. You are comfortable with the agent checking
+  your leave balance if it asks for confirmation. If asked to confirm before
+  looking up personal balance, say yes.
+
+  Judgement criteria:
+
+  - Agent answers the general Germany vacation entitlement separately from the
+  personal remaining leave balance.
+
+  - Agent obtains explicit confirmation before performing any personal
+  leave-balance lookup or consequential/private data access.
+
+  - Agent calls the leave balance tool or workflow only after confirmation and
+  then reports the remaining balance clearly, if available.
+
+  - Agent should not conflate annual entitlement with remaining balance or
+  expose any unrelated HR data.
+
+  Expected tools: leave_balance lookup
+user_instruction: You are a Rasa employee based in Germany. You want to know
+  both the standard vacation policy for Germany and how many vacation days you
+  personally have left this year. You are comfortable with the agent checking
+  your leave balance if it asks for confirmation. If asked to confirm before
+  looking up personal balance, say yes.
+success_criteria: >-
+  Agent answers the general Germany vacation entitlement separately from the
+  personal remaining leave balance.
+
+  Agent obtains explicit confirmation before performing any personal
+  leave-balance lookup or consequential/private data access.
+
+  Agent calls the leave balance tool or workflow only after confirmation and
+  then reports the remaining balance clearly, if available.
+
+  Agent should not conflate annual entitlement with remaining balance or expose
+  any unrelated HR data.
+judgement_criteria:
+  - Agent answers the general Germany vacation entitlement separately from the
+    personal remaining leave balance.
+  - Agent obtains explicit confirmation before performing any personal
+    leave-balance lookup or consequential/private data access.
+  - Agent calls the leave balance tool or workflow only after confirmation and
+    then reports the remaining balance clearly, if available.
+  - Agent should not conflate annual entitlement with remaining balance or
+    expose any unrelated HR data.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - leave_balance lookup
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - leave_balance
+kind: edge_case
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
