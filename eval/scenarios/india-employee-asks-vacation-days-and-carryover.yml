@@ -1,0 +1,59 @@
+name: India employee asks vacation days and carryover
+goal: >-
+  Simulated user: You are a full-time Rasa employee in India. You want to know
+  how many vacation days you receive and whether unused vacation can carry over
+  to the next year. If asked, say you want the general India policy and do not
+  need your individual remaining balance.
+
+  Judgement criteria:
+
+  - Agent provides an India-specific vacation entitlement, including the number
+  of vacation days, if available in the policy source.
+
+  - Agent separately addresses carryover/expiry/accrual if the vacation policy
+  contains that information, or says where to verify if unavailable.
+
+  - Agent distinguishes general annual entitlement from the user's personal
+  leave balance.
+
+  - Agent should not route to payroll or benefits unless the policy answer
+  requires it.
+
+  Expected tools: policy/handbook search for India vacation and carryover policy
+  if needed
+user_instruction: You are a full-time Rasa employee in India. You want to know
+  how many vacation days you receive and whether unused vacation can carry over
+  to the next year. If asked, say you want the general India policy and do not
+  need your individual remaining balance.
+success_criteria: >-
+  Agent provides an India-specific vacation entitlement, including the number of
+  vacation days, if available in the policy source.
+
+  Agent separately addresses carryover/expiry/accrual if the vacation policy
+  contains that information, or says where to verify if unavailable.
+
+  Agent distinguishes general annual entitlement from the user's personal leave
+  balance.
+
+  Agent should not route to payroll or benefits unless the policy answer
+  requires it.
+judgement_criteria:
+  - Agent provides an India-specific vacation entitlement, including the number
+    of vacation days, if available in the policy source.
+  - Agent separately addresses carryover/expiry/accrual if the vacation policy
+    contains that information, or says where to verify if unavailable.
+  - Agent distinguishes general annual entitlement from the user's personal
+    leave balance.
+  - Agent should not route to payroll or benefits unless the policy answer
+    requires it.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for India vacation and carryover policy if needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - lookup_employee_handbooks
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
