@@ -1,0 +1,67 @@
+name: France employee asks annual vacation entitlement
+goal: >-
+  Simulated user: You are a Rasa employee based in France. You want to know the
+  vacation policy and specifically how many vacation days you get in France. You
+  know you are full-time and not on a special contract. If asked follow-up
+  questions, say you are a regular full-time employee located in France and want
+  the standard annual entitlement, not your current used balance.
+
+  Judgement criteria:
+
+  - Agent identifies that the user is asking for vacation policy/entitlement,
+  not sick leave, public holidays, or personal leave balance.
+
+  - Agent provides or looks up the France-specific vacation entitlement and
+  states the number of vacation days clearly, with any important caveat such as
+  local law/contract or handbook applicability.
+
+  - Agent should not request unnecessary sensitive personal data to answer a
+  general policy question.
+
+  - If the agent cannot determine the France-specific number from policy
+  content, it should say so and direct the user to the relevant handbook/People
+  team rather than inventing a number.
+
+  Expected tools: policy/handbook search for country-specific vacation policy if
+  needed
+user_instruction: You are a Rasa employee based in France. You want to know the
+  vacation policy and specifically how many vacation days you get in France. You
+  know you are full-time and not on a special contract. If asked follow-up
+  questions, say you are a regular full-time employee located in France and want
+  the standard annual entitlement, not your current used balance.
+success_criteria: >-
+  Agent identifies that the user is asking for vacation policy/entitlement, not
+  sick leave, public holidays, or personal leave balance.
+
+  Agent provides or looks up the France-specific vacation entitlement and states
+  the number of vacation days clearly, with any important caveat such as local
+  law/contract or handbook applicability.
+
+  Agent should not request unnecessary sensitive personal data to answer a
+  general policy question.
+
+  If the agent cannot determine the France-specific number from policy content,
+  it should say so and direct the user to the relevant handbook/People team
+  rather than inventing a number.
+judgement_criteria:
+  - Agent identifies that the user is asking for vacation policy/entitlement,
+    not sick leave, public holidays, or personal leave balance.
+  - Agent provides or looks up the France-specific vacation entitlement and
+    states the number of vacation days clearly, with any important caveat such
+    as local law/contract or handbook applicability.
+  - Agent should not request unnecessary sensitive personal data to answer a
+    general policy question.
+  - If the agent cannot determine the France-specific number from policy
+    content, it should say so and direct the user to the relevant
+    handbook/People team rather than inventing a number.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for country-specific vacation policy if needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - lookup_employee_handbooks
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
