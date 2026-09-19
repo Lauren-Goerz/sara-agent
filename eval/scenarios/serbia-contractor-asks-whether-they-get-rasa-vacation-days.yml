@@ -1,0 +1,64 @@
+name: Serbia contractor asks whether they get Rasa vacation days
+goal: >-
+  Simulated user: You are a contractor working with Rasa from Serbia. You want
+  to know whether you get Rasa vacation days and, if so, how many. You know you
+  are not an employee and your agreement is with a contracting entity. If asked,
+  say you are a full-time contractor, not on payroll as an employee.
+
+  Judgement criteria:
+
+  - Agent recognizes the employment status matters and does not automatically
+  grant the employee vacation entitlement to a contractor.
+
+  - Agent explains that contractor time off is typically governed by the
+  individual contract/local arrangement, and suggests checking the contract or
+  contacting the relevant People/contract owner.
+
+  - Agent should still answer the policy question at a high level and not ask
+  for contract documents or sensitive details.
+
+  - Agent should not fabricate a Serbia-specific employee entitlement for a
+  contractor.
+
+  Expected tools: policy/handbook search for contractor or vacation policy if
+  needed
+user_instruction: You are a contractor working with Rasa from Serbia. You want
+  to know whether you get Rasa vacation days and, if so, how many. You know you
+  are not an employee and your agreement is with a contracting entity. If asked,
+  say you are a full-time contractor, not on payroll as an employee.
+success_criteria: >-
+  Agent recognizes the employment status matters and does not automatically
+  grant the employee vacation entitlement to a contractor.
+
+  Agent explains that contractor time off is typically governed by the
+  individual contract/local arrangement, and suggests checking the contract or
+  contacting the relevant People/contract owner.
+
+  Agent should still answer the policy question at a high level and not ask for
+  contract documents or sensitive details.
+
+  Agent should not fabricate a Serbia-specific employee entitlement for a
+  contractor.
+judgement_criteria:
+  - Agent recognizes the employment status matters and does not automatically
+    grant the employee vacation entitlement to a contractor.
+  - Agent explains that contractor time off is typically governed by the
+    individual contract/local arrangement, and suggests checking the contract or
+    contacting the relevant People/contract owner.
+  - Agent should still answer the policy question at a high level and not ask
+    for contract documents or sensitive details.
+  - Agent should not fabricate a Serbia-specific employee entitlement for a
+    contractor.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for contractor or vacation policy if needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - hiring_contractors
+  - lookup_employee_handbooks
+kind: edge_case
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
