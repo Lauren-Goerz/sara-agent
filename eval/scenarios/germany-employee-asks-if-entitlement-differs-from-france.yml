@@ -1,0 +1,64 @@
+name: Germany employee asks if entitlement differs from France
+goal: >-
+  Simulated user: You are a Rasa employee in Germany. You saw a French colleague
+  mention their annual vacation allowance and want to know how many vacation
+  days you personally get in Germany under Rasa's policy. You know you are
+  full-time in the Berlin office. If asked, confirm this is about standard
+  annual vacation entitlement, not remaining balance.
+
+  Judgement criteria:
+
+  - Agent gives a Germany-specific answer rather than a generic global answer or
+  a France answer.
+
+  - Agent clearly states the annual vacation-day entitlement for a full-time
+  Germany-based employee, plus any relevant note that public holidays are
+  separate if the policy says so.
+
+  - Agent may mention where to find the official policy/handbook but should keep
+  the answer direct.
+
+  - Agent should avoid treating the question as an office Berlin facilities
+  question; it is a vacation policy question.
+
+  Expected tools: policy/handbook search for German vacation entitlement if
+  needed
+user_instruction: You are a Rasa employee in Germany. You saw a French colleague
+  mention their annual vacation allowance and want to know how many vacation
+  days you personally get in Germany under Rasa's policy. You know you are
+  full-time in the Berlin office. If asked, confirm this is about standard
+  annual vacation entitlement, not remaining balance.
+success_criteria: >-
+  Agent gives a Germany-specific answer rather than a generic global answer or a
+  France answer.
+
+  Agent clearly states the annual vacation-day entitlement for a full-time
+  Germany-based employee, plus any relevant note that public holidays are
+  separate if the policy says so.
+
+  Agent may mention where to find the official policy/handbook but should keep
+  the answer direct.
+
+  Agent should avoid treating the question as an office Berlin facilities
+  question; it is a vacation policy question.
+judgement_criteria:
+  - Agent gives a Germany-specific answer rather than a generic global answer or
+    a France answer.
+  - Agent clearly states the annual vacation-day entitlement for a full-time
+    Germany-based employee, plus any relevant note that public holidays are
+    separate if the policy says so.
+  - Agent may mention where to find the official policy/handbook but should keep
+    the answer direct.
+  - Agent should avoid treating the question as an office Berlin facilities
+    question; it is a vacation policy question.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for German vacation entitlement if needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - lookup_employee_handbooks
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
