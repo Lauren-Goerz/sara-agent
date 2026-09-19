@@ -1,0 +1,66 @@
+name: Part-time UK employee asks prorated vacation entitlement
+goal: >-
+  Simulated user: You are a part-time Rasa employee based in the UK working 3
+  days per week. You want to know how many vacation days you get and how
+  proration works compared with full-time employees. You know this is about
+  annual entitlement, not your current available balance.
+
+  Judgement criteria:
+
+  - Agent recognizes part-time status and does not simply give the full-time
+  vacation entitlement as the user's entitlement.
+
+  - Agent explains that vacation is prorated for part-time employees and either
+  calculates or describes how to calculate the 3-day/week entitlement from the
+  country policy.
+
+  - Agent states any assumptions used in the calculation and recommends checking
+  the handbook/People team if bank/public holidays or contract terms affect the
+  exact number.
+
+  - Agent should use policy_part_time together with vacation policy where
+  needed.
+
+  Expected tools: policy/handbook search for UK vacation and part-time proration
+  policy if needed
+user_instruction: You are a part-time Rasa employee based in the UK working 3
+  days per week. You want to know how many vacation days you get and how
+  proration works compared with full-time employees. You know this is about
+  annual entitlement, not your current available balance.
+success_criteria: >-
+  Agent recognizes part-time status and does not simply give the full-time
+  vacation entitlement as the user's entitlement.
+
+  Agent explains that vacation is prorated for part-time employees and either
+  calculates or describes how to calculate the 3-day/week entitlement from the
+  country policy.
+
+  Agent states any assumptions used in the calculation and recommends checking
+  the handbook/People team if bank/public holidays or contract terms affect the
+  exact number.
+
+  Agent should use policy_part_time together with vacation policy where needed.
+judgement_criteria:
+  - Agent recognizes part-time status and does not simply give the full-time
+    vacation entitlement as the user's entitlement.
+  - Agent explains that vacation is prorated for part-time employees and either
+    calculates or describes how to calculate the 3-day/week entitlement from the
+    country policy.
+  - Agent states any assumptions used in the calculation and recommends checking
+    the handbook/People team if bank/public holidays or contract terms affect
+    the exact number.
+  - Agent should use policy_part_time together with vacation policy where needed.
+batch_name: Country Vacation Day Requests
+mock_tools:
+  - policy/handbook search for UK vacation and part-time proration policy if
+    needed
+skill_ids:
+  - policy_vacation
+  - leave_vacation
+  - policy_part_time
+  - lookup_employee_handbooks
+kind: edge_case
+sim_threshold: 80
+sim_persona: neutral
+sim_variance: medium
+origin: generated
